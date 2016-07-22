@@ -7,15 +7,14 @@ import com.univocity.parsers.common.processor.core.*;
 
 import java.io.*;
 import java.nio.charset.*;
-import java.text.*;
 import java.util.*;
 
 /**
  * Created by anthony on 21/07/16.
  */
-public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList> extends AbstractEntityParserSettings{
+public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList, F extends Format, C extends Context> extends AbstractEntityParserSettings<F,C>{
 
-	protected Processor<Context> processor;
+	protected Processor<C> processor;
 	protected final T entityList;
 	protected FileProvider downloadContentDirectory;
 	protected int downloadThreads;
@@ -47,7 +46,7 @@ public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList>
 	 *
 	 * @param processor the {@link Processor} that will be set as the processor
 	 */
-	public void setGlobalProcessor(Processor<Context> processor) {
+	public void setGlobalProcessor(Processor<C> processor) {
 		this.processor = processor;
 	}
 
@@ -57,19 +56,10 @@ public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList>
 	 *
 	 * @return the {@link Processor} previously set, or a {@link NoopProcessor} if never set.
 	 */
-	public Processor<Context> getGlobalProcessor() {
+	public Processor<C> getGlobalProcessor() {
 		return processor == null ? NoopProcessor.instance : processor;
 	}
 
-	@Override
-	protected Format createDefaultFormat() {
-		return new Format() {
-			@Override
-			protected TreeMap<String, Object> getConfiguration() {
-				return new TreeMap<String, Object>();
-			}
-		};
-	}
 
 	/**
 	 * Returns the entity names contained in the associated {@link HtmlEntityList} as a set of Strings.
