@@ -179,6 +179,4 @@ public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList,
 	public String getFileNamePattern() {
 		return fileNamePattern;
 	}
-
-
 }
