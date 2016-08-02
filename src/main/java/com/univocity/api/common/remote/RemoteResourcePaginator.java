@@ -25,7 +25,7 @@ public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
 	protected int idealPageSize;
 	protected int currentPageNumber;
 	protected PaginationHandler paginationHandler;
-	protected static String entityName = "*paginator*";
+	public static String entityName = "*paginator*";
 
 	/**
 	 * Creates a new HtmlPaginator and sets the currentPageNumber to 0
