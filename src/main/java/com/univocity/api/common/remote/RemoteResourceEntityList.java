@@ -60,7 +60,8 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 	}
 
 	/**
-	 * Returns the entity names stored in the HtmlEntityList as a set of type String
+	 * Returns the entity names stored in the HtmlEntityList as a set of type String. Returns empty Set if no
+	 * entities configured.
 	 *
 	 * @return entity names stored as a set.
 	 */
