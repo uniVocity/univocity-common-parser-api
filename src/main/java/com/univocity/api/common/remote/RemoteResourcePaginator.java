@@ -11,16 +11,16 @@ import com.univocity.api.common.*;
 import java.util.*;
 
 /**
- * Used by the {@link HtmlParser} to follow pages on a website.
+ * A abstract class that allows {@link RemoteResourceParser}'s to access and parse a sequence of pages
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  *
- * @see HtmlParser
+ * @see RemoteResourceParser
  * @see PaginationContext
  * @see PaginationHandler
  */
 public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
-	protected C entity; //public temporarily
+	protected C entity;
 	protected int followCount;
 	protected int idealPageSize;
 	protected int currentPageNumber;
@@ -35,7 +35,7 @@ public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
 		entity = newEntity();
 	}
 
-	public abstract C newEntity();
+	protected abstract C newEntity();
 
 
 	/**
@@ -87,8 +87,7 @@ public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
 
 	/**
 	 *
-	 * Sets a request parameter to a specfic value. This differs from {@link RemoteResourcePaginator#addRequestParameter(String)}
-	 * as it does not create a field in the entity, therefore not returning a path. It is generally used during
+	 * Sets a request parameter to a specfic value. This differs from {@link RemoteResourcePaginator#addRequestParameter(String)} * as it does not create a field in the entity, therefore not returning a path. It is generally used during
 	 * the parsing process as
 	 *
 	 * @param fieldName the name of the request parameter
@@ -138,7 +137,7 @@ public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
 
 	/**
 	 * Sets the {@link PaginationHandler} which is used to prepare the call to the next page when the {@link HtmlParser}
-	 * runs. If not set, will use DefaultPaginationHandler
+	 * runs. If not set, will use DefaultPaginationHandler.
 	 *
 	 * @param paginationHandler the {@link PaginationHandler} that will be associated with the paginator
 	 */
@@ -146,6 +145,11 @@ public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
 		this.paginationHandler = paginationHandler;
 	}
 
+	/**
+	 * Returns the {@link PaginationHandler} associated with the RemoteResourcePaginator
+	 *
+	 * @return the associated {@link PaginationHandler}
+	 */
 	public PaginationHandler getPaginationHandler() {
 		return paginationHandler;
 	}

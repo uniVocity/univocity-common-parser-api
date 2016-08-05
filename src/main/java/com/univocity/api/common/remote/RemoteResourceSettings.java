@@ -16,7 +16,12 @@ import java.nio.charset.*;
 import java.util.*;
 
 /**
- * Created by anthony on 21/07/16.
+ * An abstract class used by Parsers to provide configuration options for use during the parsing process.
+ *
+ * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ *
+ * @see RemoteResourceEntityList
+ * @see AbstractEntityParserSettings
  */
 public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList, F extends Format, C extends Context> extends AbstractEntityParserSettings<F,C>{
 
@@ -38,7 +43,7 @@ public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList,
 	}
 
 	/**
-	 * Returns the {@link HtmlEntityList} associated with the settings.
+	 * Returns the {@link T} associated with the settings.
 	 *
 	 * @return the HtmlEntityList
 	 */
