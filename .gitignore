@@ -1,0 +1,8 @@
+/target/*
+/test-output/*
+/target
+.idea
+
+*.iml
+*.ipr
+*.iws
