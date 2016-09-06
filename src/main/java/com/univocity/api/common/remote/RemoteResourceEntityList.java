@@ -89,10 +89,36 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 		return linkFollower;
 	}
 
+	/**
+	 * Creates a new LinkFollower and returns it
+	 *
+	 * @return the newly created LinkFollower
+	 */
 	abstract protected RemoteResourceLinkFollower newLinkFollower();
 
+	/**
+	 * Returns the {@link RemoteResourceLinkFollower} associated with the Entity.
+	 *
+	 * @return the associated LinkFollower
+	 */
 	public RemoteResourceLinkFollower getLinkFollower() {
 		return  linkFollower;
+	}
+
+
+	/**
+	 * Removes an Entity from the list. A removed entity will not be used by the parser and any fields/configuration made
+	 * in the removed entity will be lost.
+	 *
+	 * @param entityName the name of the entity that will be removed
+	 */
+	public void removeEntity(String entityName) {
+		entities.remove(entityName);
+		originalEntityNames.remove(entityName);
+	}
+
+	public void removeEntity(RemoteResourceEntity entity) {
+		removeEntity(entity.getEntityName());
 	}
 
 }
