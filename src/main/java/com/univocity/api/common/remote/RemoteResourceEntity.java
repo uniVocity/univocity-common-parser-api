@@ -77,5 +77,9 @@ public abstract class RemoteResourceEntity {
 	 * @param fieldName the name of the field that will be removed.
 	 */
 	abstract public void removeField(String fieldName);
+
+	public String toString() {
+		return entityName;
+	}
 }
 
