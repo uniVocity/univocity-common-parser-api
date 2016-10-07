@@ -7,6 +7,7 @@
 package com.univocity.api.common.remote;
 
 import com.univocity.api.common.*;
+import com.univocity.parsers.common.*;
 
 import java.util.*;
 
@@ -27,11 +28,11 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 
 
 	/**
-	 * Returns the {@link HtmlEntity} associated with the given entityName. If there is not a {@link HtmlEntity} with that
-	 * name, it creates it and returns it.
+	 * Returns the entity object associated with the given entityName. If there is no entity with that
+	 * name, a new entity will be created and returned.
 	 *
-	 * @param entityName the name of the {@link HtmlEntity} that will be returned.
-	 * @return the {@link HtmlEntity} with the given entityName
+	 * @param entityName name of the entity that will be returned.
+	 * @return an existing or new entity with the given name
 	 */
 	public final T configureEntity(String entityName) {
 		Args.notBlank(entityName, "Entity name");
@@ -72,14 +73,15 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 	/**
 	 * Returns all the entities stored in the entityList as a unmodifiable Collection
 	 *
-	 * @return a Collection of {@link HtmlEntity}s.
+	 * @return a Collection of entities.
 	 */
 	public final Collection<T> getEntities() {
 		return Collections.unmodifiableCollection(entities.values());
 	}
 
-	public final T getEntityByName(String entityName) {
-		return entities.get(entityName);
+	public final T getEntity(String entityName) {
+		ArgumentUtils.notEmpty("Entity name", entityName);
+		return entities.get(entityName.trim().toLowerCase());
 	}
 
 	public RemoteResourceLinkFollower configureLinkFollower() {
@@ -117,7 +119,13 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 		originalEntityNames.remove(entityName);
 	}
 
-	public void removeEntity(RemoteResourceEntity entity) {
+	/**
+	 * Removes an entity from the list. A removed entity will not be used by the parser and any fields/configuration
+	 * associated with the removed entity will be lost.
+	 *
+	 * @param entity the entity object that will be removed
+	 */
+	public void removeEntity(T entity) {
 		removeEntity(entity.getEntityName());
 	}
 
