@@ -4,13 +4,15 @@
  * 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.univocity.api.common.remote;
+package com.univocity.parsers.remote;
+
+import java.util.*;
 
 /**
  * Created by anthony on 20/07/16.
  */
-public abstract class RemoteResourceLinkFollower<C extends RemoteResourceEntity> {
-	protected C entity;
+public abstract class LinkFollower<S extends RemoteEntitySettings> extends RemoteAccessConfiguration {
+	protected S entitySettings;
 	protected static String entityName = "*itemFollower*";
 	protected int itemCount;
 	protected boolean joinRows;
@@ -18,25 +20,25 @@ public abstract class RemoteResourceLinkFollower<C extends RemoteResourceEntity>
 
 
 	/**
-	 * Creates a new RemoteResourceLinkFollower
+	 * Creates a new LinkFollower
 	 */
-	public RemoteResourceLinkFollower() {
-		entity = newEntity();
+	public LinkFollower() {
+		entitySettings = newEntitySettings();
 		itemCount = 0;
 		joinRows = false;
 		linkNum = 1;
 	}
 
 	/**
-	 * Returns the name associated with the RemoteResourceLinkFollower
+	 * Returns the name associated with the LinkFollower
 	 *
-	 * @return the RemoteResourceLinkFollower's name
+	 * @return the LinkFollower's name
 	 */
 	static public final String getEntityName() {
-		return  entityName;
+		return entityName;
 	}
 
-	protected abstract C newEntity();
+	protected abstract S newEntitySettings();
 
 
 	/**
@@ -44,8 +46,8 @@ public abstract class RemoteResourceLinkFollower<C extends RemoteResourceEntity>
 	 *
 	 * @return a string array of field names
 	 */
-	public final String[] getFieldNames() {
-		return entity.getFieldNames();
+	public final Set<String> getFieldNames() {
+		return entitySettings.getFieldNames();
 	}
 
 	/**
@@ -69,6 +71,7 @@ public abstract class RemoteResourceLinkFollower<C extends RemoteResourceEntity>
 	/**
 	 * Sets if parsed rows from a linked page will be joined with the parsed rows of the original page. If this is set to
 	 * false, any data parsed in the linked page will generate new rows.
+	 *
 	 * @param joinRows
 	 */
 	public final void setJoinRows(boolean joinRows) {

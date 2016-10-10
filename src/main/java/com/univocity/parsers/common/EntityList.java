@@ -4,28 +4,33 @@
  * 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.univocity.api.common.remote;
+package com.univocity.parsers.common;
 
 import com.univocity.api.common.*;
-import com.univocity.parsers.common.*;
 
 import java.util.*;
 
 /**
- * Created by anthony on 21/07/16.
+ * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
-	protected final Map<String,T> entities = new TreeMap<String,T>();
+public abstract class EntityList<E extends EntitySettings> {
+
+	protected final Map<String, E> entities = new TreeMap<String, E>();
 	protected final Map <String, String> originalEntityNames = new TreeMap<String, String>();
-	protected RemoteResourcePaginator paginator;
-	protected RemoteResourceLinkFollower linkFollower;
+	private EntityParserSettings globalSettings;
 
 	/**
-	 * Creates a new, empty HtmlEntityList
+	 * Creates a new, empty EntityList
 	 */
-	public RemoteResourceEntityList() {
+	protected EntityList() {
 	}
 
+	final void setGlobalSettings(EntityParserSettings globalSettings){
+		this.globalSettings = globalSettings;
+		for(E entity : entities.values()){
+			entity.setGlobalSettings(globalSettings);
+		}
+	}
 
 	/**
 	 * Returns the entity object associated with the given entityName. If there is no entity with that
@@ -34,31 +39,20 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 	 * @param entityName name of the entity that will be returned.
 	 * @return an existing or new entity with the given name
 	 */
-	public final T configureEntity(String entityName) {
+	public final E configureEntity(String entityName) {
 		Args.notBlank(entityName, "Entity name");
 		String normalizedEntityName = entityName.trim().toLowerCase();
 		if (entities.get(normalizedEntityName) == null) {
-			entities.put(normalizedEntityName, newEntity(entityName));
+			E newEntity = newEntity(entityName);
+			newEntity.setGlobalSettings(globalSettings);
+			entities.put(normalizedEntityName, newEntity);
 			originalEntityNames.put(entityName, normalizedEntityName);
 		}
-		return entities.get(normalizedEntityName);
+		E entitySettings = entities.get(normalizedEntityName);
+		return entitySettings;
 	}
 
-	protected abstract T newEntity(String entityName);
-
-	public RemoteResourcePaginator configurePaginator() {
-		if (paginator == null) {
-			paginator = newPaginator();
-		}
-		return paginator;
-	}
-
-
-	protected abstract RemoteResourcePaginator newPaginator();
-
-	public RemoteResourcePaginator getPaginator() {
-		return paginator;
-	}
+	protected abstract E newEntity(String entityName);
 
 	/**
 	 * Returns the entity names stored in the HtmlEntityList as a set of type String. Returns empty Set if no
@@ -75,38 +69,14 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 	 *
 	 * @return a Collection of entities.
 	 */
-	public final Collection<T> getEntities() {
+	public final Collection<E> getEntities() {
 		return Collections.unmodifiableCollection(entities.values());
 	}
 
-	public final T getEntity(String entityName) {
+	public final E getEntity(String entityName) {
 		ArgumentUtils.notEmpty("Entity name", entityName);
 		return entities.get(entityName.trim().toLowerCase());
 	}
-
-	public RemoteResourceLinkFollower configureLinkFollower() {
-		if (linkFollower == null) {
-			linkFollower = newLinkFollower();
-		}
-		return linkFollower;
-	}
-
-	/**
-	 * Creates a new LinkFollower and returns it
-	 *
-	 * @return the newly created LinkFollower
-	 */
-	abstract protected RemoteResourceLinkFollower newLinkFollower();
-
-	/**
-	 * Returns the {@link RemoteResourceLinkFollower} associated with the Entity.
-	 *
-	 * @return the associated LinkFollower
-	 */
-	public RemoteResourceLinkFollower getLinkFollower() {
-		return  linkFollower;
-	}
-
 
 	/**
 	 * Removes an Entity from the list. A removed entity will not be used by the parser and any fields/configuration made
@@ -114,7 +84,9 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 	 *
 	 * @param entityName the name of the entity that will be removed
 	 */
-	public void removeEntity(String entityName) {
+	public final void removeEntity(String entityName) {
+		Args.notBlank(entityName, "Entity name");
+		entityName = entityName.trim().toLowerCase();
 		entities.remove(entityName);
 		originalEntityNames.remove(entityName);
 	}
@@ -125,9 +97,9 @@ public abstract class RemoteResourceEntityList<T extends RemoteResourceEntity> {
 	 *
 	 * @param entity the entity object that will be removed
 	 */
-	public void removeEntity(T entity) {
+	public final void removeEntity(E entity) {
+		Args.notNull(entity, "Entity");
 		removeEntity(entity.getEntityName());
 	}
 
 }
-

@@ -4,48 +4,34 @@
  * 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.univocity.api.common.remote;
-
-import com.univocity.api.common.*;
-
-import java.util.*;
+package com.univocity.parsers.remote;
 
 /**
  * A abstract class that allows {@link RemoteResourceParser}'s to access and parse a sequence of pages
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
- *
  * @see RemoteResourceParser
  * @see PaginationContext
  * @see PaginationHandler
  */
-public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
-	protected C entity;
+public abstract class Paginator<E extends RemoteEntitySettings> extends RemoteAccessConfiguration {
+	protected E entitySettings;
 	protected int followCount;
 	protected int idealPageSize;
 	protected int currentPageNumber;
 	protected PaginationHandler paginationHandler;
-	public static String entityName = "*paginator*";
+	public static String ENTITY_NAME = "*paginator*";
+
 
 	/**
 	 * Creates a new HtmlPaginator and sets the currentPageNumber to 0
 	 */
-	public RemoteResourcePaginator() {
+	protected Paginator() {
 		currentPageNumber = 0;
-		entity = newEntity();
+		entitySettings = newEntitySettings();
 	}
 
-	protected abstract C newEntity();
-
-
-	/**
-	 * Returns the name of the paginator
-	 *
-	 * @return the name of the paginator
-	 */
-	public String getEntityName() {
-		return entity.getEntityName();
-	}
+	protected abstract E newEntitySettings();
 
 	/**
 	 * Sets the ideal page size. The ideal page size is a number that the paginator will try to set the page size to.
@@ -85,37 +71,6 @@ public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
 	}
 
 
-	/**
-	 *
-	 * Sets a request parameter to a specfic value. This differs from {@link RemoteResourcePaginator#addRequestParameter(String)} * as it does not create a field in the entity, therefore not returning a path. It is generally used during
-	 * the parsing process as
-	 *
-	 * @param fieldName the name of the request parameter
-	 * @param value the string that will be associated with the request parameter
-	 */
-	public void setRequestParameter(String fieldName, String value) {
-		entity.setRequestParameter(fieldName, value);
-	}
-
-	/**
-	 * Returns the request parameters as a Map<String, String>, where the key is the request parameter name and the value
-	 * is the parsed String from the HTML page.
-	 *
-	 * @return the request parameters as a Map
-	 */
-	public Map<String, String> getRequestParameters() {
-		return entity.getRequestParameters();
-	}
-
-
-	/**
-	 * Returns the field names used by the Paginator
-	 *
-	 * @return a String array of field names
-	 */
-	public String[] getFieldNames() {
-		return entity.getFieldNames();
-	}
 
 	/**
 	 * Returns the page number that the Paginator is currently up to
@@ -146,7 +101,7 @@ public abstract class RemoteResourcePaginator<C extends RemoteResourceEntity> {
 	}
 
 	/**
-	 * Returns the {@link PaginationHandler} associated with the RemoteResourcePaginator
+	 * Returns the {@link PaginationHandler} associated with the Paginator
 	 *
 	 * @return the associated {@link PaginationHandler}
 	 */

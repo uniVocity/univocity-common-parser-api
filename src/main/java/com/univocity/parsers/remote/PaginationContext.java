@@ -4,10 +4,9 @@
  * 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.univocity.api.common;
+package com.univocity.parsers.remote;
 
 import com.univocity.api.common.*;
-import com.univocity.api.common.remote.*;
 
 import java.util.*;
 
@@ -21,7 +20,7 @@ import java.util.*;
  */
 public class PaginationContext {
 
-	private final RemoteResourcePaginator paginator;
+	private final Paginator paginator;
 	private final UrlReaderProvider urlReaderProvider;
 	private List<String[]> rows;
 
@@ -30,7 +29,7 @@ public class PaginationContext {
 	 * @param paginator
 	 * @param urlReaderProvider
 	 */
-	public PaginationContext(RemoteResourcePaginator paginator, UrlReaderProvider urlReaderProvider) {
+	public PaginationContext(Paginator paginator, UrlReaderProvider urlReaderProvider) {
 		this.paginator = paginator;
 		this.urlReaderProvider = urlReaderProvider;
 	}
@@ -145,15 +144,15 @@ public class PaginationContext {
 		this.rows = rows;
 	}
 
-	/**
-	 * Returns a String array of field names used by the paginator. Field names are set via setting requestParameters or
-	 * using the other setters such as {@link HtmlPaginator#setNextPage()}
-	 *
-	 * @return a string array of field names.
-	 */
-	public String[] getFieldNames() {
-		return paginator.getFieldNames();
-	}
+//	/** TODO: REVIEW
+//	 * Returns a String array of field names used by the paginator. Field names are set via setting requestParameters or
+//	 * using the other setters such as {@link HtmlPaginator#setNextPage()}
+//	 *
+//	 * @return a string array of field names.
+//	 */
+//	public Set<String> getFieldNames() {
+//		return paginator.get.getFieldNames();
+//	}
 
 	/**
 	 * Returns the number of the page that the paginator is currently up to

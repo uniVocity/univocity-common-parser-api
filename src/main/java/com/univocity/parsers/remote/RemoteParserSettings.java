@@ -4,32 +4,30 @@
  * 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.univocity.api.common.remote;
+package com.univocity.parsers.remote;
 
 import com.univocity.api.common.*;
 import com.univocity.parsers.common.*;
-import com.univocity.parsers.common.Format;
-import com.univocity.parsers.common.processor.core.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
 /**
- * An abstract class used by Parsers to provide configuration options for use during the parsing process.
- *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
- *
- * @see RemoteResourceEntityList
- * @see AbstractEntityParserSettings
  */
-public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList, F extends Format, C extends Context> extends AbstractEntityParserSettings<F,C>{
+public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList> extends EntityParserSettings<S, L> {
 
-	protected Processor<C> processor;
-	protected final T entityList;
+	//Does not exist in CommonParserSettings.
+	private String emptyValue;
+
+	protected Paginator paginator;
+	protected LinkFollower linkFollower;
+
 	protected FileProvider downloadContentDirectory;
 	protected int downloadThreads;
 	protected String fileNamePattern;
+	protected final TreeMap<String, String> requestParameters = new TreeMap<String, String>();
 
 
 	/**
@@ -38,46 +36,8 @@ public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList,
 	 *
 	 * @param
 	 */
-	public RemoteResourceSettings(T entityList) {
-		this.entityList = entityList;
-	}
-
-	/**
-	 * Returns the {@link T} associated with the settings.
-	 *
-	 * @return the HtmlEntityList
-	 */
-	public T getEntityList() {
-		return entityList;
-	}
-
-	/**
-	 * Sets the global {@link Processor}. All rows parsed will be delegated to the processor. Does not
-	 * need to be set for the {@link HtmlParser} to function.
-	 *
-	 * @param processor the {@link Processor} that will be set as the processor
-	 */
-	public void setGlobalProcessor(Processor<C> processor) {
-		this.processor = processor;
-	}
-
-	/**
-	 * Returns the processor if previously set. If the processor was not set, returns a
-	 * {@link NoopProcessor}, which is a {@link Processor} that does nothing.
-	 *
-	 * @return the {@link Processor} previously set, or a {@link NoopProcessor} if never set.
-	 */
-	public Processor<C> getGlobalProcessor() {
-		return processor == null ? NoopProcessor.instance : processor;
-	}
-
-
-	/**
-	 * Returns the entity names contained in the associated {@link HtmlEntityList} as a set of Strings.
-	 * @return the entity names
-	 */
-	public Set<String> getEntityNames() {
-		return entityList.getEntityNames();
+	public RemoteParserSettings(L entityList) {
+		super(entityList);
 	}
 
 	/**
@@ -140,7 +100,7 @@ public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList,
 	/**
 	 * Sets the file directory where downloaded content will be stored
 	 *
-	 * @param file the directory that stores downloaded content
+	 * @param file     the directory that stores downloaded content
 	 * @param encoding the encoding the directory as a Charset
 	 */
 	public void setDownloadContentDirectory(File file, Charset encoding) {
@@ -150,7 +110,7 @@ public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList,
 	/**
 	 * Sets the file directory where downloaded content will be stored
 	 *
-	 * @param file The directory that stores downloaded content
+	 * @param file     The directory that stores downloaded content
 	 * @param encoding the encoding of the directory as a String
 	 */
 	public void setDownloadContentDirectory(File file, String encoding) {
@@ -179,9 +139,84 @@ public abstract class RemoteResourceSettings<T extends RemoteResourceEntityList,
 
 	/**
 	 * Returns the file name pattern used for names when saving pages
+	 *
 	 * @return the pattern of file names
 	 */
 	public String getFileNamePattern() {
 		return fileNamePattern;
+	}
+
+	/**
+	 * Returns a map of request parameter names and values.
+	 *
+	 * @return request parameter names and values as a map
+	 */
+	public final Map<String, String> getRequestParameters() {
+		return requestParameters;
+	}
+
+	/**
+	 * Creates a new request parameter.
+	 *
+	 * @param parameterName the name of the parameter
+	 * @param value         the value associated with the parameter
+	 */
+	public final void setRequestParameter(String parameterName, String value) {
+		requestParameters.put(parameterName, value);
+
+	}
+
+
+	public Paginator configurePaginator() {
+		if (paginator == null) {
+			paginator = newPaginator();
+		}
+		return paginator;
+	}
+
+
+	protected abstract Paginator newPaginator();
+
+	public Paginator getPaginator() {
+		return paginator;
+	}
+
+	public LinkFollower configureLinkFollower() {
+		if (linkFollower == null) {
+			linkFollower = newLinkFollower();
+		}
+		return linkFollower;
+	}
+
+	/**
+	 * Creates a new LinkFollower and returns it
+	 *
+	 * @return the newly created LinkFollower
+	 */
+	abstract protected LinkFollower newLinkFollower();
+
+	/**
+	 * Returns the {@link LinkFollower} associated with the Entity.
+	 *
+	 * @return the associated LinkFollower
+	 */
+	public LinkFollower getLinkFollower() {
+		return  linkFollower;
+	}
+
+	public String getEmptyValue() {
+		return emptyValue;
+	}
+
+	public void setEmptyValue(String emptyValue) {
+		this.emptyValue = emptyValue;
+	}
+
+	public boolean isColumnReorderingEnabled() {
+		return globalSettings.isColumnReorderingEnabled();
+	}
+
+	public void setColumnReorderingEnabled(boolean columnReorderingEnabled) {
+		globalSettings.setColumnReorderingEnabled(columnReorderingEnabled);
 	}
 }
