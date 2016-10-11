@@ -23,7 +23,6 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	private String emptyValue = null;
 
 	private boolean localColumnReorderingEnabled;
-	private boolean columnReorderingEnabled = true;
 
 	public RemoteEntitySettings(String entityName, S entitySettings) {
 		super(entityName, entitySettings);
@@ -52,14 +51,14 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 
 	public boolean isColumnReorderingEnabled() {
 		if(localColumnReorderingEnabled || globalSettings == null) {
-			return columnReorderingEnabled;
+			return getInternalSettings().isColumnReorderingEnabled();
 		}
 		return globalSettings.isColumnReorderingEnabled();
 	}
 
 	public void setColumnReorderingEnabled(boolean columnReorderingEnabled) {
 		this.localColumnReorderingEnabled = true;
-		this.columnReorderingEnabled = columnReorderingEnabled;
+		this.getInternalSettings().setColumnReorderingEnabled(columnReorderingEnabled);
 	}
 
 	public String getEmptyValue() {
