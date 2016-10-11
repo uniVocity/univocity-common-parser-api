@@ -6,6 +6,8 @@
 
 package com.univocity.parsers.remote;
 
+import java.util.*;
+
 /**
  * A abstract class that allows {@link RemoteResourceParser}'s to access and parse a sequence of pages
  *
@@ -15,7 +17,7 @@ package com.univocity.parsers.remote;
  * @see PaginationHandler
  */
 public abstract class Paginator<E extends RemoteEntitySettings> extends RemoteAccessConfiguration {
-	protected E entitySettings;
+	protected final E entitySettings;
 	protected int followCount;
 	protected int idealPageSize;
 	protected int currentPageNumber;
@@ -71,7 +73,6 @@ public abstract class Paginator<E extends RemoteEntitySettings> extends RemoteAc
 	}
 
 
-
 	/**
 	 * Returns the page number that the Paginator is currently up to
 	 *
@@ -107,5 +108,9 @@ public abstract class Paginator<E extends RemoteEntitySettings> extends RemoteAc
 	 */
 	public PaginationHandler getPaginationHandler() {
 		return paginationHandler;
+	}
+
+	public Set<String> getFieldNames() {
+		return entitySettings.getFieldNames();
 	}
 }

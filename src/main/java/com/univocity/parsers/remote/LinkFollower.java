@@ -13,7 +13,7 @@ import java.util.*;
  */
 public abstract class LinkFollower<S extends RemoteEntitySettings> extends RemoteAccessConfiguration {
 	protected S entitySettings;
-	protected static String entityName = "*itemFollower*";
+	public static String ENTITY_NAME = "*itemFollower*";
 	protected int itemCount;
 	protected boolean joinRows;
 	protected int linkNum;
@@ -35,7 +35,7 @@ public abstract class LinkFollower<S extends RemoteEntitySettings> extends Remot
 	 * @return the LinkFollower's name
 	 */
 	static public final String getEntityName() {
-		return entityName;
+		return ENTITY_NAME;
 	}
 
 	protected abstract S newEntitySettings();

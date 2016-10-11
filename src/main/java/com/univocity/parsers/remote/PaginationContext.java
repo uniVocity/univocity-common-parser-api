@@ -21,17 +21,16 @@ import java.util.*;
 public class PaginationContext {
 
 	private final Paginator paginator;
-	private final UrlReaderProvider urlReaderProvider;
-	private List<String[]> rows;
+	private final ReaderProvider readerProvider;
 
 	/**
 	 * Creates a new PaginationContext with a {@link HtmlPaginator} and a {@link UrlReaderProvider}.
 	 * @param paginator
 	 * @param urlReaderProvider
 	 */
-	public PaginationContext(Paginator paginator, UrlReaderProvider urlReaderProvider) {
+	public PaginationContext(Paginator paginator, ReaderProvider readerProvider) {
 		this.paginator = paginator;
-		this.urlReaderProvider = urlReaderProvider;
+		this.readerProvider = readerProvider;
 	}
 
 	/**
@@ -89,8 +88,10 @@ public class PaginationContext {
 	}
 
 	private String getField(String fieldName) {
-		Map<String,String> map = paginator.getRequestParameters();
-		return  map.get(fieldName);
+//
+//		Map<String,String> map = paginator.getRequestParameters();
+//		return  map.get(fieldName); //FIXME
+		throw new IllegalStateException("fix me");
 	}
 
 	/**
@@ -121,38 +122,19 @@ public class PaginationContext {
 	 *
 	 * @return the associated {@link UrlReaderProvider}
 	 */
-	public UrlReaderProvider getUrlReaderProvider() {
-		return urlReaderProvider;
+	public ReaderProvider getReaderProvider() {
+		return readerProvider;
 	}
 
 	/**
-	 * Returns the rows that were received from the parsing process.
+	 * Returns a String array of field names used by the paginator. Field names are set via setting requestParameters or
+	 * using the other setters such as {@link HtmlPaginator#setNextPage()}
 	 *
-	 * @return parsed rows
+	 * @return a string array of field names.
 	 */
-	public List<String[]> getParsedRows() {
-			return rows;
+	public Set<String> getFieldNames() {
+		return paginator.getFieldNames();
 	}
-
-	/**
-	 * Sets the rows that were parsed using the paths set in the {@link HtmlPaginator}. This method is primarily
-	 * used by {@link HtmlParser}.
-	 *
-	 * @param rows the rows parsed
-	 */
-	public void setRows(List<String[]> rows) {
-		this.rows = rows;
-	}
-
-//	/** TODO: REVIEW
-//	 * Returns a String array of field names used by the paginator. Field names are set via setting requestParameters or
-//	 * using the other setters such as {@link HtmlPaginator#setNextPage()}
-//	 *
-//	 * @return a string array of field names.
-//	 */
-//	public Set<String> getFieldNames() {
-//		return paginator.get.getFieldNames();
-//	}
 
 	/**
 	 * Returns the number of the page that the paginator is currently up to
