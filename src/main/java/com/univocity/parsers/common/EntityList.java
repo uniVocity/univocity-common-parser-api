@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public abstract class EntityList<E extends EntitySettings> {
+public abstract class EntityList<E extends EntitySettings> implements Iterable<E> {
 
 	protected final Map<String, E> entities = new TreeMap<String, E>();
 	protected final Map <String, String> originalEntityNames = new TreeMap<String, String>();
@@ -102,4 +102,8 @@ public abstract class EntityList<E extends EntitySettings> {
 		removeEntity(entity.getEntityName());
 	}
 
+	@Override
+	public Iterator<E> iterator() {
+		return entities.values().iterator();
+	}
 }
