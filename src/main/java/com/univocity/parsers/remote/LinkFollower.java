@@ -15,7 +15,6 @@ public abstract class LinkFollower<S extends RemoteEntitySettings> extends Remot
 	protected S entitySettings;
 	public static String ENTITY_NAME = "*itemFollower*";
 	protected int itemCount;
-	protected boolean joinRows;
 	protected int linkNum;
 
 
@@ -25,7 +24,6 @@ public abstract class LinkFollower<S extends RemoteEntitySettings> extends Remot
 	public LinkFollower() {
 		entitySettings = newEntitySettings();
 		itemCount = 0;
-		joinRows = false;
 		linkNum = 1;
 	}
 
@@ -67,25 +65,4 @@ public abstract class LinkFollower<S extends RemoteEntitySettings> extends Remot
 	public final int getFollowedLinkCount() {
 		return itemCount;
 	}
-
-	/**
-	 * Sets if parsed rows from a linked page will be joined with the parsed rows of the original page. If this is set to
-	 * false, any data parsed in the linked page will generate new rows.
-	 *
-	 * @param joinRows
-	 */
-	public final void setJoinRows(boolean joinRows) {
-		this.joinRows = joinRows;
-	}
-
-	/**
-	 * Returns true if the joinrows option was set to true, otherwise, returns false.
-	 *
-	 * @return the state of the join rows opton
-	 */
-	public final boolean getJoinRowsOption() {
-		return joinRows;
-	}
-
-
 }
