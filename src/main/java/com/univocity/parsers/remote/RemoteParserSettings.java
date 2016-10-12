@@ -22,7 +22,6 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private String emptyValue;
 
 	protected Paginator paginator;
-	protected LinkFollower linkFollower;
 
 	protected FileProvider downloadContentDirectory;
 	protected int downloadThreads;
@@ -166,7 +165,6 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 	}
 
-
 	public Paginator configurePaginator() {
 		if (paginator == null) {
 			paginator = newPaginator();
@@ -174,34 +172,10 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return paginator;
 	}
 
-
 	protected abstract Paginator newPaginator();
 
 	public Paginator getPaginator() {
 		return paginator;
-	}
-
-	public LinkFollower configureLinkFollower() {
-		if (linkFollower == null) {
-			linkFollower = newLinkFollower();
-		}
-		return linkFollower;
-	}
-
-	/**
-	 * Creates a new LinkFollower and returns it
-	 *
-	 * @return the newly created LinkFollower
-	 */
-	abstract protected LinkFollower newLinkFollower();
-
-	/**
-	 * Returns the {@link LinkFollower} associated with the Entity.
-	 *
-	 * @return the associated LinkFollower
-	 */
-	public LinkFollower getLinkFollower() {
-		return  linkFollower;
 	}
 
 	public String getEmptyValue() {
