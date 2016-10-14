@@ -11,12 +11,21 @@ import com.univocity.api.common.*;
 import java.util.*;
 
 /**
+ * A list of entities to be parsed by some implementation of {@link EntityParserInterface},
+ * and their specific configurations.
+ *
+ * The configuration applied over individual {@link EntitySettings} elements override their counterparts in the
+ * global parser settings, usually a subclass of {@link EntityParserSettings}
+ *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @see EntitySettings
+ * @see EntityParserSettings
+ * @see EntityParserInterface
  */
 public abstract class EntityList<E extends EntitySettings> implements Iterable<E> {
 
 	protected final Map<String, E> entities = new TreeMap<String, E>();
-	protected final Map <String, String> originalEntityNames = new TreeMap<String, String>();
+	protected final Map<String, String> originalEntityNames = new TreeMap<String, String>();
 	private EntityParserSettings globalSettings;
 
 	/**
@@ -25,19 +34,27 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	protected EntityList() {
 	}
 
-	final void setGlobalSettings(EntityParserSettings globalSettings){
+	/**
+	 * Applies the global configuration object, used by the {@link EntityParserInterface} implementation, to
+	 * all entity-specific settings in this list.
+	 *
+	 * @param globalSettings the
+	 */
+	final void setGlobalSettings(EntityParserSettings globalSettings) {
 		this.globalSettings = globalSettings;
-		for(E entity : entities.values()){
+		for (E entity : entities.values()) {
 			entity.setGlobalSettings(globalSettings);
 		}
 	}
 
 	/**
-	 * Returns the entity object associated with the given entityName. If there is no entity with that
-	 * name, a new entity will be created and returned.
+	 * Returns the configuration object associated with the given entityName. If there is no entity with that
+	 * name, a new configuration will be created and returned. The global settings made for the parser will be used
+	 * by default. You can configure your entity to use different settings if required.
 	 *
-	 * @param entityName name of the entity that will be returned.
-	 * @return an existing or new entity with the given name
+	 * @param entityName name of the entity whose configuration that will be returned.
+	 *
+	 * @return an existing or new entity configuration associated with the given entity name
 	 */
 	public final E configureEntity(String entityName) {
 		Args.notBlank(entityName, "Entity name");
@@ -52,37 +69,52 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 		return entitySettings;
 	}
 
+	/**
+	 * Creates a new configuration object for the given entity name
+	 *
+	 * @param entityName name of the new entity
+	 *
+	 * @return new configuration object to be used by the new entity.
+	 */
 	protected abstract E newEntity(String entityName);
 
 	/**
-	 * Returns the entity names stored in the HtmlEntityList as a set of type String. Returns empty Set if no
+	 * Returns the entity names stored in the {@code EntityList} as a set of {@code String}s. Returns an empty set if no
 	 * entities configured.
 	 *
-	 * @return entity names stored as a set.
+	 * @return all entity names in a set.
 	 */
 	public final Set<String> getEntityNames() {
 		return new TreeSet<String>(originalEntityNames.keySet());
 	}
 
 	/**
-	 * Returns all the entities stored in the entityList as a unmodifiable Collection
+	 * Returns all the entity configurations stored in this {@code EntityList} as a unmodifiable Collection
 	 *
-	 * @return a Collection of entities.
+	 * @return the collection of all entity settings currently in use.
 	 */
 	public final Collection<E> getEntities() {
 		return Collections.unmodifiableCollection(entities.values());
 	}
 
+	/**
+	 * Returns the configuration of a an existing entity or {@code null} if there's no entity with the given name.
+	 *
+	 * @param entityName name of the entity whose configuration will be returned
+	 *
+	 * @return an instance of {@link EntitySettings} which manages the configuration of the given entity,
+	 * or {@code null} if no such entity exist.
+	 */
 	public final E getEntity(String entityName) {
 		ArgumentUtils.notEmpty("Entity name", entityName);
 		return entities.get(entityName.trim().toLowerCase());
 	}
 
 	/**
-	 * Removes an Entity from the list. A removed entity will not be used by the parser and any fields/configuration made
-	 * in the removed entity will be lost.
+	 * Removes an entity from this {@code EntityList}. A removed entity will not be used by the parser and any
+	 * fields/configuration made for the removed entity configuration will be lost.
 	 *
-	 * @param entityName the name of the entity that will be removed
+	 * @param entityName name of the entity that will be removed.
 	 */
 	public final void removeEntity(String entityName) {
 		Args.notBlank(entityName, "Entity name");
@@ -92,16 +124,21 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	}
 
 	/**
-	 * Removes an entity from the list. A removed entity will not be used by the parser and any fields/configuration
-	 * associated with the removed entity will be lost.
+	 * Removes an entity from this {@code EntityList}. A removed entity will not be used by the parser and any
+	 * fields/configuration made for the removed entity configuration will be lost.
 	 *
-	 * @param entity the entity object that will be removed
+	 * @param entity the entity object that should be be removed
 	 */
 	public final void removeEntity(E entity) {
 		Args.notNull(entity, "Entity");
 		removeEntity(entity.getEntityName());
 	}
 
+	/**
+	 * Iterates over the entity configurations managed by this {@code EntityList}.
+	 *
+	 * @return a new {@code Iterator} of {@link EntitySettings} objects stored in this {@code EntityList}.
+	 */
 	@Override
 	public Iterator<E> iterator() {
 		return entities.values().iterator();
