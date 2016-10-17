@@ -62,7 +62,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @param parserSettings the {@link EntityParserSettings} that "owns" all entities and their {@code EntitySettings}
 	 */
-	protected void setParserSettings(G parserSettings) {
+	protected final void setParserSettings(G parserSettings) {
 		this.parserSettings = parserSettings;
 	}
 
@@ -94,7 +94,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return the String representation of a null value
 	 */
-	public String getNullValue() {
+	public final String getNullValue() {
 		if (localNullValue || parserSettings == null) {
 			return internalSettings.getNullValue();
 		} else {
@@ -111,7 +111,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @param nullValue the String representation of a null value
 	 */
-	public void setNullValue(String nullValue) {
+	public final void setNullValue(String nullValue) {
 		localNullValue = true;
 		internalSettings.setNullValue(nullValue);
 	}
@@ -133,7 +133,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return the (modifiable) set of selected fields
 	 */
-	public FieldSet<String> selectFields(String... fieldNames) {
+	public final FieldSet<String> selectFields(String... fieldNames) {
 		return internalSettings.selectFields(fieldNames);
 	}
 
@@ -154,7 +154,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return the (modifiable) set of ignored fields
 	 */
-	public FieldSet<String> excludeFields(String... fieldNames) {
+	public final FieldSet<String> excludeFields(String... fieldNames) {
 		return internalSettings.excludeFields(fieldNames);
 	}
 
@@ -175,7 +175,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return the (modifiable) set of selected fields
 	 */
-	public FieldSet<Integer> selectIndexes(Integer... fieldIndexes) {
+	public final FieldSet<Integer> selectIndexes(Integer... fieldIndexes) {
 		return internalSettings.selectIndexes(fieldIndexes);
 	}
 
@@ -196,7 +196,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return the (modifiable) set of ignored fields
 	 */
-	public FieldSet<Integer> excludeIndexes(Integer... fieldIndexes) {
+	public final FieldSet<Integer> excludeIndexes(Integer... fieldIndexes) {
 		return internalSettings.excludeIndexes(fieldIndexes);
 	}
 
@@ -219,7 +219,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return the (modifiable) set of selected fields
 	 */
 	@SuppressWarnings("rawtypes")
-	public FieldSet<Enum> selectFields(Enum... columns) {
+	public final FieldSet<Enum> selectFields(Enum... columns) {
 		return internalSettings.selectFields(columns);
 	}
 
@@ -241,7 +241,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return the (modifiable) set of ignored fields
 	 */
 	@SuppressWarnings("rawtypes")
-	public FieldSet<Enum> excludeFields(Enum... columns) {
+	public final FieldSet<Enum> excludeFields(Enum... columns) {
 		return internalSettings.excludeFields(columns);
 	}
 
@@ -283,7 +283,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return the callback error handler with custom code to manage occurrences of {@link DataProcessingException}.
 	 */
-	public <T extends Context> ProcessorErrorHandler<T> getProcessorErrorHandler() {
+	public final <T extends Context> ProcessorErrorHandler<T> getProcessorErrorHandler() {
 		if (localProcessorErrorHandler || parserSettings == null) {
 			return internalSettings.getProcessorErrorHandler();
 		} else {
@@ -301,7 +301,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @param processorErrorHandler the callback error handler with custom code to manage occurrences of {@link DataProcessingException}.
 	 */
-	public void setProcessorErrorHandler(ProcessorErrorHandler<? extends Context> processorErrorHandler) {
+	public final void setProcessorErrorHandler(ProcessorErrorHandler<? extends Context> processorErrorHandler) {
 		localProcessorErrorHandler = true;
 		internalSettings.setProcessorErrorHandler(processorErrorHandler);
 	}
@@ -313,7 +313,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return {@code true} if the parser/writer is configured to use a {@link ProcessorErrorHandler}
 	 */
-	public boolean isProcessorErrorHandlerDefined() {
+	public final boolean isProcessorErrorHandlerDefined() {
 		if (localProcessorErrorHandler || parserSettings == null) {
 			return internalSettings.isProcessorErrorHandlerDefined();
 		} else {
@@ -340,7 +340,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return the maximum length of contents displayed in exception messages in case of errors while parsing/writing.
 	 */
-	public int getErrorContentLength() {
+	public final int getErrorContentLength() {
 		if (localErrorContentLength || parserSettings == null) {
 			return internalSettings.getErrorContentLength();
 		} else {
@@ -361,12 +361,12 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @param errorContentLength maximum length of contents displayed in exception messages in case of errors
 	 *                           while parsing/writing.
 	 */
-	public void setErrorContentLength(int errorContentLength) {
+	public final void setErrorContentLength(int errorContentLength) {
 		localErrorContentLength = true;
 		internalSettings.setErrorContentLength(errorContentLength);
 	}
 
-	protected void runAutomaticConfiguration() {
+	protected final void runAutomaticConfiguration() {
 		internalSettings.runAutomaticConfiguration();
 	}
 
@@ -383,7 +383,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 		return name;
 	}
 
-	public String toString() {
+	public final String toString() {
 		return name;
 	}
 
@@ -395,7 +395,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @see com.univocity.parsers.common.processor
 	 */
-	public Processor<C> getProcessor() {
+	public final Processor<C> getProcessor() {
 		return processor == null ? NoopProcessor.instance : processor;
 	}
 
@@ -407,7 +407,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @see com.univocity.parsers.common.processor
 	 */
-	public void setProcessor(Processor<C> processor) {
+	public final void setProcessor(Processor<C> processor) {
 		this.processor = processor;
 	}
 
@@ -416,7 +416,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return {@code true} if trailing whitespaces from values being read/written should be trimmed, {@code false} otherwise
 	 */
-	public boolean getTrimTrailingWhitespaces() {
+	public final boolean getTrimTrailingWhitespaces() {
 		if (localTrimTrailing || parserSettings == null) {
 			return internalSettings.getIgnoreTrailingWhitespaces();
 		}
@@ -428,7 +428,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @param trimTrailingWhitespaces flag indicating whether to remove trailing whitespaces from values being read/written
 	 */
-	public void setTrimTrailingWhitespaces(boolean trimTrailingWhitespaces) {
+	public final void setTrimTrailingWhitespaces(boolean trimTrailingWhitespaces) {
 		localTrimTrailing = true;
 		internalSettings.setIgnoreTrailingWhitespaces(trimTrailingWhitespaces);
 	}
@@ -438,7 +438,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @return {@code true} if leading whitespaces from values being read/written should be trimmed, {@code false} otherwise
 	 */
-	public boolean getTrimLeadingWhitespaces() {
+	public final boolean getTrimLeadingWhitespaces() {
 		if (localTrimLeading || parserSettings == null) {
 			return internalSettings.getIgnoreLeadingWhitespaces();
 		}
@@ -450,7 +450,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @param trimLeadingWhitespaces flag indicating whether to remove leading whitespaces from values being read/written
 	 */
-	public void setTrimLeadingWhitespaces(boolean trimLeadingWhitespaces) {
+	public final void setTrimLeadingWhitespaces(boolean trimLeadingWhitespaces) {
 		localTrimLeading = true;
 		internalSettings.setIgnoreLeadingWhitespaces(trimLeadingWhitespaces);
 	}
@@ -462,7 +462,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *
 	 * @param trim a flag indicating whether whitespaces should be removed around values parsed/written.
 	 */
-	public void trimValues(boolean trim) {
+	public final void trimValues(boolean trim) {
 		localTrimTrailing = true;
 		localTrimLeading = true;
 		internalSettings.trimValues(trim);

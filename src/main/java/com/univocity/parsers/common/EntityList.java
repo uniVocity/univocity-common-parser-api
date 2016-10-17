@@ -17,6 +17,8 @@ import java.util.*;
  * The configuration applied over individual {@link EntitySettings} elements override their counterparts in the
  * global parser settings, usually a subclass of {@link EntityParserSettings}
  *
+ * @param <E> the type of {@link EntitySettings} managed by this list.
+ *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see EntitySettings
  * @see EntityParserSettings
@@ -29,7 +31,7 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	private EntityParserSettings globalSettings;
 
 	/**
-	 * Creates a new, empty EntityList
+	 * Creates a new, empty {@code EntityList}
 	 */
 	protected EntityList() {
 	}
@@ -140,7 +142,7 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	 * @return a new {@code Iterator} of {@link EntitySettings} objects stored in this {@code EntityList}.
 	 */
 	@Override
-	public Iterator<E> iterator() {
+	public final Iterator<E> iterator() {
 		return entities.values().iterator();
 	}
 }

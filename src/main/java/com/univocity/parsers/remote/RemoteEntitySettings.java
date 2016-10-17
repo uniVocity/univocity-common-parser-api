@@ -11,11 +11,16 @@ import com.univocity.parsers.common.*;
 import java.util.*;
 
 /**
- * An abstract class used by Parsers to provide configuration options for use during the parsing process.
+ * Manages configuration options for individual entities of a {@link RemoteEntityList}. Settings that also exist in
+ * the parent {@link RemoteParserSettings} will be used by default but can be overridden for an individual entity.
+ *
+ * @param <C> the type of {@link Context} implementation supported by {@link com.univocity.parsers.common.processor.core.Processor}s of this entity.
+ * @param <S> an internal configuration object that extends from {@link CommonParserSettings}, and is used to
+ *            manage configuration of elements shared with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>
+ * @param <G> type of the global configuration class (an instance of {@link RemoteEntitySettings}, used to configure
+ *            the parser (a concrete implementation of {@link EntityParserInterface}) and its entities.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
- * @see RemoteEntityList
- * @see EntityParserSettings
  */
 public abstract class RemoteEntitySettings<C extends Context, S extends CommonParserSettings, G extends RemoteParserSettings> extends EntitySettings<C, S, G> {
 
@@ -34,40 +39,80 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	}
 
 	/**
-	 * Returns the name of all fields associated with the RemoteResourceEntity. Fields are associated when any of the field adding
-	 * methods are run.
+	 * Returns the name of all fields associated with a remote entity. The definition of fields and how they are populated
+	 * is delegated to concrete implementations of this class.
 	 *
-	 * @return a String array of the field names
+	 * @return a unmodifiable, ordered {@link LinkedHashSet} of field names available from this entity.
 	 */
 	public abstract Set<String> getFieldNames();
 
-
 	/**
-	 * Removes a field from the RemoteResourceEntity. Removed fields will not be used by the parser.
+	 * Removes a field from the entity. Removed fields will not be used by the parser and any configuration associated
+	 * with it will be lost.
 	 *
-	 * @param fieldName the name of the field that will be removed.
+	 * @param fieldName name of the field that should be be removed.
 	 */
 	public abstract void removeField(String fieldName);
 
-	public boolean isColumnReorderingEnabled() {
-		if(localColumnReorderingEnabled || parserSettings == null) {
+	/**
+	 * Identifies whether fields should be reordered when field selection methods such as
+	 * {@link EntitySettings#selectFields(String...)} are used.
+	 *
+	 * <p>When <b>enabled</b>, each parsed record will contain values only for the selected columns.
+	 * The values will be ordered according to the selection.
+	 * <p>When <b>disabled</b>, each parsed record will contain values for all columns, in their original sequence.
+	 * Fields which were not selected will contain null values, as defined in {@link EntitySettings#getNullValue()}.
+	 *
+	 * <i>Defaults to {@code true}</i>
+	 *
+	 * @return a flag indicating whether or not selected fields should be reordered
+	 */
+	public final boolean isColumnReorderingEnabled() {
+		if (localColumnReorderingEnabled || parserSettings == null) {
 			return getInternalSettings().isColumnReorderingEnabled();
 		}
 		return parserSettings.isColumnReorderingEnabled();
 	}
 
-	public void setColumnReorderingEnabled(boolean columnReorderingEnabled) {
+	/**
+	 * Defines whether fields should be reordered when field selection methods such as
+	 * {@link EntitySettings#selectFields(String...)} are used.
+	 *
+	 * <p>When <b>enabled</b>, each parsed record will contain values only for the selected columns.
+	 * The values will be ordered according to the selection.
+	 * <p>When <b>disabled</b>, each parsed record will contain values for all columns, in their original sequence.
+	 * Fields which were not selected will contain null values, as defined in {@link EntitySettings#getNullValue()}.
+	 *
+	 * <i>Defaults to {@code true}</i>
+	 *
+	 * @param columnReorderingEnabled the flag indicating whether or not selected fields should be reordered
+	 */
+	public final void setColumnReorderingEnabled(boolean columnReorderingEnabled) {
 		this.localColumnReorderingEnabled = true;
 		this.getInternalSettings().setColumnReorderingEnabled(columnReorderingEnabled);
 	}
 
-	public String getEmptyValue() {
-		if(localEmptyValue || parserSettings == null) {
+	/**
+	 * Returns the value to be used when the content parsed for a field of some record evaluates to an empty {@code String}
+	 *
+	 * <i>Defaults to {@code null}</i>
+	 *
+	 * @return the value to be used instead of empty {@code String} (i.e. "") when the content of a field is empty.
+	 */
+	public final String getEmptyValue() {
+		if (localEmptyValue || parserSettings == null) {
 			return emptyValue;
 		}
 		return parserSettings.getEmptyValue();
 	}
 
+	/**
+	 * Defines the value to be used when the content parsed for a field of some record evaluates to an empty {@code String}
+	 *
+	 * <i>Defaults to {@code null}</i>
+	 *
+	 * @param emptyValue the value to be used instead of empty {@code String} (i.e. "") when the content of a field is empty.
+	 */
 	public void setEmptyValue(String emptyValue) {
 		localEmptyValue = true;
 		this.emptyValue = emptyValue;

@@ -112,11 +112,6 @@ public class PaginationContext {
 		paginator.setIdealPageSize(idealPageSize);
 	}
 
-
-	public Map<String,String> getRequestParameters() {
-		return  paginator.getRequestParameters();
-	}
-
 	/**
 	 * Returns the associated {@link UrlReaderProvider}
 	 *

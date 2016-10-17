@@ -16,7 +16,7 @@ import java.util.*;
  * @see PaginationContext
  * @see PaginationHandler
  */
-public abstract class Paginator<E extends RemoteEntitySettings> extends RemoteAccessConfiguration {
+public abstract class Paginator<E extends RemoteEntitySettings> {
 	protected final E entitySettings;
 	protected int followCount;
 	protected int idealPageSize;
