@@ -8,18 +8,31 @@ package com.univocity.parsers.common;
 
 import com.univocity.parsers.annotations.*;
 import com.univocity.parsers.common.fields.*;
+import com.univocity.parsers.common.processor.*;
 import com.univocity.parsers.common.processor.core.*;
 
 import java.util.*;
 
 
 /**
+ * Manages configuration options for individual entities of an {@link EntityList}. Settings that also exist in
+ * the parent {@link EntityParserSettings} will be used by default but can be overridden for an individual entity.
+ *
+ * @param <C> the type of {@link Context} implementation supported by {@link Processor}s of this entity.
+ * @param <S> internal implementation of a {@link CommonSettings}, used to manage configuration of elements shared
+ *            with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>
+ * @param <G> type of the global configuration class (an instance of {@link EntityParserSettings}, used to configure
+ *            the parser (a concrete implementation of {@link EntityParserInterface}) and its entities.
+ *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @see EntityList
+ * @see EntityParserInterface
+ * @see EntityParserSettings
  */
 public abstract class EntitySettings<C extends Context, S extends CommonSettings, G extends EntityParserSettings> {
 
 	private final S internalSettings;
-	protected G globalSettings;
+	protected G parserSettings;
 
 	private boolean localNullValue;
 	private boolean localProcessorErrorHandler;
@@ -30,15 +43,34 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	protected final String name;
 	protected Processor<C> processor;
 
+	/**
+	 * Internal constructor to be invoked the subclasses of {@code EntitySettings}
+	 *
+	 * @param name             the entity name, usually provided by the user
+	 * @param internalSettings an internal implementation of a {@link CommonSettings}, used to manage configuration
+	 *                         of elements shared with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>.
+	 *                         Not meant to be exposed/accessed directly by users.
+	 */
 	protected EntitySettings(String name, S internalSettings) {
 		this.name = name;
 		this.internalSettings = internalSettings;
 	}
 
-	protected void setGlobalSettings(G globalSettings) {
-		this.globalSettings = globalSettings;
+	/**
+	 * Used to "inherit" default settings of a parent {@link EntityParserSettings}. Used internally in
+	 * in the constructor of {@link EntityParserSettings} (which is the global setting object itself).
+	 *
+	 * @param parserSettings the {@link EntityParserSettings} that "owns" all entities and their {@code EntitySettings}
+	 */
+	protected void setParserSettings(G parserSettings) {
+		this.parserSettings = parserSettings;
 	}
 
+	/**
+	 * Utility method to create new, empty instances of {@link CommonParserSettings}. For internal use only.
+	 *
+	 * @return a new instance of a {@link CommonParserSettings} class.
+	 */
 	protected static final CommonParserSettings createEmptyParserSettings() {
 		return new CommonParserSettings() {
 			@Override
@@ -54,24 +86,28 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	}
 
 	/**
-	 * Returns the String representation of a null value (defaults to null)
-	 * <p>When reading, if the parser does not read any character from the input, the nullValue is used instead of an empty string
-	 * <p>When writing, if the writer has a null object to write to the output, the nullValue is used instead of an empty string
+	 * Returns the {@code String} representation of a null value (defaults to {@link EntityParserSettings#globalSettings#getNullValue()})
+	 * <p>When reading, if the parser does not read any character from the input for a particular value, the nullValue
+	 * is used instead of an empty {@code String}</p>
+	 * <p>When writing, if the writer has a {@code null} object to write to the output, the nullValue is used instead
+	 * of an empty {@code String}</p>
 	 *
 	 * @return the String representation of a null value
 	 */
 	public String getNullValue() {
-		if (localNullValue || globalSettings == null) {
+		if (localNullValue || parserSettings == null) {
 			return internalSettings.getNullValue();
 		} else {
-			return globalSettings.globalSettings.getNullValue();
+			return parserSettings.globalSettings.getNullValue();
 		}
 	}
 
 	/**
-	 * Sets the String representation of a null value (defaults to null)
-	 * <p>When reading, if the parser does not read any character from the input, the nullValue is used instead of an empty string
-	 * <p>When writing, if the writer has a null object to write to the output, the nullValue is used instead of an empty string
+	 * Sets the {@code String} representation of a null value (defaults to {@link EntityParserSettings#globalSettings#getNullValue()})
+	 * <p>When reading, if the parser does not read any character from the input for a particular value, the nullValue
+	 * is used instead of an empty {@code String}</p>
+	 * <p>When writing, if the writer has a {@code null} object to write to the output, the nullValue is used instead
+	 * of an empty {@code String}</p>
 	 *
 	 * @param nullValue the String representation of a null value
 	 */
@@ -86,7 +122,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@code setColumnReorderingEnabled(boolean)} with {@code false} if available.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence provided represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -107,7 +143,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@code setColumnReorderingEnabled(boolean)} with {@code false} if available.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence of non-excluded fields represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -128,7 +164,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@code setColumnReorderingEnabled(boolean)} with {@code false} if available.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence provided represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -149,7 +185,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@code setColumnReorderingEnabled(boolean)} with {@code false} if available.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence of non-excluded fields represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -171,7 +207,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@code setColumnReorderingEnabled(boolean)} with {@code false} if available.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence provided represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -193,7 +229,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@code setColumnReorderingEnabled(boolean)} with {@code false} if available.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence of non-excluded fields represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -210,9 +246,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	}
 
 	/**
-	 * Indicates whether this settings object can automatically derive configuration options. This is used, for example, to define the headers when the user
-	 * provides a {@link BeanWriterProcessor} where the bean class contains a {@link Headers} annotation, or to enable header extraction when the bean class of a
-	 * {@link BeanProcessor} has attributes mapping to header names.
+	 * Indicates whether this settings object can automatically derive configuration options. This is used, for example,
+	 * to define the headers when the user provides a {@link BeanWriterProcessor} where the bean class contains a
+	 * {@link Headers} annotation, or to enable header extraction when the bean class of a {@link BeanProcessor} has
+	 * attributes mapping to header names.
 	 *
 	 * <p>Defaults to {@code true}</p>
 	 *
@@ -223,8 +260,9 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	}
 
 	/**
-	 * Indicates whether this settings object can automatically derive configuration options. This is used, for example, to define the headers when the user
-	 * provides a {@link BeanWriterProcessor} where the bean class contains a {@link Headers} annotation, or to enable header extraction when the bean class of a
+	 * Indicates whether this settings object can automatically derive configuration options. This is used, for example,
+	 * to define the headers when the user provides a {@link BeanWriterProcessor} where the bean class contains a
+	 * {@link Headers} annotation, or to enable header extraction when the bean class of a
 	 * {@link BeanProcessor} has attributes mapping to header names.
 	 *
 	 * @param autoConfigurationEnabled a flag to turn the automatic configuration feature on/off.
@@ -234,28 +272,32 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	}
 
 	/**
-	 * Returns the custom error handler to be used to capture and handle errors that might happen while processing records with a {@link com.univocity.parsers.common.processor.core.Processor}
+	 * Returns the custom error handler to be used to capture and handle errors that might happen while processing
+	 * records with a {@link com.univocity.parsers.common.processor.core.Processor}
 	 * or a {@link RowWriterProcessor} (i.e. non-fatal {@link DataProcessingException}s).
 	 *
-	 * <p>The parsing/writing process won't stop (unless the error handler rethrows the {@link DataProcessingException} or manually stops the process).</p>
+	 * <p>The parsing/writing process won't stop (unless the error handler rethrows the {@link DataProcessingException}
+	 * or manually stops the process).</p>
 	 *
 	 * @param <T> the {@code Context} type provided by the parser implementation.
 	 *
 	 * @return the callback error handler with custom code to manage occurrences of {@link DataProcessingException}.
 	 */
 	public <T extends Context> ProcessorErrorHandler<T> getProcessorErrorHandler() {
-		if (localProcessorErrorHandler || globalSettings == null) {
+		if (localProcessorErrorHandler || parserSettings == null) {
 			return internalSettings.getProcessorErrorHandler();
 		} else {
-			return globalSettings.globalSettings.getProcessorErrorHandler();
+			return parserSettings.globalSettings.getProcessorErrorHandler();
 		}
 	}
 
 	/**
-	 * Defines a custom error handler to capture and handle errors that might happen while processing records with a {@link com.univocity.parsers.common.processor.core.Processor}
+	 * Defines a custom error handler to capture and handle errors that might happen while processing records with
+	 * a {@link com.univocity.parsers.common.processor.core.Processor}
 	 * or a {@link RowWriterProcessor} (i.e. non-fatal {@link DataProcessingException}s).
 	 *
-	 * <p>The parsing parsing/writing won't stop (unless the error handler rethrows the {@link DataProcessingException} or manually stops the process).</p>
+	 * <p>The parsing parsing/writing won't stop (unless the error handler rethrows the {@link DataProcessingException}
+	 * or manually stops the process).</p>
 	 *
 	 * @param processorErrorHandler the callback error handler with custom code to manage occurrences of {@link DataProcessingException}.
 	 */
@@ -266,15 +308,16 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 
 
 	/**
-	 * Returns a flag indicating whether or not a {@link ProcessorErrorHandler} has been defined through the use of method {@link #setProcessorErrorHandler(ProcessorErrorHandler)}
+	 * Returns a flag indicating whether or not a {@link ProcessorErrorHandler} has been defined through the use of
+	 * method {@link #setProcessorErrorHandler(ProcessorErrorHandler)}
 	 *
 	 * @return {@code true} if the parser/writer is configured to use a {@link ProcessorErrorHandler}
 	 */
 	public boolean isProcessorErrorHandlerDefined() {
-		if (localProcessorErrorHandler || globalSettings == null) {
+		if (localProcessorErrorHandler || parserSettings == null) {
 			return internalSettings.isProcessorErrorHandlerDefined();
 		} else {
-			return globalSettings.globalSettings.isProcessorErrorHandlerDefined();
+			return parserSettings.globalSettings.isProcessorErrorHandlerDefined();
 		}
 	}
 
@@ -287,7 +330,8 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	}
 
 	/**
-	 * Configures the parser/writer to limit the length of displayed contents being parsed/written in the exception message when an error occurs
+	 * Configures the parser/writer to limit the length of displayed contents being parsed/written in
+	 * the exception message when an error occurs
 	 *
 	 * <p>If set to {@code 0}, then no exceptions will include the content being manipulated in their attributes,
 	 * and the {@code "<omitted>"} string will appear in error messages as the parsed/written content.</p>
@@ -297,15 +341,16 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return the maximum length of contents displayed in exception messages in case of errors while parsing/writing.
 	 */
 	public int getErrorContentLength() {
-		if (localErrorContentLength || globalSettings == null) {
+		if (localErrorContentLength || parserSettings == null) {
 			return internalSettings.getErrorContentLength();
 		} else {
-			return globalSettings.globalSettings.getErrorContentLength();
+			return parserSettings.globalSettings.getErrorContentLength();
 		}
 	}
 
 	/**
-	 * Configures the parser/writer to limit the length of displayed contents being parsed/written in the exception message when an error occurs.
+	 * Configures the parser/writer to limit the length of displayed contents being parsed/written in the exception
+	 * message when an error occurs.
 	 *
 	 * <p>If set to {@code 0}, then no exceptions will include the content being manipulated in their attributes,
 	 * and the {@code "<omitted>"} string will appear in error messages as the parsed/written content.</p>
@@ -313,7 +358,8 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * <p
 	 * >defaults to {@code -1} (no limit)</p>.
 	 *
-	 * @param errorContentLength maximum length of contents displayed in exception messages in case of errors while parsing/writing.
+	 * @param errorContentLength maximum length of contents displayed in exception messages in case of errors
+	 *                           while parsing/writing.
 	 */
 	public void setErrorContentLength(int errorContentLength) {
 		localErrorContentLength = true;
@@ -341,39 +387,82 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 		return name;
 	}
 
+	/**
+	 * Returns the current implementation of {@link Processor} to be used to process rows generated for this
+	 * entity. If no processor has been defined, a {@link NoopProcessor} will be returned.
+	 *
+	 * @return the current {@link Processor}
+	 *
+	 * @see com.univocity.parsers.common.processor
+	 */
 	public Processor<C> getProcessor() {
 		return processor == null ? NoopProcessor.instance : processor;
 	}
 
+	/**
+	 * Defines an implementation of {@link Processor} to be used to process rows generated for this
+	 * entity.
+	 *
+	 * @param processor the {@link Processor} implementation.
+	 *
+	 * @see com.univocity.parsers.common.processor
+	 */
 	public void setProcessor(Processor<C> processor) {
 		this.processor = processor;
 	}
 
-	public boolean isTrimTrailingWhitespaces() {
-		if(localTrimTrailing || globalSettings == null){
+	/**
+	 * Returns whether or not trailing whitespaces from values being read/written should be trimmed (defaults to {@code true})
+	 *
+	 * @return {@code true} if trailing whitespaces from values being read/written should be trimmed, {@code false} otherwise
+	 */
+	public boolean getTrimTrailingWhitespaces() {
+		if (localTrimTrailing || parserSettings == null) {
 			return internalSettings.getIgnoreTrailingWhitespaces();
 		}
-		return globalSettings.globalSettings.getIgnoreTrailingWhitespaces();
+		return parserSettings.globalSettings.getIgnoreTrailingWhitespaces();
 	}
 
-	public void setTrimTrailingWhitespaces(boolean ignoreTrailingWhitespaces) {
+	/**
+	 * Defines whether or not trailing whitespaces from values being read/written should be trimmed (defaults to {@code true})
+	 *
+	 * @param trimTrailingWhitespaces flag indicating whether to remove trailing whitespaces from values being read/written
+	 */
+	public void setTrimTrailingWhitespaces(boolean trimTrailingWhitespaces) {
 		localTrimTrailing = true;
-		internalSettings.setIgnoreTrailingWhitespaces(ignoreTrailingWhitespaces);
+		internalSettings.setIgnoreTrailingWhitespaces(trimTrailingWhitespaces);
 	}
 
-	public boolean isTrimLeadingWhitespaces() {
-		if(localTrimLeading || globalSettings == null){
+	/**
+	 * Returns whether or not leading whitespaces from values being read/written should be trimmed (defaults to {@code true})
+	 *
+	 * @return {@code true} if leading whitespaces from values being read/written should be trimmed, {@code false} otherwise
+	 */
+	public boolean getTrimLeadingWhitespaces() {
+		if (localTrimLeading || parserSettings == null) {
 			return internalSettings.getIgnoreLeadingWhitespaces();
 		}
-		return globalSettings.globalSettings.getIgnoreLeadingWhitespaces();
+		return parserSettings.globalSettings.getIgnoreLeadingWhitespaces();
 	}
 
-	public void setTrimLeadingWhitespaces(boolean ignoreLeadingWhitespaces) {
+	/**
+	 * Defines whether or not leading whitespaces from values being read/written should be trimmed (defaults to {@code true})
+	 *
+	 * @param trimLeadingWhitespaces flag indicating whether to remove leading whitespaces from values being read/written
+	 */
+	public void setTrimLeadingWhitespaces(boolean trimLeadingWhitespaces) {
 		localTrimLeading = true;
-		internalSettings.setIgnoreLeadingWhitespaces(ignoreLeadingWhitespaces);
+		internalSettings.setIgnoreLeadingWhitespaces(trimLeadingWhitespaces);
 	}
 
-	public void trimValues(boolean trim){
+	/**
+	 * Configures the parser/writer to trim/keep leading and trailing whitespaces around values
+	 * This has the same effect as invoking both {@link #setTrimLeadingWhitespaces(boolean)}
+	 * and {@link #setTrimTrailingWhitespaces(boolean)} with the same value.
+	 *
+	 * @param trim a flag indicating whether whitespaces should be removed around values parsed/written.
+	 */
+	public void trimValues(boolean trim) {
 		localTrimTrailing = true;
 		localTrimLeading = true;
 		internalSettings.trimValues(trim);

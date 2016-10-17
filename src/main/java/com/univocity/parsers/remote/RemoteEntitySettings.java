@@ -50,10 +50,10 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	public abstract void removeField(String fieldName);
 
 	public boolean isColumnReorderingEnabled() {
-		if(localColumnReorderingEnabled || globalSettings == null) {
+		if(localColumnReorderingEnabled || parserSettings == null) {
 			return getInternalSettings().isColumnReorderingEnabled();
 		}
-		return globalSettings.isColumnReorderingEnabled();
+		return parserSettings.isColumnReorderingEnabled();
 	}
 
 	public void setColumnReorderingEnabled(boolean columnReorderingEnabled) {
@@ -62,10 +62,10 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	}
 
 	public String getEmptyValue() {
-		if(localEmptyValue || globalSettings == null) {
+		if(localEmptyValue || parserSettings == null) {
 			return emptyValue;
 		}
-		return globalSettings.getEmptyValue();
+		return parserSettings.getEmptyValue();
 	}
 
 	public void setEmptyValue(String emptyValue) {

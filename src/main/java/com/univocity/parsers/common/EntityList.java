@@ -43,7 +43,7 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	final void setGlobalSettings(EntityParserSettings globalSettings) {
 		this.globalSettings = globalSettings;
 		for (E entity : entities.values()) {
-			entity.setGlobalSettings(globalSettings);
+			entity.setParserSettings(globalSettings);
 		}
 	}
 
@@ -61,7 +61,7 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 		String normalizedEntityName = entityName.trim().toLowerCase();
 		if (entities.get(normalizedEntityName) == null) {
 			E newEntity = newEntity(entityName);
-			newEntity.setGlobalSettings(globalSettings);
+			newEntity.setParserSettings(globalSettings);
 			entities.put(normalizedEntityName, newEntity);
 			originalEntityNames.put(entityName, normalizedEntityName);
 		}
