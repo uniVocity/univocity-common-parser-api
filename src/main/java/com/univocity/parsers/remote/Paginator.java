@@ -9,108 +9,93 @@ package com.univocity.parsers.remote;
 import java.util.*;
 
 /**
- * A abstract class that allows {@link RemoteResourceParser}'s to access and parse a sequence of pages
+ * An abstract class that allows {@link com.univocity.parsers.common.EntityParserInterface} implementations that work
+ * with {@link RemoteEntitySettings} to access multiple pages of remote content that needs to parsed.
+ *
+ * @param <E> type of {@link RemoteEntitySettings} of a parser with support for pagination. A paginator is essentially
+ *            an entity specifically configured and used for the purpose of retrieving more content from a current
+ *            state (or page), if available.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
- * @see RemoteResourceParser
+ * @see RemoteParserSettings
  * @see PaginationContext
  * @see PaginationHandler
  */
 public abstract class Paginator<E extends RemoteEntitySettings> {
 	protected final E entitySettings;
-	protected int followCount;
-	protected int idealPageSize;
-	protected int currentPageNumber;
-	protected PaginationHandler paginationHandler;
+	private int followCount = 0;
+	private PaginationHandler paginationHandler;
 	public static String ENTITY_NAME = "*paginator*";
 
-
 	/**
-	 * Creates a new HtmlPaginator and sets the currentPageNumber to 0
+	 * Creates a new {@code Paginator}
 	 */
 	protected Paginator() {
-		currentPageNumber = 0;
 		entitySettings = newEntitySettings();
 	}
 
+	/**
+	 * Internally, the {@code Paginator} uses an instance of {@link RemoteEntitySettings} that should allow
+	 * the definition of fields specifically to control the available pagination elements found in the parsed content.
+	 *
+	 * @return a new instance of a concrete implementation of {@link RemoteEntitySettings}, used to configure all
+	 * pagination-related elements.
+	 */
 	protected abstract E newEntitySettings();
 
-	/**
-	 * Sets the ideal page size. The ideal page size is a number that the paginator will try to set the page size to.
-	 *
-	 * @param pageSize a number that is used to define the ideal page size
-	 */
-	public void setIdealPageSize(int pageSize) {
-		this.idealPageSize = pageSize;
-	}
 
 	/**
-	 * Returns the ideal page size. The ideal page size is a number that the paginator will try to set the page size to.
+	 * Sets the number of pages this {@code Paginator} can go up to.
 	 *
-	 * @return the ideal page size
-	 */
-	public int getIdealPageSize() {
-		return idealPageSize;
-	}
-
-
-	/**
-	 * Sets the amount of times that the {@link HtmlParser} will go to the next page.
+	 * <i>Defaults to {@code 0} (no limit)</i>
 	 *
-	 * @param followCount the number of pages that will be visited
+	 * @param followCount the maximum number of pages that should be visited from a given starting point.
 	 */
-	public void setFollowCount(int followCount) {
+	public final void setFollowCount(int followCount) {
 		this.followCount = followCount;
 	}
 
 	/**
-	 * Returns the amount of times the {@link HtmlParser} will go to the next page.
+	 * Returns the number of pages this {@code Paginator} can go up to.
 	 *
-	 * @return the number of pages that will be visited
+	 * <i>Defaults to {@code 0} (no limit)</i>
+	 *
+	 * @return the maximum number of pages that should be visited from a given starting point.
 	 */
-	public int getFollowCount() {
+	public final int getFollowCount() {
 		return followCount;
 	}
 
-
 	/**
-	 * Returns the page number that the Paginator is currently up to
+	 * Sets the {@link PaginationHandler} which is used to prepare the call to the next page when the parser runs.
+	 * Users can provide their {@link PaginationHandler} to obtain information about the pagination process through a
+	 * {@link PaginationContext}, and if required, to manipulate the remote call used to fetch the next page.
 	 *
-	 * @return the current page number of the paginator
+	 * @param paginationHandler the {@link PaginationHandler} that will be associated with this {@code Paginator}
 	 */
-	public int getCurrentPageNumber() {
-		return currentPageNumber;
-	}
-
-	/**
-	 * Sets what page number the Paginator is up to.
-	 *
-	 * @param currentPageNumber the page number that the paginator will be set to.
-	 */
-	public void setCurrentPageNumber(int currentPageNumber) {
-		this.currentPageNumber = currentPageNumber;
-	}
-
-	/**
-	 * Sets the {@link PaginationHandler} which is used to prepare the call to the next page when the {@link HtmlParser}
-	 * runs. If not set, will use DefaultPaginationHandler.
-	 *
-	 * @param paginationHandler the {@link PaginationHandler} that will be associated with the paginator
-	 */
-	public void setPaginationHandler(PaginationHandler paginationHandler) {
+	public final void setPaginationHandler(PaginationHandler paginationHandler) {
 		this.paginationHandler = paginationHandler;
 	}
 
 	/**
-	 * Returns the {@link PaginationHandler} associated with the Paginator
+	 * Returns the {@link PaginationHandler} associated with thie {@code Paginator}.
+	 * The {@link PaginationHandler} is used to prepare the call to the next page when the parser runs.
+	 * Users can provide their {@link PaginationHandler} to obtain information about the pagination process through a
+	 * {@link PaginationContext}, and if required, to manipulate the remote call used to fetch the next page.
 	 *
-	 * @return the associated {@link PaginationHandler}
+	 * @return the {@link PaginationHandler} associated with this {@code Paginator}
 	 */
-	public PaginationHandler getPaginationHandler() {
+	public final PaginationHandler getPaginationHandler() {
 		return paginationHandler;
 	}
 
-	public Set<String> getFieldNames() {
+	/**
+	 * Returns the name of all fields associated with the paginator. The definition how this {@code Paginator} fields
+	 * are populated is delegated to concrete implementations of this class.
+	 *
+	 * @return a unmodifiable, ordered {@link LinkedHashSet} of field names available from this {@code Paginator}.
+	 */
+	public final Set<String> getFieldNames() {
 		return entitySettings.getFieldNames();
 	}
 }

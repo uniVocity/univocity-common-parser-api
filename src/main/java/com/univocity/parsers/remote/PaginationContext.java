@@ -139,4 +139,15 @@ public class PaginationContext {
 		return paginator.getCurrentPageNumber();
 	}
 
+
+	/**
+	 * Returns the page number that this {@code Paginator} is currently up to
+	 * (0-based, independent of the underlying resource page indexing).
+	 *
+	 * @return the current page number of the paginator
+	 */
+	public final int getCurrentPageNumber() {
+		return currentPageNumber;
+	}
+
 }
