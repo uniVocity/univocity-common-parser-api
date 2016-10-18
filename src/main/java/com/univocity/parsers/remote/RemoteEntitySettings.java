@@ -113,7 +113,7 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	 *
 	 * @param emptyValue the value to be used instead of empty {@code String} (i.e. "") when the content of a field is empty.
 	 */
-	public void setEmptyValue(String emptyValue) {
+	public final void setEmptyValue(String emptyValue) {
 		localEmptyValue = true;
 		this.emptyValue = emptyValue;
 	}

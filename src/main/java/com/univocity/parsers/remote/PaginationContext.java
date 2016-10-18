@@ -11,90 +11,81 @@ import com.univocity.api.common.*;
 import java.util.*;
 
 /**
- *  Contains information about the pagination process.
+ * Contains information about the pagination process managed by a {@link Paginator} and made available to the user
+ * through the {@link PaginationHandler} callback.
  *
- *  @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
- *
- *  @see HtmlPaginator
- *  @see UrlReaderProvider
+ * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @see Paginator
+ * @see PaginationHandler
+ * @see UrlReaderProvider
  */
 public interface PaginationContext {
 
 	/**
-	 * Returns the value parsed from the next page path.
+	 * Returns the value parsed from the input that points to the next page.
 	 *
-	 * @return String from html element specified by the next page path
+	 * @return the content extracted from the input that provides information about the next page.
 	 */
 	String getNextPage();
 
 	/**
-	 * Returns the value parsed from the last page path.
+	 * Returns the value parsed from the input that points to the previous page.
 	 *
-	 * @return String from html element specified by the last page path
-	 */
-	String getLastPage();
-
-	/**
-	 * Returns the value parsed from the previous page path.
-	 *
-	 * @return String from html element specified by the previous page path
+	 * @return the content extracted from the input that provides information about the previous page.
 	 */
 	String getPreviousPage();
 
 	/**
-	 * Returns the value parsed from the page size path.
+	 * Returns the value parsed from the input that points to the first page.
 	 *
-	 * @return String from html element specified by the page size path
+	 * @return the content extracted from the input that provides information about the first page.
+	 */
+	String getFirstPage();
+
+	/**
+	 * Returns the value parsed from the input that points to the last page.
+	 *
+	 * @return the content extracted from the input that provides information about the last page.
+	 */
+	String getLastPage();
+
+
+	/**
+	 * Returns the value parsed from the input that indicates the current page size.
+	 *
+	 * @return the content extracted from the input that provides information about the current page size.
 	 */
 	String getPageSize();
 
 	/**
-	 * Returns the value parsed from the item count path.
+	 * Returns the value parsed from the input that indicates the number of items available in the current page.
 	 *
-	 * @return String from html element specified by the first page path
+	 * @return the content extracted from the input that provides information about the number of items available
+	 * in the current page.
 	 */
 	String getItemCount();
 
 	/**
-	 * Returns the value parsed from the first page path.
+	 * Returns the value parsed from the input and associated with a user provided field of the {@link Paginator}.
 	 *
-	 * @return String from html element specified by the first page path
+	 * @param fieldName name of the user-provided field associated with the {@link Paginator}
+	 *
+	 * @return the content extracted from the input for the given field name.
 	 */
-	String getFirstPage();
-
 	String getField(String fieldName);
 
-	Set<String> getRequestParameterNames();
-
 	/**
-	 * Returns the ideal page size that the paginator is set at.
+	 * Returns the available field names available from the current {@link Paginator} implementation.
 	 *
-	 * @return a number defining the ideal page size
-	 */
-	int getIdealPageSize();
-
-	/**
-	 * Sets the page size that the paginator will set the web page size to.
-	 *
-	 * @param idealPageSize
-	 */
-	void setIdealPageSize(int idealPageSize);
-
-	/**
-	 * Returns the associated {@link UrlReaderProvider}
-	 *
-	 * @return the associated {@link UrlReaderProvider}
-	 */
-	ReaderProvider getReaderProvider();
-
-	/**
-	 * Returns a String array of field names used by the paginator. Field names are set via setting requestParameters or
-	 * using the other setters such as {@link HtmlPaginator#setNextPage()}
-	 *
-	 * @return a string array of field names.
+	 * @return a set of field names bound to the paginator.
 	 */
 	Set<String> getFieldNames();
 
+	/**
+	 * Returns the number of the page being visited by current {@link Paginator}.
+	 *
+	 * @return the current page number.
+	 */
 	int getCurrentPageNumber();
 
 }
