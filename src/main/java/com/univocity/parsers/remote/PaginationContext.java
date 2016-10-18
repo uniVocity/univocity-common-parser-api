@@ -62,6 +62,10 @@ public interface PaginationContext {
 	 */
 	String getFirstPage();
 
+	String getField(String fieldName);
+
+	Set<String> getRequestParameterNames();
+
 	/**
 	 * Returns the ideal page size that the paginator is set at.
 	 *
@@ -91,5 +95,6 @@ public interface PaginationContext {
 	 */
 	Set<String> getFieldNames();
 
+	int getCurrentPageNumber();
 
 }
