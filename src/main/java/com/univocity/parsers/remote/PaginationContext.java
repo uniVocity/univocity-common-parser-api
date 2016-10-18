@@ -18,108 +18,70 @@ import java.util.*;
  *  @see HtmlPaginator
  *  @see UrlReaderProvider
  */
-public class PaginationContext {
-
-	private final Paginator paginator;
-	private final ReaderProvider readerProvider;
-
-	/**
-	 * Creates a new PaginationContext with a {@link HtmlPaginator} and a {@link UrlReaderProvider}.
-	 * @param paginator
-	 * @param urlReaderProvider
-	 */
-	public PaginationContext(Paginator paginator, ReaderProvider readerProvider) {
-		this.paginator = paginator;
-		this.readerProvider = readerProvider;
-	}
-
-	/**
-	 * Returns the value parsed from the first page path.
-	 *
-	 * @return String from html element specified by the first page path
-	 */
-	public String getFirstPage() {
-		return getField("firstPage");
-	}
+public interface PaginationContext {
 
 	/**
 	 * Returns the value parsed from the next page path.
 	 *
 	 * @return String from html element specified by the next page path
 	 */
-	public String getNextPage() {
-		return getField("nextPage");
-	}
+	String getNextPage();
 
 	/**
 	 * Returns the value parsed from the last page path.
 	 *
 	 * @return String from html element specified by the last page path
 	 */
-	public String getLastPage() {
-		return getField("lastPage");
-	}
+	String getLastPage();
 
 	/**
 	 * Returns the value parsed from the previous page path.
 	 *
 	 * @return String from html element specified by the previous page path
 	 */
-	public String getPreviousPage() {
-		return getField("previousPage");
-	}
+	String getPreviousPage();
 
 	/**
 	 * Returns the value parsed from the page size path.
 	 *
 	 * @return String from html element specified by the page size path
 	 */
-	public String getPageSize() {
-		return getField("pageSize");
-	}
+	String getPageSize();
 
 	/**
 	 * Returns the value parsed from the item count path.
 	 *
 	 * @return String from html element specified by the first page path
 	 */
-	public String getItemCount() {
-		return getField("itemCount");
-	}
+	String getItemCount();
 
-	private String getField(String fieldName) {
-//
-//		Map<String,String> map = paginator.getRequestParameters();
-//		return  map.get(fieldName); //FIXME
-		throw new IllegalStateException("fix me");
-	}
+	/**
+	 * Returns the value parsed from the first page path.
+	 *
+	 * @return String from html element specified by the first page path
+	 */
+	String getFirstPage();
 
 	/**
 	 * Returns the ideal page size that the paginator is set at.
 	 *
 	 * @return a number defining the ideal page size
 	 */
-	public int getIdealPageSize() {
-		return paginator.getIdealPageSize();
-	}
+	int getIdealPageSize();
 
 	/**
 	 * Sets the page size that the paginator will set the web page size to.
 	 *
 	 * @param idealPageSize
 	 */
-	public void setIdealPageSize(int idealPageSize) {
-		paginator.setIdealPageSize(idealPageSize);
-	}
+	void setIdealPageSize(int idealPageSize);
 
 	/**
 	 * Returns the associated {@link UrlReaderProvider}
 	 *
 	 * @return the associated {@link UrlReaderProvider}
 	 */
-	public ReaderProvider getReaderProvider() {
-		return readerProvider;
-	}
+	ReaderProvider getReaderProvider();
 
 	/**
 	 * Returns a String array of field names used by the paginator. Field names are set via setting requestParameters or
@@ -127,27 +89,7 @@ public class PaginationContext {
 	 *
 	 * @return a string array of field names.
 	 */
-	public Set<String> getFieldNames() {
-		return paginator.getFieldNames();
-	}
+	Set<String> getFieldNames();
 
-	/**
-	 * Returns the number of the page that the paginator is currently up to
-	 * @return the current page number
-	 */
-	public int getCurrentPageNumber() {
-		return paginator.getCurrentPageNumber();
-	}
-
-
-	/**
-	 * Returns the page number that this {@code Paginator} is currently up to
-	 * (0-based, independent of the underlying resource page indexing).
-	 *
-	 * @return the current page number of the paginator
-	 */
-	public final int getCurrentPageNumber() {
-		return currentPageNumber;
-	}
 
 }
