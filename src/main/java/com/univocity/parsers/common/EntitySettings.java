@@ -86,7 +86,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	}
 
 	/**
-	 * Returns the {@code String} representation of a null value (defaults to {@link EntityParserSettings#globalSettings#getNullValue()})
+	 * Returns the {@code String} representation of a null value.
 	 * <p>When reading, if the parser does not read any character from the input for a particular value, the nullValue
 	 * is used instead of an empty {@code String}</p>
 	 * <p>When writing, if the writer has a {@code null} object to write to the output, the nullValue is used instead
@@ -103,7 +103,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	}
 
 	/**
-	 * Sets the {@code String} representation of a null value (defaults to {@link EntityParserSettings#globalSettings#getNullValue()})
+	 * Sets the {@code String} representation of a null value.
 	 * <p>When reading, if the parser does not read any character from the input for a particular value, the nullValue
 	 * is used instead of an empty {@code String}</p>
 	 * <p>When writing, if the writer has a {@code null} object to write to the output, the nullValue is used instead

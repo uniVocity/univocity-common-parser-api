@@ -85,7 +85,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * The following patterns are recognized:
 	 * <ul>
-	 * <li>number, &lt;padding&gt;</li> prints a sequential number, starting from {@code 1}.
+	 * <li>number, &lt;padding&gt; prints a sequential number, starting from {@code 1}.
 	 * Numbers can be padded with leading zeros if the optional padding number is provided.
 	 *
 	 * Examples:
@@ -94,8 +94,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <li>/tmp/page{number}: prints /tmp/page1.html, /tmp/page543.html, etc</li>
 	 * <li>/tmp/page{number, 2}: prints /tmp/page01.html, /tmp/page89.html, /tmp/page289.html, etc</li>
 	 * </ul>
-	 *
-	 * <li>date, &lt;mask&gt;</li> prints the current date as a timestamp. A date mask can be provided to configure
+	 * </li>
+	 * <li>date, &lt;mask&gt; prints the current date as a timestamp. A date mask can be provided to configure
 	 * how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
 	 *
 	 * Examples:
@@ -103,7 +103,9 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <li>/tmp/file_{date, yyyy-MMM-dd}: prints /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html, etc</li>
 	 * <li>/tmp/file_{date}: prints /tmp/file_23423423423.pdf, /tmp/file_234234324231.html, etc</li>
 	 * </ul>
+	 * </li>
 	 * </ul>
+	 *
 	 *
 	 * <i>defaults to @code{file_{number}}</i>
 	 *
@@ -120,7 +122,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * The following patterns are recognized:
 	 * <ul>
-	 * <li>number, &lt;padding&gt;</li> prints a sequential number, starting from {@code 1}.
+	 * <li>number, &lt;padding&gt; prints a sequential number, starting from {@code 1}.
 	 * Numbers can be padded with leading zeros if the optional padding number is provided.
 	 *
 	 * Examples:
@@ -129,8 +131,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <li>/tmp/page{number}: prints /tmp/page1.html, /tmp/page543.html, etc</li>
 	 * <li>/tmp/page{number, 2}: prints /tmp/page01.html, /tmp/page89.html, /tmp/page289.html, etc</li>
 	 * </ul>
-	 *
-	 * <li>date, &lt;mask&gt;</li> prints the current date as a timestamp. A date mask can be provided to configure
+	 * </li>
+	 * <li>date, &lt;mask&gt; prints the current date as a timestamp. A date mask can be provided to configure
 	 * how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
 	 *
 	 * Examples:
@@ -138,6 +140,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <li>/tmp/file_{date, yyyy-MMM-dd}: prints /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html, etc</li>
 	 * <li>/tmp/file_{date}: prints /tmp/file_23423423423.pdf, /tmp/file_234234324231.html, etc</li>
 	 * </ul>
+	 * </li>
 	 * </ul>
 	 *
 	 * <i>defaults to @code{file_{number}}</i>
