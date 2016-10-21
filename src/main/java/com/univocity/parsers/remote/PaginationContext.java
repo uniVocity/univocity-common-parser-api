@@ -72,7 +72,7 @@ public interface PaginationContext {
 	 *
 	 * @return the content extracted from the input for the given field name.
 	 */
-	String getField(String fieldName);
+	String readField(String fieldName);
 
 	/**
 	 * Returns the available field names available from the current {@link Paginator} implementation.
