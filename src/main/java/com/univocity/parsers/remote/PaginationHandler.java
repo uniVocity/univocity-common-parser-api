@@ -13,7 +13,7 @@ import com.univocity.api.common.*;
  * Callback class used by a {@link Paginator} to determine how the next page of content should be accessed.
  *
  * Information about the pagination process is provided by a {@link PaginationContext}, through the invocation of
- * the {@link #prepareCallToNextPage(UrlReaderProvider, PaginationContext)} method. Users can manipulate the remote request to
+ * the {@link #prepareCallToNextPage(HttpResponse, UrlReaderProvider, PaginationContext)} method. Users can manipulate the remote request to
  * control how the next page should be fetched by modifying the {@link UrlReaderProvider} configuration.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
@@ -27,9 +27,11 @@ public interface PaginationHandler {
 	 * identified in the input. Users can use this method to prepare the call to the next page and to obtain more
 	 * information about the pagination process
 	 *
-	 * @param urlReaderProvider a {@link UrlReaderProvider} prepared by the parser to access the next page.
-	 *                          Users can alter its configuration before the {@link HttpRequest} is processed.
-	 * @param paginationContext the {@link PaginationContext} used to get information from the pagination process.
+	 * @param currentPageResponse    a {@link HttpResponse} object with all information returned by the remote server
+	 *                               in its HTTP response message.
+	 * @param nextPageReaderProvider a {@link UrlReaderProvider} prepared by the parser to access the next page.
+	 *                               Users can alter its configuration before the {@link HttpRequest} is processed.
+	 * @param paginationContext      the {@link PaginationContext} used to get information from the pagination process.
 	 */
-	void prepareCallToNextPage(UrlReaderProvider urlReaderProvider, PaginationContext paginationContext);
+	void prepareCallToNextPage(HttpResponse currentPageResponse, UrlReaderProvider nextPageReaderProvider, PaginationContext paginationContext);
 }
