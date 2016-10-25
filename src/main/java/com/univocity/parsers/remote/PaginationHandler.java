@@ -7,7 +7,7 @@
 package com.univocity.parsers.remote;
 
 
-import com.univocity.api.common.*;
+import com.univocity.api.net.*;
 
 /**
  * Callback class used by a {@link Paginator} to determine how the next page of content should be accessed.

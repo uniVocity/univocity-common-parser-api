@@ -6,7 +6,9 @@
 
 package com.univocity.parsers.remote;
 
-import com.univocity.api.common.*;
+import com.univocity.api.io.*;
+import com.univocity.api.net.*;
+import com.univocity.api.statistics.*;
 import com.univocity.parsers.common.*;
 
 import java.io.*;
@@ -27,13 +29,14 @@ import java.io.*;
  */
 public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList> extends EntityParserSettings<S, L> {
 
-	//Does not exist in CommonParserSettings.
 	private String emptyValue;
 
 	protected Paginator paginator;
 
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
+
+	private DataTransfer<UrlReaderProvider, File> dataTransfer;
 
 
 	/**
@@ -227,5 +230,13 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 */
 	public final void setColumnReorderingEnabled(boolean columnReorderingEnabled) {
 		globalSettings.setColumnReorderingEnabled(columnReorderingEnabled);
+	}
+
+	public DataTransfer<UrlReaderProvider, File> getDataTransfer() {
+		return dataTransfer == null ? NoopDataTransfer.instance : dataTransfer;
+	}
+
+	public void setDataTransfer(DataTransfer<UrlReaderProvider, File> dataTransfer) {
+		this.dataTransfer = dataTransfer;
 	}
 }

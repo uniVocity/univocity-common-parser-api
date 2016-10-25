@@ -6,7 +6,7 @@
 
 package com.univocity.parsers.common;
 
-import com.univocity.api.common.*;
+import com.univocity.api.io.*;
 import com.univocity.parsers.common.processor.core.*;
 import com.univocity.parsers.common.record.*;
 
