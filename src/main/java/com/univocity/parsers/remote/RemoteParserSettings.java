@@ -26,6 +26,10 @@ import java.io.*;
  * @param <L> the {@link RemoteEntityList} implementation supported by an {@link EntityParserInterface}.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @see DataTransferListener
+ * @see RemoteEntitySettings
+ * @see RemoteEntityList
+ * @see Paginator
  */
 public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList> extends EntityParserSettings<S, L> {
 
@@ -36,7 +40,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
 
-	private DataTransferListener<UrlReaderProvider, File> dataTransferListener;
+	private DataTransferListener<UrlReaderProvider, File> downloadListener;
 
 
 	/**
@@ -232,11 +236,26 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		globalSettings.setColumnReorderingEnabled(columnReorderingEnabled);
 	}
 
-	public DataTransferListener<UrlReaderProvider, File> getDataTransferListener() {
-		return dataTransferListener == null ? NoopDataTransferListener.instance : dataTransferListener;
+
+	/**
+	 * Returns the {@link DataTransferListener} associated with the parser and which will receive updates on the
+	 * progress of downloads made by the parser.
+	 *
+	 * @return the current listener that should receive notifications regarding the progress of downloads
+	 * performed by the parser. If undefined, a {@link NoopDataTransferListener} will be returned.
+	 */
+	public DataTransferListener<UrlReaderProvider, File> getDownloadListener() {
+		return downloadListener == null ? NoopDataTransferListener.instance : downloadListener;
 	}
 
-	public void setDataTransferListener(DataTransferListener<UrlReaderProvider, File> dataTransferListener) {
-		this.dataTransferListener = dataTransferListener;
+	/**
+	 * Associates a {@link DataTransferListener} with the parser, which will receive updates on the progress of downloads
+	 * made by the parser.
+	 *
+	 * @param downloadListener the listener that should receive notifications regarding the progress of downloads
+	 *                         performed by the parser.
+	 */
+	public void setDownloadListener(DataTransferListener<UrlReaderProvider, File> downloadListener) {
+		this.downloadListener = downloadListener;
 	}
 }
