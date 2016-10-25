@@ -255,7 +255,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @param downloadListener the listener that should receive notifications regarding the progress of downloads
 	 *                         performed by the parser.
 	 */
-	public void setDownloadListener(DataTransferListener<UrlReaderProvider, File> downloadListener) {
+	public void setDownloadListener(DownloadStatistics downloadListener) {
 		this.downloadListener = downloadListener;
 	}
 }
