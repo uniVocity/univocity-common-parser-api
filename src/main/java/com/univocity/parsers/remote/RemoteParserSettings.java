@@ -36,7 +36,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
 
-	private DataTransfer<UrlReaderProvider, File> dataTransfer;
+	private DataTransferListener<UrlReaderProvider, File> dataTransferListener;
 
 
 	/**
@@ -232,11 +232,11 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		globalSettings.setColumnReorderingEnabled(columnReorderingEnabled);
 	}
 
-	public DataTransfer<UrlReaderProvider, File> getDataTransfer() {
-		return dataTransfer == null ? NoopDataTransfer.instance : dataTransfer;
+	public DataTransferListener<UrlReaderProvider, File> getDataTransferListener() {
+		return dataTransferListener == null ? NoopDataTransferListener.instance : dataTransferListener;
 	}
 
-	public void setDataTransfer(DataTransfer<UrlReaderProvider, File> dataTransfer) {
-		this.dataTransfer = dataTransfer;
+	public void setDataTransferListener(DataTransferListener<UrlReaderProvider, File> dataTransferListener) {
+		this.dataTransferListener = dataTransferListener;
 	}
 }
