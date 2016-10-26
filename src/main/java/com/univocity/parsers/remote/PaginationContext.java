@@ -7,7 +7,9 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.api.net.*;
+import com.univocity.parsers.common.record.*;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -66,7 +68,8 @@ public interface PaginationContext {
 	String getItemCount();
 
 	/**
-	 * Returns the value parsed from the input and associated with a user provided field of the {@link Paginator}.
+	 * Returns the value parsed from the input and associated with a user provided fields and request parameters of
+	 * the {@link Paginator}.
 	 *
 	 * @param fieldName name of the user-provided field associated with the {@link Paginator}
 	 *
@@ -75,11 +78,31 @@ public interface PaginationContext {
 	String readField(String fieldName);
 
 	/**
+	 * Returns the values parsed from the input and associated with the given user provided fields
+	 * and request parameters of the {@link Paginator}.
+	 *
+	 * @param fieldNames names of the user-provided field associated with the {@link Paginator}. If empty
+	 *                   the values of all fields will be returned.
+	 *
+	 * @return the content extracted from the input for the given field names.
+	 */
+	String[] readFields(String... fieldNames);
+
+	/**
 	 * Returns the available field names available from the current {@link Paginator} implementation.
 	 *
 	 * @return a set of field names bound to the paginator.
 	 */
 	Set<String> getFieldNames();
+
+
+	/**
+	 * Returns a {@link Record} with the values parsed from the input and associated with the given user provided fields
+	 * and request parameters of the {@link Paginator}.
+	 *
+	 * @return the content extracted from the input as a {@link Record}
+	 */
+	Record getRecord();
 
 	/**
 	 * Returns the number of the page being visited by current {@link Paginator}.
@@ -87,5 +110,14 @@ public interface PaginationContext {
 	 * @return the current page number.
 	 */
 	int getCurrentPageNumber();
+
+	/**
+	 * Returns the local file which will contain the data of the next page to be visited,
+	 * if reading from a remote location. If the parsing process is running on a set of already downloaded files,
+	 * returns the file that is expected to contain the information of the next page.
+	 *
+	 * @return the file with the next page of data.
+	 */
+	File getNextPageFile();
 
 }

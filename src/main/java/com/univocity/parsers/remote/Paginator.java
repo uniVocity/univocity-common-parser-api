@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * An abstract class that allows {@link com.univocity.parsers.common.EntityParserInterface} implementations that work
- * with {@link RemoteEntitySettings} to access multiple pages of remote content that need to parsed.
+ * with {@link RemoteEntitySettings} to access multiple pages of remote content that needs to parsed.
  *
  * @param <E> type of {@link RemoteEntitySettings} of a parser with support for pagination. A paginator is essentially
  *            an entity specifically configured and used for the purpose of retrieving more content from a current
