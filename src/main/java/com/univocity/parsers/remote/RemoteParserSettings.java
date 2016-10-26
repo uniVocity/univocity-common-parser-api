@@ -40,7 +40,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
 
-	private DataTransferListener<UrlReaderProvider, File> downloadListener;
+	private DownloadList downloadListener;
 
 
 	/**
@@ -238,14 +238,14 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 
 	/**
-	 * Returns the {@link DataTransferListener} associated with the parser and which will receive updates on the
+	 * Returns the {@link DownloadList} associated with the parser and which will receive updates on the
 	 * progress of downloads made by the parser.
 	 *
 	 * @return the current listener that should receive notifications regarding the progress of downloads
 	 * performed by the parser. If undefined, a {@link NoopDataTransferListener} will be returned.
 	 */
-	public DataTransferListener<UrlReaderProvider, File> getDownloadListener() {
-		return downloadListener == null ? NoopDataTransferListener.instance : downloadListener;
+	public DownloadList getDownloadListener() {
+		return downloadListener;
 	}
 
 	/**
@@ -255,7 +255,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @param downloadListener the listener that should receive notifications regarding the progress of downloads
 	 *                         performed by the parser.
 	 */
-	public void setDownloadListener(DownloadStatistics downloadListener) {
+	public void setDownloadListener(DownloadList downloadListener) {
 		this.downloadListener = downloadListener;
 	}
 }
