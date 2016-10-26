@@ -7,7 +7,6 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.api.io.*;
-import com.univocity.api.net.*;
 import com.univocity.api.statistics.*;
 import com.univocity.parsers.common.*;
 
@@ -26,7 +25,7 @@ import java.io.*;
  * @param <L> the {@link RemoteEntityList} implementation supported by an {@link EntityParserInterface}.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
- * @see DataTransferListener
+ * @see DataTransfer
  * @see RemoteEntitySettings
  * @see RemoteEntityList
  * @see Paginator
@@ -40,7 +39,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
 
-	private DownloadList downloadListener;
+	private DownloadListener downloadListener;
 
 
 	/**
@@ -238,24 +237,24 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 
 	/**
-	 * Returns the {@link DownloadList} associated with the parser and which will receive updates on the
+	 * Returns the {@link DownloadListener} associated with the parser and which will receive updates on the
 	 * progress of downloads made by the parser.
 	 *
 	 * @return the current listener that should receive notifications regarding the progress of downloads
-	 * performed by the parser. If undefined, a {@link NoopDataTransferListener} will be returned.
+	 * performed by the parser. If undefined, a {@link NoopDataTransfer} will be returned.
 	 */
-	public DownloadList getDownloadListener() {
+	public DownloadListener getDownloadListener() {
 		return downloadListener;
 	}
 
 	/**
-	 * Associates a {@link DataTransferListener} with the parser, which will receive updates on the progress of downloads
+	 * Associates a {@link DataTransfer} with the parser, which will receive updates on the progress of downloads
 	 * made by the parser.
 	 *
 	 * @param downloadListener the listener that should receive notifications regarding the progress of downloads
 	 *                         performed by the parser.
 	 */
-	public void setDownloadListener(DownloadList downloadListener) {
+	public void setDownloadListener(DownloadListener downloadListener) {
 		this.downloadListener = downloadListener;
 	}
 }
