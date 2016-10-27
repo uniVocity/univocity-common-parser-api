@@ -28,6 +28,7 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	private String emptyValue = null;
 
 	private boolean localColumnReorderingEnabled;
+	protected final Set<String> requestParameters = new LinkedHashSet<String>();
 
 	public RemoteEntitySettings(String entityName, S entitySettings) {
 		super(entityName, entitySettings);

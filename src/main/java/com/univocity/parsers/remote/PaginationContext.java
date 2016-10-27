@@ -120,4 +120,9 @@ public interface PaginationContext {
 	 */
 	File getNextPageFile();
 
+	/**
+	 * Stops the pagination and prevents attempts to read more pages.
+	 */
+	void stopPagination();
+
 }
