@@ -91,10 +91,24 @@ public interface PaginationContext {
 	/**
 	 * Returns the available field names available from the current {@link Paginator} implementation.
 	 *
-	 * @return a set of field names bound to the paginator.
+	 * @return the sequence of field names bound to the paginator.
 	 */
-	Set<String> getFieldNames();
+	String[] getFieldNames();
 
+	/**
+	 * Returns the names of all request parameters configured in the current {@link Paginator} implementation.
+	 *
+	 * @return a sequence of request field names bound to the paginator.
+	 */
+	String[] getRequestParameterNames();
+
+	/**
+	 * Returns the request parameters collected by the paginator as a map of request parameter names and values
+	 * collected by the paginator. Note that request parameters can have multiple values assigned to the same name.
+	 *
+	 * @return a map of request parameter names and their values.
+	 */
+	Map<String, String[]> getRequestParameters();
 
 	/**
 	 * Returns a {@link Record} with the values parsed from the input and associated with the given user provided fields
@@ -124,5 +138,6 @@ public interface PaginationContext {
 	 * Stops the pagination and prevents attempts to read more pages.
 	 */
 	void stopPagination();
+
 
 }
