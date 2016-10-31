@@ -24,48 +24,37 @@ import java.util.*;
 public interface PaginationContext {
 
 	/**
-	 * Returns the value parsed from the input that points to the next page.
+	 * Returns the value parsed from the input that indicates the current page, or {@code null} if not available.
+	 *
+	 * @return the content extracted from the input that provides information about the current page.
+	 */
+	String getCurrentPage();
+
+	/**
+	 * Returns the value parsed from the input from {@link #getCurrentPage()}, and converted to a valid {@code int}
+	 * number that indicates the current page. If the information is unparseable/unavailable, {@code -1} will be
+	 * returned.
+	 *
+	 * @return the actual page number available from the input, or {@code -1} if unavailable.
+	 */
+	int getCurrentPageNumber();
+
+	/**
+	 * Returns the value parsed from the input that points to the next page. This is usually a link to the next page
+	 * or simply a numeric value representing the next page.
 	 *
 	 * @return the content extracted from the input that provides information about the next page.
 	 */
 	String getNextPage();
 
 	/**
-	 * Returns the value parsed from the input that points to the previous page.
+	 * Returns the value parsed from the input from {@link #getNextPage()}, and converted to a valid {@code int}
+	 * number that indicates the current page. If the information is unparseable/unavailable, {@code -1} will be
+	 * returned.
 	 *
-	 * @return the content extracted from the input that provides information about the previous page.
+	 * @return the next page number, available from the input, or {@code -1} if unavailable.
 	 */
-	String getPreviousPage();
-
-	/**
-	 * Returns the value parsed from the input that points to the first page.
-	 *
-	 * @return the content extracted from the input that provides information about the first page.
-	 */
-	String getFirstPage();
-
-	/**
-	 * Returns the value parsed from the input that points to the last page.
-	 *
-	 * @return the content extracted from the input that provides information about the last page.
-	 */
-	String getLastPage();
-
-
-	/**
-	 * Returns the value parsed from the input that indicates the current page size.
-	 *
-	 * @return the content extracted from the input that provides information about the current page size.
-	 */
-	String getPageSize();
-
-	/**
-	 * Returns the value parsed from the input that indicates the number of items available in the current page.
-	 *
-	 * @return the content extracted from the input that provides information about the number of items available
-	 * in the current page.
-	 */
-	String getItemCount();
+	int getNextPageNumber();
 
 	/**
 	 * Returns the value parsed from the input and associated with a user provided fields and request parameters of
@@ -103,8 +92,8 @@ public interface PaginationContext {
 	String[] getRequestParameterNames();
 
 	/**
-	 * Returns the request parameters collected by the paginator as a map of request parameter names and values
-	 * collected by the paginator. Note that request parameters can have multiple values assigned to the same name.
+	 * Returns the request parameters collected by the paginator as a map of request parameter names and values.
+	 * Note that request parameters can have multiple values assigned to the same name.
 	 *
 	 * @return a map of request parameter names and their values.
 	 */
@@ -119,23 +108,17 @@ public interface PaginationContext {
 	Record getRecord();
 
 	/**
-	 * Returns the number of the page being visited by the current {@link Paginator}.
+	 * Returns the output of {@link #getCurrentPageNumber()} if evaluates to a positive number, otherwise
+	 * returns the number of the pages visited so far by the current {@link Paginator}.
 	 *
-	 * @return the current page number.
+	 * @return the current page count.
 	 */
-	int getCurrentPageNumber();
-
-	/**
-	 * Returns the number of next the page to be visited by the current {@link Paginator}.
-	 *
-	 * @return the next page number.
-	 */
-	int getNextPageNumber();
+	int getPageCount();
 
 	/**
 	 * Returns the local file which will contain the data of the next page to be visited,
 	 * if reading from a remote location. If the parsing process is running on a set of already downloaded files,
-	 * returns the file that is expected to contain the information of the next page.
+	 * returns the file that is expected to contain information of the next page.
 	 *
 	 * @return the file with the next page of data.
 	 */

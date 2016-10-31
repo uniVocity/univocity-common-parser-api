@@ -27,14 +27,10 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	private PaginationHandler paginationHandler;
 
 	public static final String ENTITY_NAME = "*paginator*";
+	public static final String CURRENT_PAGE = "currentPage";
 	public static final String NEXT_PAGE = "nextPage";
-	public static final String PREVIOUS_PAGE = "previousPage";
-	public static final String PAGE_SIZE = "pageSize";
-	public static final String FIRST_PAGE = "firstPage";
-	public static final String LAST_PAGE = "lastPage";
-	public static final String ITEM_COUNT = "itemCount";
 
-	public static Set<String> RESERVED_NAMES = Collections.unmodifiableSet(new TreeSet<String>(Arrays.asList(NEXT_PAGE, PREVIOUS_PAGE, PAGE_SIZE, FIRST_PAGE, LAST_PAGE, ITEM_COUNT)));
+	public static Set<String> RESERVED_NAMES = Collections.unmodifiableSet(new TreeSet<String>(Arrays.asList(CURRENT_PAGE, NEXT_PAGE)));
 
 	/**
 	 * Creates a new {@code Paginator}

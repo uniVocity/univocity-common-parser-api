@@ -7,31 +7,27 @@
 package com.univocity.parsers.remote;
 
 
-import com.univocity.api.net.*;
-
 /**
  * Callback class used by a {@link Paginator} to determine how the next page of content should be accessed.
  *
  * Information about the pagination process is provided by a {@link PaginationContext}, through the invocation of
- * the {@link #prepareCallToNextPage(HttpResponse, UrlReaderProvider, PaginationContext)} method. Users can manipulate the remote request to
- * control how the next page should be fetched by modifying the {@link UrlReaderProvider} configuration.
+ * the {@link #prepareCallToNextPage(PaginationContext)} method. Users can for example manipulate the remote request to
+ * control how the next page should be fetched by modifying the configuration to access the next page of data.
+ *
+ * @param <C> the {@link PaginationContext} implementation supported by this handler.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see Paginator
  * @see PaginationContext
  */
-public interface PaginationHandler {
+public interface PaginationHandler<C extends PaginationContext> {
 
 	/**
 	 * Method invoked by the parser internally when a {@link Paginator} is defined and new pages of content have been
 	 * identified in the input. Users can use this method to prepare the call to the next page and to obtain more
 	 * information about the pagination process
 	 *
-	 * @param currentPageResponse    a {@link HttpResponse} object with all information returned by the remote server
-	 *                               in its HTTP response message.
-	 * @param nextPageReaderProvider a {@link UrlReaderProvider} prepared by the parser to access the next page.
-	 *                               Users can alter its configuration before the {@link HttpRequest} is processed.
-	 * @param paginationContext      the {@link PaginationContext} used to get information from the pagination process.
+	 * @param paginationContext the {@link PaginationContext} used to get information from the pagination process.
 	 */
-	void prepareCallToNextPage(HttpResponse currentPageResponse, UrlReaderProvider nextPageReaderProvider, PaginationContext paginationContext);
+	void prepareCallToNextPage(C paginationContext);
 }
