@@ -119,11 +119,18 @@ public interface PaginationContext {
 	Record getRecord();
 
 	/**
-	 * Returns the number of the page being visited by current {@link Paginator}.
+	 * Returns the number of the page being visited by the current {@link Paginator}.
 	 *
 	 * @return the current page number.
 	 */
 	int getCurrentPageNumber();
+
+	/**
+	 * Returns the number of next the page to be visited by the current {@link Paginator}.
+	 *
+	 * @return the next page number.
+	 */
+	int getNextPageNumber();
 
 	/**
 	 * Returns the local file which will contain the data of the next page to be visited,

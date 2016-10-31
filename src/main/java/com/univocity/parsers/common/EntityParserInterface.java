@@ -9,6 +9,7 @@ package com.univocity.parsers.common;
 import com.univocity.api.io.*;
 import com.univocity.parsers.common.processor.core.*;
 import com.univocity.parsers.common.record.*;
+import com.univocity.parsers.remote.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -380,4 +381,14 @@ public interface EntityParserInterface {
 	 * @param encoding the encoding to be used when reading text from the given input.
 	 */
 	void parse(File file, String encoding);
+
+	/**
+	 * Returns the {@link PaginationContext} object with information collected for the configured {@link Paginator}, if
+	 * any. The information returned comes from the last input processed, and might have been modified by a
+	 * {@link PaginationHandler} if it has been associated with the {@link Paginator}
+	 * using {@link Paginator#setPaginationHandler(PaginationHandler)}.
+	 *
+	 * @return the current {@link PaginationContext} with pagination information captured after parsing a given input.
+	 */
+	PaginationContext getPaginationContext();
 }
