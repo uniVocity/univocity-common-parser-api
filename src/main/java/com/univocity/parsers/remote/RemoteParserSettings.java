@@ -23,6 +23,8 @@ import java.io.*;
  * @param <S> an internal configuration object that extends from {@link CommonParserSettings}, and is used to
  *            manage configuration of elements shared with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>
  * @param <L> the {@link RemoteEntityList} implementation supported by an {@link EntityParserInterface}.
+ * @param <C> the {@link Context} implementation which provides specific details about the the parsing process performed
+ *           by this parser.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see DataTransfer
@@ -30,7 +32,7 @@ import java.io.*;
  * @see RemoteEntityList
  * @see Paginator
  */
-public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList> extends EntityParserSettings<S, L> {
+public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList, C extends Context> extends EntityParserSettings<S, L, C> {
 
 	private String emptyValue;
 

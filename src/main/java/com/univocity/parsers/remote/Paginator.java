@@ -15,22 +15,27 @@ import java.util.*;
  * @param <E> type of {@link RemoteEntitySettings} of a parser with support for pagination. A paginator is essentially
  *            an entity specifically configured and used for the purpose of retrieving more content from a current
  *            state (or page), if available.
+ * @param <C> the concrete {link PaginationContext} which provides additional information about the
+ *           pagination process of a specific {@link com.univocity.parsers.common.EntityParserInterface} implementation.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see RemoteParserSettings
  * @see PaginationContext
  * @see PaginationHandler
  */
-public abstract class Paginator<E extends RemoteEntitySettings> {
+public abstract class Paginator<E extends RemoteEntitySettings, C extends PaginationContext> {
 	protected final E entitySettings;
 	private int followCount = 0;
-	private PaginationHandler paginationHandler;
+	private PaginationHandler<C> paginationHandler;
 
 	public static final String ENTITY_NAME = "*paginator*";
 	public static final String CURRENT_PAGE = "currentPage";
+	public static final String CURRENT_PAGE_NUMBER = "currentPageNumber";
 	public static final String NEXT_PAGE = "nextPage";
+	public static final String NEXT_PAGE_NUMBER = "nextPageNumber";
 
-	public static Set<String> RESERVED_NAMES = Collections.unmodifiableSet(new TreeSet<String>(Arrays.asList(CURRENT_PAGE, NEXT_PAGE)));
+	public static Set<String> RESERVED_NAMES = Collections.unmodifiableSet(
+			new TreeSet<String>(Arrays.asList(CURRENT_PAGE, CURRENT_PAGE_NUMBER, NEXT_PAGE, NEXT_PAGE_NUMBER)));
 
 	/**
 	 * Creates a new {@code Paginator}
@@ -78,7 +83,7 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	 *
 	 * @param paginationHandler the {@link PaginationHandler} that will be associated with this {@code Paginator}
 	 */
-	public final void setPaginationHandler(PaginationHandler paginationHandler) {
+	public final void setPaginationHandler(PaginationHandler<C> paginationHandler) {
 		this.paginationHandler = paginationHandler;
 	}
 
@@ -90,7 +95,7 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	 *
 	 * @return the {@link PaginationHandler} associated with this {@code Paginator}
 	 */
-	public final PaginationHandler getPaginationHandler() {
+	public final PaginationHandler<C> getPaginationHandler() {
 		return paginationHandler;
 	}
 

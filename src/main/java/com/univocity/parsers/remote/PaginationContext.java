@@ -31,7 +31,8 @@ public interface PaginationContext {
 	String getCurrentPage();
 
 	/**
-	 * Returns the value parsed from the input from {@link #getCurrentPage()}, and converted to a valid {@code int}
+	 * Returns the value parsed from the input that indicates the current page number. If undefined, and
+	 * {@link #getCurrentPage()} returns a valid numeric {@code String} it will be converted to an {@code int}
 	 * number that indicates the current page. If the information is unparseable/unavailable, {@code -1} will be
 	 * returned.
 	 *
@@ -48,13 +49,23 @@ public interface PaginationContext {
 	String getNextPage();
 
 	/**
-	 * Returns the value parsed from the input from {@link #getNextPage()}, and converted to a valid {@code int}
-	 * number that indicates the current page. If the information is unparseable/unavailable, {@code -1} will be
-	 * returned.
+	 * Returns the value parsed from the input, converted to a valid {@code int} number that indicates the next
+	 * page number. If undefined, and {@link #getNextPage()} returns a valid numeric {@code String} it will be converted
+	 * to an {@code int} number that indicates the next page. If the information is unparseable/unavailable,
+	 * {@code -1} will be returned.
 	 *
-	 * @return the next page number, available from the input, or {@code -1} if unavailable.
+	 * @return the next page number if available from the input, {@code -1} otherwise.
 	 */
 	int getNextPageNumber();
+
+	/**
+	 * Returns a flag indicating whether a next page is available from the current page. It tests if
+	 * {@link #getNextPage()} returns a non-null value OR {@link #getNextPageNumber()} returns a non-negative number and
+	 * returns {@code true}. If no information about a next page is available, {@code false} will be returned
+	 *
+	 * @return {@code true} if information about a next page is available, otherwise {@code false}
+	 */
+	boolean hasMorePages();
 
 	/**
 	 * Returns the value parsed from the input and associated with a user provided fields and request parameters of
@@ -82,22 +93,7 @@ public interface PaginationContext {
 	 *
 	 * @return the sequence of field names bound to the paginator.
 	 */
-	String[] getFieldNames();
-
-	/**
-	 * Returns the names of all request parameters configured in the current {@link Paginator} implementation.
-	 *
-	 * @return a sequence of request field names bound to the paginator.
-	 */
-	String[] getRequestParameterNames();
-
-	/**
-	 * Returns the request parameters collected by the paginator as a map of request parameter names and values.
-	 * Note that request parameters can have multiple values assigned to the same name.
-	 *
-	 * @return a map of request parameter names and their values.
-	 */
-	Map<String, String[]> getRequestParameters();
+	Set<String> getFieldNames();
 
 	/**
 	 * Returns a {@link Record} with the values parsed from the input and associated with the given user provided fields
@@ -108,7 +104,7 @@ public interface PaginationContext {
 	Record getRecord();
 
 	/**
-	 * Returns the output of {@link #getCurrentPageNumber()} if evaluates to a positive number, otherwise
+	 * Returns the output of {@link #getCurrentPageNumber()} if it evaluates to a positive number, otherwise
 	 * returns the number of the pages visited so far by the current {@link Paginator}.
 	 *
 	 * @return the current page count.

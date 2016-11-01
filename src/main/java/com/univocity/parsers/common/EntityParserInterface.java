@@ -40,6 +40,8 @@ import java.util.*;
  *
  * Concrete parser implementations may provide additional operations.
  *
+ * @param <C> the pagination context implementation supported by the parser.
+ *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see EntityList
  * @see EntityParserSettings
@@ -48,7 +50,7 @@ import java.util.*;
  * @see FileProvider
  * @see Record
  */
-public interface EntityParserInterface {
+public interface EntityParserInterface<C extends PaginationContext> {
 
 	/**
 	 * Given an input, made available from a {@link ReaderProvider}, parses all records of all entities
@@ -390,5 +392,5 @@ public interface EntityParserInterface {
 	 *
 	 * @return the current {@link PaginationContext} with pagination information captured after parsing a given input.
 	 */
-	PaginationContext getPaginationContext();
+	C getPaginationContext();
 }
