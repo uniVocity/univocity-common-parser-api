@@ -104,8 +104,7 @@ public interface PaginationContext {
 	Record getRecord();
 
 	/**
-	 * Returns the output of {@link #getCurrentPageNumber()} if it evaluates to a positive number, otherwise
-	 * returns the number of the pages visited so far by the current {@link Paginator}.
+	 * Returns the number of the pages visited so far by the current {@link Paginator}.
 	 *
 	 * @return the current page count.
 	 */
