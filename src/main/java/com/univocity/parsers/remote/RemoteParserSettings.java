@@ -24,7 +24,7 @@ import java.io.*;
  *            manage configuration of elements shared with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>
  * @param <L> the {@link RemoteEntityList} implementation supported by an {@link EntityParserInterface}.
  * @param <C> the {@link Context} implementation which provides specific details about the the parsing process performed
- *           by this parser.
+ *            by this parser.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see DataTransfer
@@ -35,7 +35,6 @@ import java.io.*;
 public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList, C extends Context> extends EntityParserSettings<S, L, C> {
 
 	private String emptyValue;
-
 	protected Paginator paginator;
 
 	private FileProvider downloadContentDirectory;
@@ -259,4 +258,13 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	public void setDownloadListener(DownloadListener downloadListener) {
 		this.downloadListener = downloadListener;
 	}
+
+	/**
+	 * Returns the default file extension to use when saving files to the directory specified by
+	 * {@link #getDownloadContentDirectory()}, in case the the file name pattern taken from {@link #getFileNamePattern()}
+	 * doesn't include a file extension.
+	 *
+	 * @return the default file extension to use when saving files
+	 */
+	public abstract String getDefaultFileExtension();
 }

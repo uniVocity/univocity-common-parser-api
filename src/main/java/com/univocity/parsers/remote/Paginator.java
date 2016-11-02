@@ -6,6 +6,8 @@
 
 package com.univocity.parsers.remote;
 
+import com.univocity.api.common.*;
+
 import java.util.*;
 
 /**
@@ -62,6 +64,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	 * @param followCount the maximum number of pages that should be visited from a given starting point.
 	 */
 	public final void setFollowCount(int followCount) {
+		Args.positiveOrZero(followCount, "Follow count");
 		this.followCount = followCount;
 	}
 
