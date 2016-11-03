@@ -39,6 +39,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
+	private boolean downloadOverwritingEnabled = true;
 
 	private DownloadListener downloadListener;
 
@@ -267,4 +268,28 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @return the default file extension to use when saving files
 	 */
 	public abstract String getDefaultFileExtension();
+
+	/**
+	 * Returns a flag indicating whether the parser will overwrite content already downloaded. If disabled, the parser
+	 * will skip the download of contents already available in the filesystem, and use the content available locally.
+	 *
+	 * <i>Defaults to {@true}</i>
+	 *
+	 * @return flag to indicate overwriting of downloaded content is enabled.
+	 */
+	public boolean isDownloadOverwritingEnabled() {
+		return downloadOverwritingEnabled;
+	}
+
+	/**
+	 * Configures the parser to overwrite content already downloaded. If disabled, the parser will skip the download
+	 * of contents already available in the filesystem, and use the content available locally.
+	 *
+	 * <i>Defaults to {@true}</i>
+	 *
+	 * @param downloadOverwritingEnabled flag to enable or disable overwriting of downloaded content.
+	 */
+	public void setDownloadOverwritingEnabled(boolean downloadOverwritingEnabled) {
+		this.downloadOverwritingEnabled = downloadOverwritingEnabled;
+	}
 }
