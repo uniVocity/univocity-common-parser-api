@@ -8,6 +8,7 @@ package com.univocity.parsers.remote;
 
 import com.univocity.api.common.*;
 
+import java.net.*;
 import java.util.*;
 
 /**
@@ -18,7 +19,7 @@ import java.util.*;
  *            an entity specifically configured and used for the purpose of retrieving more content from a current
  *            state (or page), if available.
  * @param <C> the concrete {link PaginationContext} which provides additional information about the
- *           pagination process of a specific {@link com.univocity.parsers.common.EntityParserInterface} implementation.
+ *            pagination process of a specific {@link com.univocity.parsers.common.EntityParserInterface} implementation.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see RemoteParserSettings
@@ -29,6 +30,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	protected final E entitySettings;
 	private int followCount = 0;
 	private PaginationHandler<C> paginationHandler;
+	private boolean urlTestingEnabled = true;
 
 	public static final String ENTITY_NAME = "*paginator*";
 	public static final String CURRENT_PAGE = "currentPage";
@@ -110,5 +112,41 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	 */
 	public final Set<String> getFieldNames() {
 		return entitySettings.getFieldNames();
+	}
+
+	/**
+	 * Indicates whether this paginator should test URLs pointing to the next page before actually retrieving it.
+	 * Testing occurs every time {@link PaginationContext#getNextPage()} returns content that might be a relative or
+	 * absolute URL pointing to the next page.
+	 *
+	 * URL testing consists of executing a {@code HEAD} {@link com.univocity.api.net.HttpRequest} call to the next page
+	 * URL. If the response code returned by the remote server is {@code 200} (i.e. {@link HttpURLConnection#HTTP_OK})
+	 * then the next page URL can be used, otherwise pagination will stop.
+	 *
+	 * <i>Defaults to {@code true}</i>
+	 *
+	 * @return a flag indicating whether the paginator will test URLs formed to capture the next page
+	 * before actually attempting to fetch it.
+	 */
+	public boolean isUrlTestingEnabled() {
+		return urlTestingEnabled;
+	}
+
+	/**
+	 * Configures this paginator to test URLs pointing to the next page before actually retrieving it. Testing occurs
+	 * every time {@link PaginationContext#getNextPage()} returns content that might be a relative or absolute URL
+	 * pointing to the next page.
+	 *
+	 * URL testing consists of executing a {@code HEAD} {@link com.univocity.api.net.HttpRequest} call to the next page
+	 * URL. If the response code returned by the remote server is {@code 200} (i.e. {@link HttpURLConnection#HTTP_OK})
+	 * then the next page URL can be used, otherwise pagination will stop.
+	 *
+	 * <i>Defaults to {@code true}</i>
+	 *
+	 * @param urlTestingEnabled flag indicating whether the paginator should test URLs formed to capture the next page
+	 *                          before actually attempting to fetch it.
+	 */
+	public void setUrlTestingEnabled(boolean urlTestingEnabled) {
+		this.urlTestingEnabled = urlTestingEnabled;
 	}
 }
