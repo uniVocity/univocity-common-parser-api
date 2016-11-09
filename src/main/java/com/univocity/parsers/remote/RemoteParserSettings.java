@@ -37,6 +37,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private String emptyValue;
 	protected Paginator paginator;
 
+	private boolean downloadBeforeParsingEnabled = false;
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
@@ -291,5 +292,33 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 */
 	public void setDownloadOverwritingEnabled(boolean downloadOverwritingEnabled) {
 		this.downloadOverwritingEnabled = downloadOverwritingEnabled;
+	}
+
+	/**
+	 * Verifies whether the parser will download the remote content before parsing it. If a directory to download
+	 * content has been set (with {@link #setDownloadContentDirectory(String)}, this method will always return {@code true}
+	 * and the parser will download the remote content into the given directory. If no directory has been defined,
+	 * the contents will be downloaded into a temporary directory.
+	 *
+	 * <i>Defaults to {@code false}</i>
+	 *
+	 * @return a flag indicating whether any remote content should be downloaded into a local file before being parsed.
+	 */
+	public boolean isDownloadBeforeParsingEnabled() {
+		return downloadBeforeParsingEnabled || downloadContentDirectory != null;
+	}
+
+	/**
+	 * Instructs the parser to download the remote content before parsing it. If a directory to download
+	 * content has been set (with {@link #setDownloadContentDirectory(String)}, this method has no effect
+	 * and the parser will download the remote content into the given directory. If this flag is set to {@code true} and
+	 * no directory has been defined, the contents will be downloaded into a temporary directory.
+	 *
+	 * <i>Defaults to {@code false}</i>
+	 *
+	 * @param downloadBeforeParsingEnabled flag enable the parser to download remote content into a local file before parsing it.
+	 */
+	public void setDownloadBeforeParsingEnabled(boolean downloadBeforeParsingEnabled) {
+		this.downloadBeforeParsingEnabled = downloadBeforeParsingEnabled;
 	}
 }
