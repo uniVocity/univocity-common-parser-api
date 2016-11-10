@@ -6,6 +6,7 @@
 
 package com.univocity.parsers.remote;
 
+import com.univocity.api.common.*;
 import com.univocity.api.io.*;
 import com.univocity.api.statistics.*;
 import com.univocity.parsers.common.*;
@@ -43,7 +44,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private boolean downloadOverwritingEnabled = true;
 
 	private DownloadListener downloadListener;
-
+	private int downloadThreads = Runtime.getRuntime().availableProcessors();
 
 	/**
 	 * Creates a new instance with a supplied {@link RemoteEntityList} implementation. The
@@ -321,4 +322,30 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	public void setDownloadBeforeParsingEnabled(boolean downloadBeforeParsingEnabled) {
 		this.downloadBeforeParsingEnabled = downloadBeforeParsingEnabled;
 	}
+
+	/**
+	 * Sets the number of threads that will be used to download remote content (e.g. images) that is associated with
+	 * the parsed input
+	 *
+	 * <i>Defaults to the available number of processors given by {@link Runtime#availableProcessors()}</i>
+	 *
+	 * @param downloadThreads the maximum number of threads to be used for downloading content
+	 */
+	public final void setDownloadThreads(int downloadThreads) {
+		Args.positive(downloadThreads, "Number of threads for content download");
+		this.downloadThreads = downloadThreads;
+	}
+
+	/**
+	 * Sets the number of threads that will be used to download remote content (e.g. images) that is associated with
+	 * the parsed input
+	 *
+	 * <i>Defaults to the available number of processors given by {@link Runtime#availableProcessors()}</i>
+	 *
+	 * @return the maximum number of threads to be used for downloading content
+	 */
+	public final int getDownloadThreads() {
+		return downloadThreads <= 0 ? 1 : downloadThreads;
+	}
+
 }
