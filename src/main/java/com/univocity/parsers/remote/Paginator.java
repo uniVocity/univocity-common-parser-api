@@ -28,7 +28,7 @@ import java.util.*;
  */
 public abstract class Paginator<E extends RemoteEntitySettings, C extends PaginationContext> {
 	protected final E entitySettings;
-	private int followCount = 0;
+	private int followCount = -1;
 	private PaginationHandler<C> paginationHandler;
 	private boolean urlTestingEnabled = true;
 
@@ -61,7 +61,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	/**
 	 * Sets the number of pages this {@code Paginator} can go up to.
 	 *
-	 * <i>Defaults to {@code 0} (no limit)</i>
+	 * <i>Defaults to {@code -1} (no limit)</i>
 	 *
 	 * @param followCount the maximum number of pages that should be visited from a given starting point.
 	 */
