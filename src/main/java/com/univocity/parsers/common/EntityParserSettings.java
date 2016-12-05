@@ -267,7 +267,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param trimTrailingWhitespaces flag indicating whether to remove trailing whitespaces from values being read
 	 */
-	@UIConfig(order = 3)
+	@UIConfig(order = 4)
 	public final void setTrimTrailingWhitespaces(boolean trimTrailingWhitespaces) {
 		globalSettings.setIgnoreTrailingWhitespaces(trimTrailingWhitespaces);
 	}
@@ -286,7 +286,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param trimTrailingWhitespaces flag indicating whether to remove trailing whitespaces from values being read
 	 */
-	@UIConfig(order = 3)
+	@UIConfig(order = 4)
 	public final void setTrimLeadingWhitespaces(boolean trimTrailingWhitespaces) {
 		globalSettings.setIgnoreLeadingWhitespaces(trimTrailingWhitespaces);
 	}
