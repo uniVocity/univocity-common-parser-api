@@ -327,6 +327,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param errorContentLength the maximum length of contents displayed in exception messages in case of errors while parsing.
 	 */
+	@Range(minSize = 0, maxSize = 300)
 	@UIConfig(order = 10)
 	public final void setErrorContentLength(int errorContentLength) {
 		globalSettings.setErrorContentLength(errorContentLength);

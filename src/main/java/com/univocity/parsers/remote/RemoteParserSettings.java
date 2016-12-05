@@ -336,7 +336,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param downloadThreads the maximum number of threads to be used for downloading content
 	 */
-	@UIConfig
+	@Range(minSize = 1, maxSize = 8)
+	@UIConfig()
 	public final void setDownloadThreads(int downloadThreads) {
 		Args.positive(downloadThreads, "Number of threads for content download");
 		this.downloadThreads = downloadThreads;
