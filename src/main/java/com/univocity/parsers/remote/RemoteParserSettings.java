@@ -65,6 +65,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @param path the path to the target directory. It can contain system variables enclosed within { and }
 	 *             (e.g. {@code {user.home}/Downloads"}). Subdirectories that doesn't exist will be created if required.
 	 */
+	@UIConfig(show = false)
 	public final void setDownloadContentDirectory(String path) {
 		downloadContentDirectory = new FileProvider(path);
 	}
@@ -75,6 +76,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param directory the target directory. Subdirectories that doesn't exist will be created if required.
 	 */
+	@UIConfig(order = 1)
 	public final void setDownloadContentDirectory(File directory) {
 		downloadContentDirectory = new FileProvider(directory);
 	}
@@ -121,6 +123,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param pattern the pattern used to generate file names for downloaded content.
 	 */
+	@UIConfig(order = 2)
 	public final void setFileNamePattern(String pattern) {
 		fileNamePattern = pattern;
 	}

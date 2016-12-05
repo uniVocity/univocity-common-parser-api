@@ -7,6 +7,7 @@
 package com.univocity.parsers.common;
 
 import com.univocity.api.common.*;
+import com.univocity.parsers.remote.*;
 
 import java.util.*;
 
@@ -266,6 +267,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param trimTrailingWhitespaces flag indicating whether to remove trailing whitespaces from values being read
 	 */
+	@UIConfig(order = 3)
 	public final void setTrimTrailingWhitespaces(boolean trimTrailingWhitespaces) {
 		globalSettings.setIgnoreTrailingWhitespaces(trimTrailingWhitespaces);
 	}
@@ -284,6 +286,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param trimTrailingWhitespaces flag indicating whether to remove trailing whitespaces from values being read
 	 */
+	@UIConfig(order = 3)
 	public final void setTrimLeadingWhitespaces(boolean trimTrailingWhitespaces) {
 		globalSettings.setIgnoreLeadingWhitespaces(trimTrailingWhitespaces);
 	}
@@ -295,6 +298,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param trim a flag indicating whether whitespaces should be removed around values parsed.
 	 */
+	@UIConfig(show = false)
 	public final void trimValues(boolean trim) {
 		globalSettings.trimValues(trim);
 	}
@@ -324,6 +328,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param errorContentLength the maximum length of contents displayed in exception messages in case of errors while parsing.
 	 */
+	@UIConfig(order =  UIConfig.DEFAULT_ORDER+1)
 	public final void setErrorContentLength(int errorContentLength) {
 		globalSettings.setErrorContentLength(errorContentLength);
 	}
