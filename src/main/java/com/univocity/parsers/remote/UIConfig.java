@@ -13,11 +13,12 @@ public @interface UIConfig {
 	int DEFAULT_ORDER = Integer.MAX_VALUE;
 
 	/**
-	 * Defines if the method will be shown in the GUI.
+	 * Specifies what will be displayed as the name of the method in the GUI. If no label is specified, the method's name
+	 * (with better formatting) will be used.
 	 *
-	 * @return true if GUI will show method, false otherwise
+	 * @return the string representation of what the GUI will use to identify the method.
 	 */
-	boolean show() default true;
+	String label() default "";
 
 	/**
 	 * Defines the order in which the method will be shown in the GUI. A lower order number means that the method will be shown

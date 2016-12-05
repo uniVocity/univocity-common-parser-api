@@ -65,7 +65,6 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @param path the path to the target directory. It can contain system variables enclosed within { and }
 	 *             (e.g. {@code {user.home}/Downloads"}). Subdirectories that doesn't exist will be created if required.
 	 */
-	@UIConfig(show = false)
 	public final void setDownloadContentDirectory(String path) {
 		downloadContentDirectory = new FileProvider(path);
 	}
@@ -204,6 +203,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param emptyValue the value to be used instead of empty {@code String} (i.e. "") when the content of a field is empty.
 	 */
+	@UIConfig
 	public final void setEmptyValue(String emptyValue) {
 		this.emptyValue = emptyValue;
 	}
@@ -294,6 +294,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param downloadOverwritingEnabled flag to enable or disable overwriting of downloaded content.
 	 */
+	@UIConfig
 	public void setDownloadOverwritingEnabled(boolean downloadOverwritingEnabled) {
 		this.downloadOverwritingEnabled = downloadOverwritingEnabled;
 	}
@@ -322,6 +323,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param downloadBeforeParsingEnabled flag enable the parser to download remote content into a local file before parsing it.
 	 */
+	@UIConfig
 	public void setDownloadBeforeParsingEnabled(boolean downloadBeforeParsingEnabled) {
 		this.downloadBeforeParsingEnabled = downloadBeforeParsingEnabled;
 	}
@@ -334,6 +336,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param downloadThreads the maximum number of threads to be used for downloading content
 	 */
+	@UIConfig
 	public final void setDownloadThreads(int downloadThreads) {
 		Args.positive(downloadThreads, "Number of threads for content download");
 		this.downloadThreads = downloadThreads;

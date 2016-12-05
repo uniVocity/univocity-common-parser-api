@@ -298,7 +298,6 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param trim a flag indicating whether whitespaces should be removed around values parsed.
 	 */
-	@UIConfig(show = false)
 	public final void trimValues(boolean trim) {
 		globalSettings.trimValues(trim);
 	}
@@ -351,6 +350,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param nullValue the String representation of a null value
 	 */
+	@UIConfig
 	public final void setNullValue(String nullValue) {
 		globalSettings.setNullValue(nullValue);
 	}
