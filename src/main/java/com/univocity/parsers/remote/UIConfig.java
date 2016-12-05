@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UIConfig {
 
-	int DEFAULT_ORDER = 100;
+	int DEFAULT_ORDER = Integer.MAX_VALUE;
 
 	/**
 	 * Defines if the method will be shown in the GUI.
