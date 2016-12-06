@@ -6,6 +6,7 @@
 
 package com.univocity.parsers.remote;
 
+import com.univocity.api.*;
 import com.univocity.api.common.*;
 import com.univocity.api.io.*;
 import com.univocity.api.statistics.*;
