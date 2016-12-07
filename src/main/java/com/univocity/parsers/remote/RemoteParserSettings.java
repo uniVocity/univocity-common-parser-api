@@ -76,7 +76,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param directory the target directory. Subdirectories that doesn't exist will be created if required.
 	 */
-	@UIConfig(order = 1)
+	@UI(order = 1)
 	public final void setDownloadContentDirectory(File directory) {
 		downloadContentDirectory = new FileProvider(directory);
 	}
@@ -123,7 +123,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param pattern the pattern used to generate file names for downloaded content.
 	 */
-	@UIConfig(order = 2)
+	@UI(order = 2)
 	public final void setFileNamePattern(String pattern) {
 		fileNamePattern = pattern;
 	}
@@ -204,7 +204,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param emptyValue the value to be used instead of empty {@code String} (i.e. "") when the content of a field is empty.
 	 */
-	@UIConfig
+	@UI
 	public final void setEmptyValue(String emptyValue) {
 		this.emptyValue = emptyValue;
 	}
@@ -295,7 +295,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param downloadOverwritingEnabled flag to enable or disable overwriting of downloaded content.
 	 */
-	@UIConfig
+	@UI
 	public void setDownloadOverwritingEnabled(boolean downloadOverwritingEnabled) {
 		this.downloadOverwritingEnabled = downloadOverwritingEnabled;
 	}
@@ -324,7 +324,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param downloadBeforeParsingEnabled flag enable the parser to download remote content into a local file before parsing it.
 	 */
-	@UIConfig
+	@UI
 	public void setDownloadBeforeParsingEnabled(boolean downloadBeforeParsingEnabled) {
 		this.downloadBeforeParsingEnabled = downloadBeforeParsingEnabled;
 	}
@@ -338,7 +338,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @param downloadThreads the maximum number of threads to be used for downloading content
 	 */
 	@Range(min = 1, max = 8)
-	@UIConfig(order=3)
+	@UI(order=3)
 	public final void setDownloadThreads(int downloadThreads) {
 		Args.positive(downloadThreads, "Number of threads for content download");
 		this.downloadThreads = downloadThreads;

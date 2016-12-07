@@ -267,7 +267,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param trimTrailingWhitespaces flag indicating whether to remove trailing whitespaces from values being read
 	 */
-	@UIConfig(order = 4)
+	@UI(order = 4)
 	public final void setTrimTrailingWhitespaces(boolean trimTrailingWhitespaces) {
 		globalSettings.setIgnoreTrailingWhitespaces(trimTrailingWhitespaces);
 	}
@@ -286,7 +286,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param trimTrailingWhitespaces flag indicating whether to remove trailing whitespaces from values being read
 	 */
-	@UIConfig(order = 4)
+	@UI(order = 4)
 	public final void setTrimLeadingWhitespaces(boolean trimTrailingWhitespaces) {
 		globalSettings.setIgnoreLeadingWhitespaces(trimTrailingWhitespaces);
 	}
@@ -328,7 +328,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 * @param errorContentLength the maximum length of contents displayed in exception messages in case of errors while parsing.
 	 */
 	@Range(min = 0, max = 300)
-	@UIConfig(order = 10)
+	@UI(order = 10)
 	public final void setErrorContentLength(int errorContentLength) {
 		globalSettings.setErrorContentLength(errorContentLength);
 	}
@@ -351,7 +351,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param nullValue the String representation of a null value
 	 */
-	@UIConfig
+	@UI
 	public final void setNullValue(String nullValue) {
 		globalSettings.setNullValue(nullValue);
 	}
