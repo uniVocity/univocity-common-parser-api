@@ -22,13 +22,14 @@ import java.util.*;
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public abstract class RemoteEntitySettings<C extends Context, S extends CommonParserSettings, G extends RemoteParserSettings> extends EntitySettings<C, S, G> {
+public abstract class RemoteEntitySettings<C extends Context, S extends CommonParserSettings, G extends RemoteParserSettings, T extends RemoteLinkFollower> extends EntitySettings<C, S, G> {
 
 	private boolean localEmptyValue;
 	private String emptyValue = null;
 
 	private boolean localColumnReorderingEnabled;
 	protected final Set<String> requestParameters = new LinkedHashSet<String>();
+	protected final List<T> linkFollowers = new ArrayList<T>();
 
 	public RemoteEntitySettings(String entityName, S entitySettings) {
 		super(entityName, entitySettings);
@@ -117,5 +118,9 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	public final void setEmptyValue(String emptyValue) {
 		localEmptyValue = true;
 		this.emptyValue = emptyValue;
+	}
+
+	public List<T> getLinkFollowers() {
+		return Collections.unmodifiableList(linkFollowers);
 	}
 }
