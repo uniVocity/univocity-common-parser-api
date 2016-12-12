@@ -70,7 +70,7 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings> {
 		return entitySettings;
 	}
 
-	public List<? extends RemoteLinkFollower> getLinkFollowers() {
+	public Map<String, ? extends RemoteLinkFollower> getLinkFollowers() {
 		return entitySettings.getLinkFollowers();
 	}
 }
