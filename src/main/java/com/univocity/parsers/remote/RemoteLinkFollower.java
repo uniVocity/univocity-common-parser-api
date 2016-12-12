@@ -69,4 +69,8 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings> {
 	public final S getEntitySettings() {
 		return entitySettings;
 	}
+
+	public List<? extends RemoteLinkFollower> getLinkFollowers() {
+		return entitySettings.getLinkFollowers();
+	}
 }
