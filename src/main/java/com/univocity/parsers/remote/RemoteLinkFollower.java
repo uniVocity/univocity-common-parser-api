@@ -11,8 +11,9 @@ import java.util.*;
 /**
  * Created by anthony on 20/07/16.
  */
-public abstract class RemoteLinkFollower<S extends RemoteEntitySettings> {
-	protected S entitySettings;
+public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T extends RemoteEntityList<S>> {
+	protected T entityList;
+	protected S defaultEntitySettings;
 	public static String ENTITY_NAME = "*linkFollower*";
 	protected int itemCount;
 	protected int linkNum;
@@ -22,10 +23,13 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings> {
 	 * Creates a new LinkFollower
 	 */
 	public RemoteLinkFollower() {
-		entitySettings = newEntitySettings();
+		entityList = newEntityList();
+		defaultEntitySettings = entityList.configureEntity(ENTITY_NAME);
 		itemCount = 0;
 		linkNum = 1;
 	}
+
+	protected abstract T newEntityList();
 
 	/**
 	 * Returns the name associated with the LinkFollower
@@ -36,8 +40,6 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings> {
 		return ENTITY_NAME;
 	}
 
-	protected abstract S newEntitySettings();
-
 
 	/**
 	 * Returns the field names associated with the linkFollower
@@ -45,7 +47,7 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings> {
 	 * @return a string array of field names
 	 */
 	public final Set<String> getFieldNames() {
-		return entitySettings.getFieldNames();
+		return defaultEntitySettings.getFieldNames();
 	}
 
 	/**
@@ -66,11 +68,19 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings> {
 		return itemCount;
 	}
 
-	public final S getEntitySettings() {
-		return entitySettings;
+	public final S getDefaultEntitySettings() {
+		return defaultEntitySettings;
+	}
+
+	public final T getEntityList() {
+		return entityList;
 	}
 
 	public Map<String, ? extends RemoteLinkFollower> getLinkFollowers() {
-		return entitySettings.getLinkFollowers();
+		return defaultEntitySettings.getLinkFollowers();
+	}
+
+	public S addEntity(String entityName) {
+		return entityList.configureEntity(entityName);
 	}
 }
