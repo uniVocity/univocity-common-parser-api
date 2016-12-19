@@ -11,9 +11,10 @@ import java.util.*;
 /**
  * Created by anthony on 20/07/16.
  */
-public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T extends RemoteEntityList<S>> {
+public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T extends RemoteEntityList<S>, R extends RemoteParserSettings> {
 	protected T entityList;
 	protected S defaultEntitySettings;
+	protected R parserSettings;
 	public static String ENTITY_NAME = "*linkFollower*";
 	protected int itemCount;
 	protected int linkNum;
@@ -25,21 +26,14 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	public RemoteLinkFollower() {
 		entityList = newEntityList();
 		defaultEntitySettings = entityList.configureEntity(ENTITY_NAME);
+		parserSettings = newParserSettings();
 		itemCount = 0;
 		linkNum = 1;
 	}
 
 	protected abstract T newEntityList();
 
-	/**
-	 * Returns the name associated with the LinkFollower
-	 *
-	 * @return the LinkFollower's name
-	 */
-	static public final String getEntityName() {
-		return ENTITY_NAME;
-	}
-
+	protected abstract R newParserSettings();
 
 	/**
 	 * Returns the field names associated with the linkFollower
@@ -76,11 +70,21 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		return entityList;
 	}
 
-	public Map<String, ? extends RemoteLinkFollower> getLinkFollowers() {
+	public Map<String, ? extends RemoteLinkFollower<S,T,R>> getLinkFollowers() {
 		return defaultEntitySettings.getLinkFollowers();
 	}
 
-	public S addEntity(String entityName) {
+	public final S addEntity(String entityName) {
 		return entityList.configureEntity(entityName);
+	}
+
+	/**
+	 * Returns the settings object associated with the link follower. This configuration object is used to configure the
+	 * link follower when it parses a linked page.
+	 *
+	 * @return the link follower's associated settings object
+	 */
+	public final R getParserSettings() {
+		return parserSettings;
 	}
 }
