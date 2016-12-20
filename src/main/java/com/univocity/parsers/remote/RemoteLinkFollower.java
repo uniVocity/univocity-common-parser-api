@@ -6,6 +6,8 @@
 
 package com.univocity.parsers.remote;
 
+import com.univocity.api.net.*;
+
 import java.util.*;
 
 /**
@@ -18,6 +20,7 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	public static String ENTITY_NAME = "*linkFollower*";
 	protected int itemCount;
 	protected int linkNum;
+	private UrlReaderProvider baseUrlReaderProvider;
 
 
 	/**
@@ -86,5 +89,13 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	 */
 	public final R getParserSettings() {
 		return parserSettings;
+	}
+
+	public final UrlReaderProvider getBaseUrlReaderProvider() {
+		return baseUrlReaderProvider;
+	}
+
+	public final void setBaseUrlReaderProvider(UrlReaderProvider baseUrlReaderProvider) {
+		this.baseUrlReaderProvider = baseUrlReaderProvider;
 	}
 }
