@@ -98,4 +98,13 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	public final void setBaseUrlReaderProvider(UrlReaderProvider baseUrlReaderProvider) {
 		this.baseUrlReaderProvider = baseUrlReaderProvider;
 	}
+
+	@Override
+	public String toString() {
+		return "LinkFollower{" +
+				"entitiesNum=" + entityList.getEntityNames().size() +
+				", defaultEntitySettings=" + defaultEntitySettings +
+				", baseUrlReaderProvider=" + baseUrlReaderProvider +
+				'}';
+	}
 }
