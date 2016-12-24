@@ -18,20 +18,15 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	protected S defaultEntitySettings;
 	protected R parserSettings;
 	public static String ENTITY_NAME = "*linkFollower*";
-	protected int itemCount;
-	protected int linkNum;
 	private UrlReaderProvider baseUrlReaderProvider;
-
 
 	/**
 	 * Creates a new LinkFollower
 	 */
-	public RemoteLinkFollower() {
+	protected RemoteLinkFollower() {
 		entityList = newEntityList();
 		defaultEntitySettings = entityList.configureEntity(ENTITY_NAME);
 		parserSettings = newParserSettings();
-		itemCount = 0;
-		linkNum = 1;
 	}
 
 	protected abstract T newEntityList();
@@ -47,24 +42,6 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		return defaultEntitySettings.getFieldNames();
 	}
 
-	/**
-	 * Sets the number of times the link follower has followed a link
-	 *
-	 * @param itemCount LinkFollower's followed link count
-	 */
-	public final void setFollowedLinkCount(int itemCount) {
-		this.itemCount = itemCount;
-	}
-
-	/**
-	 * Returns how many times the LinkFollower has followed a link.
-	 *
-	 * @return the number of links the LinkFollower has followed
-	 */
-	public final int getFollowedLinkCount() {
-		return itemCount;
-	}
-
 	public final S getDefaultEntitySettings() {
 		return defaultEntitySettings;
 	}
@@ -73,7 +50,7 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		return entityList;
 	}
 
-	public Map<String, ? extends RemoteLinkFollower<S,T,R>> getLinkFollowers() {
+	public Map<String, ? extends RemoteLinkFollower<S, T, R>> getLinkFollowers() {
 		return defaultEntitySettings.getLinkFollowers();
 	}
 
@@ -102,7 +79,7 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	@Override
 	public String toString() {
 		return "LinkFollower{" +
-				"entitiesNum=" + entityList.getEntityNames().size() +
+				"entities=" + entityList.getEntityNames() +
 				", defaultEntitySettings=" + defaultEntitySettings +
 				", baseUrlReaderProvider=" + baseUrlReaderProvider +
 				'}';
