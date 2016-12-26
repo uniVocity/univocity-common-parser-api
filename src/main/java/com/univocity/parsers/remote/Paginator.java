@@ -30,7 +30,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	protected final E entitySettings;
 	private int followCount = -1;
 	private PaginationHandler<C> paginationHandler;
-	private boolean urlTestingEnabled = true;
+	private boolean urlTestingEnabled = false;
 
 	public static final String ENTITY_NAME = "*paginator*";
 	public static final String CURRENT_PAGE = "currentPage";
@@ -123,7 +123,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	 * URL. If the response code returned by the remote server is {@code 200} (i.e. {@link HttpURLConnection#HTTP_OK})
 	 * then the next page URL can be used, otherwise pagination will stop.
 	 *
-	 * <i>Defaults to {@code true}</i>
+	 * <i>Defaults to {@code false}</i>
 	 *
 	 * @return a flag indicating whether the paginator will test URLs formed to capture the next page
 	 * before actually attempting to fetch it.
@@ -141,7 +141,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	 * URL. If the response code returned by the remote server is {@code 200} (i.e. {@link HttpURLConnection#HTTP_OK})
 	 * then the next page URL can be used, otherwise pagination will stop.
 	 *
-	 * <i>Defaults to {@code true}</i>
+	 * <i>Defaults to {@code false}</i>
 	 *
 	 * @param urlTestingEnabled flag indicating whether the paginator should test URLs formed to capture the next page
 	 *                          before actually attempting to fetch it.

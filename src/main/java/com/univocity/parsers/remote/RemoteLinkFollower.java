@@ -18,7 +18,9 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	protected S defaultEntitySettings;
 	protected R parserSettings;
 	public static String ENTITY_NAME = "*linkFollower*";
-	private UrlReaderProvider baseUrlReaderProvider;
+	private UrlReaderProvider baseUrl;
+
+	private boolean ignoreLinkFollowingErrors = true;
 
 	/**
 	 * Creates a new LinkFollower
@@ -68,20 +70,30 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		return parserSettings;
 	}
 
-	public final UrlReaderProvider getBaseUrlReaderProvider() {
-		return baseUrlReaderProvider;
+	public final UrlReaderProvider getBaseUrl() {
+		return baseUrl;
 	}
 
-	public final void setBaseUrlReaderProvider(UrlReaderProvider baseUrlReaderProvider) {
-		this.baseUrlReaderProvider = baseUrlReaderProvider;
+	public final void setBaseUrl(UrlReaderProvider baseUrlReaderProvider) {
+		this.baseUrl = baseUrlReaderProvider;
+	}
+
+	//FIXME: javadoc here (if this is to stay)
+	public void setIgnoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
+		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
+	}
+
+	public boolean isIgnoreLinkFollowingErrors() {
+		return ignoreLinkFollowingErrors;
 	}
 
 	@Override
 	public String toString() {
 		return "LinkFollower{" +
-				"entities=" + entityList.getEntityNames() +
+				"ignoreLinkFollowingErrors=" + ignoreLinkFollowingErrors +
+				", entities=" + entityList.getEntityNames() +
 				", defaultEntitySettings=" + defaultEntitySettings +
-				", baseUrlReaderProvider=" + baseUrlReaderProvider +
+				", baseUrl=" + baseUrl +
 				'}';
 	}
 }
