@@ -29,9 +29,10 @@ import java.util.*;
  * @see EntityParserInterface
  * @see EntityParserSettings
  */
-public abstract class EntitySettings<C extends Context, S extends CommonSettings, G extends EntityParserSettings> {
+public abstract class EntitySettings<C extends Context, S extends CommonSettings, G extends EntityParserSettings> implements Cloneable {
 
-	private final S internalSettings;
+	private EntityList<EntitySettings<C, S, G>> parentEntityList;
+	private S internalSettings;
 	protected G parserSettings;
 
 	private boolean localNullValue;
@@ -60,10 +61,11 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * Used to "inherit" default settings of a parent {@link EntityParserSettings}. Used internally in
 	 * in the constructor of {@link EntityParserSettings} (which is the global setting object itself).
 	 *
-	 * @param parserSettings the {@link EntityParserSettings} that "owns" all entities and their {@code EntitySettings}
+	 * @param parentEntityList the parent {@link EntityList} who "owns" all entities and their {@code EntitySettings}
 	 */
-	protected final void setParserSettings(G parserSettings) {
-		this.parserSettings = parserSettings;
+	protected final void setParent(EntityList parentEntityList) {
+		this.parentEntityList = parentEntityList;
+		this.parserSettings = (G) parentEntityList.getParserSettings();
 	}
 
 	/**
@@ -468,4 +470,29 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 		internalSettings.trimValues(trim);
 	}
 
+	/**
+	 * Returns the entity list that "owns" this entity.
+	 *
+	 * @return the parent entity list.
+	 */
+	protected EntityList getParentEntityList() {
+		return parentEntityList;
+	}
+
+	@Override
+	protected EntitySettings<C, S, G> clone() {
+		try {
+			EntitySettings<C, S, G> out = (EntitySettings) super.clone();
+
+			out.internalSettings = (S) internalSettings.clone();
+			if (parserSettings != null) {
+				out.parserSettings = (G) parserSettings.clone();
+			}
+			out.processor = null;
+
+			return out;
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(e);
+		}
+	}
 }

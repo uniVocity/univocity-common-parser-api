@@ -28,10 +28,10 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	private String emptyValue = null;
 
 	private boolean localColumnReorderingEnabled;
-	protected final Set<String> requestParameters = new LinkedHashSet<String>();
-	protected final Map<String, T> linkFollowers = new HashMap<String, T>();
+	protected Set<String> requestParameters = new LinkedHashSet<String>();
+	protected Map<String, T> linkFollowers = new HashMap<String, T>();
 
-	public RemoteEntitySettings(String entityName, S entitySettings) {
+	protected RemoteEntitySettings(String entityName, S entitySettings) {
 		super(entityName, entitySettings);
 	}
 
@@ -122,5 +122,17 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 
 	public Map<String, T> getLinkFollowers() {
 		return Collections.unmodifiableMap(linkFollowers);
+	}
+
+	protected RemoteEntityList getParentEntityList() {
+		return (RemoteEntityList) super.getParentEntityList();
+	}
+
+	@Override
+	protected EntitySettings<C, S, G> clone() {
+		RemoteEntitySettings<C, S, G, T> out = (RemoteEntitySettings<C, S, G, T>) super.clone();
+		requestParameters = new LinkedHashSet<String>();
+		linkFollowers = new HashMap<String, T>();
+		return out;
 	}
 }

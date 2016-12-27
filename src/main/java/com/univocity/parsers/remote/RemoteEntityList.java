@@ -25,10 +25,27 @@ import com.univocity.parsers.common.*;
 public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends EntityList<S> {
 
 	/**
-	 * Creates a new, empty {@code RemoteEntityList}
+	 * Creates a new, empty {@code RemoteEntityList}, applying the global configuration object, used by the
+	 * {@link EntityParserInterface} implementation, to all entity-specific settings in this list.
+	 *
+	 * @param globalSettings the global parser settings whose configuration may provide defaults for all entities
+	 *                       defined in this list.
 	 */
-	public RemoteEntityList() {
+	public RemoteEntityList(RemoteParserSettings globalSettings) {
+		super(globalSettings);
 	}
 
+	@Override
+	protected RemoteEntityList<S> clone() {
+		return (RemoteEntityList) super.clone();
+	}
+
+	protected final S addEntitySettings(S settings) {
+		return super.addEntitySettings(settings);
+	}
+
+	public RemoteParserSettings getParserSettings() {
+		return (RemoteParserSettings) super.getParserSettings();
+	}
 }
 

@@ -8,16 +8,10 @@ package com.univocity.parsers.remote;
 
 import com.univocity.api.net.*;
 
-import java.util.*;
-
-/**
- * Created by anthony on 20/07/16.
- */
 public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T extends RemoteEntityList<S>, R extends RemoteParserSettings> {
 	protected T entityList;
-	protected S defaultEntitySettings;
 	protected R parserSettings;
-	public static String ENTITY_NAME = "*linkFollower*";
+	protected S parentEntitySettings;
 	private UrlReaderProvider baseUrl;
 
 	private boolean ignoreLinkFollowingErrors = true;
@@ -25,35 +19,14 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	/**
 	 * Creates a new LinkFollower
 	 */
-	protected RemoteLinkFollower() {
-		entityList = newEntityList();
-		defaultEntitySettings = entityList.configureEntity(ENTITY_NAME);
-		parserSettings = newParserSettings();
-	}
-
-	protected abstract T newEntityList();
-
-	protected abstract R newParserSettings();
-
-	/**
-	 * Returns the field names associated with the linkFollower
-	 *
-	 * @return a string array of field names
-	 */
-	public final Set<String> getFieldNames() {
-		return defaultEntitySettings.getFieldNames();
-	}
-
-	public final S getDefaultEntitySettings() {
-		return defaultEntitySettings;
+	protected RemoteLinkFollower(S parentEntitySettings) {
+		entityList = (T) parentEntitySettings.getParentEntityList().clone();
+		this.parentEntitySettings = entityList.addEntitySettings(parentEntitySettings);
+		parserSettings = (R) entityList.getParserSettings();
 	}
 
 	public final T getEntityList() {
 		return entityList;
-	}
-
-	public Map<String, ? extends RemoteLinkFollower<S, T, R>> getLinkFollowers() {
-		return defaultEntitySettings.getLinkFollowers();
 	}
 
 	public final S addEntity(String entityName) {
@@ -83,17 +56,19 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
 	}
 
+	//FIXME: javadoc here (if this is to stay)
 	public boolean isIgnoreLinkFollowingErrors() {
 		return ignoreLinkFollowingErrors;
 	}
 
 	@Override
 	public String toString() {
-		return "LinkFollower{" +
-				"ignoreLinkFollowingErrors=" + ignoreLinkFollowingErrors +
-				", entities=" + entityList.getEntityNames() +
-				", defaultEntitySettings=" + defaultEntitySettings +
+		return "RemoteLinkFollower{" +
+				"entityList=" + entityList +
+				", parserSettings=" + parserSettings +
+				", parentEntitySettings=" + parentEntitySettings +
 				", baseUrl=" + baseUrl +
+				", ignoreLinkFollowingErrors=" + ignoreLinkFollowingErrors +
 				'}';
 	}
 }

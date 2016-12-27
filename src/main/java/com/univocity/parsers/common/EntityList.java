@@ -24,29 +24,22 @@ import java.util.*;
  * @see EntityParserSettings
  * @see EntityParserInterface
  */
-public abstract class EntityList<E extends EntitySettings> implements Iterable<E> {
+public abstract class EntityList<E extends EntitySettings> implements Iterable<E>, Cloneable {
 
-	protected final Map<String, E> entities = new TreeMap<String, E>();
-	protected final Map<String, String> originalEntityNames = new TreeMap<String, String>();
+	protected Map<String, E> entities = new TreeMap<String, E>();
+	protected Map<String, String> originalEntityNames = new TreeMap<String, String>();
 	private EntityParserSettings globalSettings;
 
 	/**
-	 * Creates a new, empty {@code EntityList}
-	 */
-	protected EntityList() {
-	}
-
-	/**
-	 * Applies the global configuration object, used by the {@link EntityParserInterface} implementation, to
-	 * all entity-specific settings in this list.
+	 * Creates a new, empty {@code EntityList}, applying the global configuration object, used by the
+	 * {@link EntityParserInterface} implementation, to all entity-specific settings in this list.
 	 *
-	 * @param globalSettings the
+	 * @param globalSettings the global parser settings whose configuration may provide defaults for all entities
+	 *                       defined in this list.
 	 */
-	final void setGlobalSettings(EntityParserSettings globalSettings) {
+	protected EntityList(EntityParserSettings globalSettings) {
+		Args.notNull(globalSettings, "Parser settings");
 		this.globalSettings = globalSettings;
-		for (E entity : entities.values()) {
-			entity.setParserSettings(globalSettings);
-		}
 	}
 
 	/**
@@ -63,11 +56,13 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 		String normalizedEntityName = entityName.trim().toLowerCase();
 		if (entities.get(normalizedEntityName) == null) {
 			E newEntity = newEntity(entityName);
-			newEntity.setParserSettings(globalSettings);
+			newEntity.setParent(this);
 			entities.put(normalizedEntityName, newEntity);
 			originalEntityNames.put(entityName, normalizedEntityName);
 		}
 		E entitySettings = entities.get(normalizedEntityName);
+		entitySettings.setParent(this);
+
 		return entitySettings;
 	}
 
@@ -144,5 +139,49 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	@Override
 	public final Iterator<E> iterator() {
 		return entities.values().iterator();
+	}
+
+	@Override
+	protected EntityList<E> clone() {
+		try {
+			EntityList<E> out = (EntityList<E>) super.clone();
+			out.entities = new TreeMap<String, E>();
+			out.originalEntityNames = new TreeMap<String, String>();
+			out.globalSettings = globalSettings.clone();
+			return out;
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	/**
+	 * Associates an entity setting configuration to a given entity. If the entity does not exist, it will be created.
+	 * The <em>general</em> settings will be copied into a new configuration object, while any input-specific setting
+	 * will be lost.
+	 *
+	 * @param settings the configuration to be associated with the given entity.
+	 */
+	protected E addEntitySettings(E settings) {
+		Args.notNull(settings, "Entity settings");
+
+		String entityName = settings.getEntityName();
+		configureEntity(entityName);
+		String normalizedEntityName = entityName.trim().toLowerCase();
+
+		E config = (E) settings.clone();
+		this.entities.put(normalizedEntityName, config);
+		config.setParent(this);
+
+		return config;
+	}
+
+	/**
+	 * Returns the global parser settings whose configuration may provide defaults for all entities
+	 * defined in this list.
+	 *
+	 * @return the parent parser settings object.
+	 */
+	public EntityParserSettings getParserSettings() {
+		return globalSettings;
 	}
 }
