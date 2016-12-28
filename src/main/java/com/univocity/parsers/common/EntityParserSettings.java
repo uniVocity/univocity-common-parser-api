@@ -339,7 +339,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 
 			out.entitiesToRead = new TreeSet<String>();
 			out.entitiesToSkip = new TreeSet<String>();
-			out.globalSettings = (S) globalSettings.clone();
+			out.globalSettings = (S) globalSettings.clone(true);
 
 			return out;
 		} catch (CloneNotSupportedException e) {

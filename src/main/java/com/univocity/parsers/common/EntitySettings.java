@@ -484,7 +484,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 		try {
 			EntitySettings<C, S, G> out = (EntitySettings) super.clone();
 
-			out.internalSettings = (S) internalSettings.clone();
+			out.internalSettings = (S) internalSettings.clone(true);
 			if (parserSettings != null) {
 				out.parserSettings = (G) parserSettings.clone();
 			}
