@@ -124,6 +124,10 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 		return Collections.unmodifiableMap(linkFollowers);
 	}
 
+	void clearLinkFollowers() {
+		linkFollowers.clear();
+	}
+
 	protected RemoteEntityList getParentEntityList() {
 		return (RemoteEntityList) super.getParentEntityList();
 	}
@@ -131,8 +135,12 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	@Override
 	protected EntitySettings<C, S, G> clone() {
 		RemoteEntitySettings<C, S, G, T> out = (RemoteEntitySettings<C, S, G, T>) super.clone();
+		Map<String, T> linkFollowerClone = new HashMap<String, T>();
+		for (Map.Entry<String, T> entry : linkFollowers.entrySet()) {
+			linkFollowerClone.put(entry.getKey(), (T) entry.getValue().clone());
+		}
+
 		requestParameters = new LinkedHashSet<String>();
-		linkFollowers = new HashMap<String, T>();
 		return out;
 	}
 }

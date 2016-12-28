@@ -43,6 +43,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
+	private boolean combineLinkFollowingRows = true;
 
 	private DownloadListener downloadListener;
 	private int downloadThreads = Runtime.getRuntime().availableProcessors();
@@ -352,6 +353,15 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	public final int getDownloadThreads() {
 		return downloadThreads <= 0 ? 1 : downloadThreads;
 	}
+
+	public final boolean isCombineLinkFollowingRows() {
+		return combineLinkFollowingRows;
+	}
+
+	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
+		this.combineLinkFollowingRows = combineLinkFollowingRows;
+	}
+
 
 	@Override
 	protected RemoteParserSettings<S, L, C> clone() {

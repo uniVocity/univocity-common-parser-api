@@ -35,10 +35,6 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 		super(globalSettings);
 	}
 
-	@Override
-	protected RemoteEntityList<S> clone() {
-		return (RemoteEntityList) super.clone();
-	}
 
 	protected final S addEntitySettings(S settings) {
 		return super.addEntitySettings(settings);
@@ -47,5 +43,9 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 	public RemoteParserSettings getParserSettings() {
 		return (RemoteParserSettings) super.getParserSettings();
 	}
+
+	@Override
+	protected abstract RemoteEntityList<S> newInstance();
+
 }
 

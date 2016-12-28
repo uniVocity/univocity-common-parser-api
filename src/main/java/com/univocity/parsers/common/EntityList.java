@@ -24,7 +24,7 @@ import java.util.*;
  * @see EntityParserSettings
  * @see EntityParserInterface
  */
-public abstract class EntityList<E extends EntitySettings> implements Iterable<E>, Cloneable {
+public abstract class EntityList<E extends EntitySettings> implements Iterable<E> {
 
 	protected Map<String, E> entities = new TreeMap<String, E>();
 	protected Map<String, String> originalEntityNames = new TreeMap<String, String>();
@@ -141,18 +141,6 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 		return entities.values().iterator();
 	}
 
-	@Override
-	protected EntityList<E> clone() {
-		try {
-			EntityList<E> out = (EntityList<E>) super.clone();
-			out.entities = new TreeMap<String, E>();
-			out.originalEntityNames = new TreeMap<String, String>();
-			out.globalSettings = globalSettings.clone();
-			return out;
-		} catch (CloneNotSupportedException e) {
-			throw new IllegalStateException(e);
-		}
-	}
 
 	/**
 	 * Associates an entity setting configuration to a given entity. If the entity does not exist, it will be created.
@@ -184,4 +172,6 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	public EntityParserSettings getParserSettings() {
 		return globalSettings;
 	}
+
+	protected abstract EntityList newInstance();
 }
