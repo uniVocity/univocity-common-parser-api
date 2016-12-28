@@ -168,6 +168,15 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	/**
 	 * Configures a {@link Paginator} to handle multiple pages of remote content that needs to parsed.
 	 *
+	 * @param paginator a {@link Paginator} to be associated with the current {@code RemoteParserSettings}
+	 */
+	public void setPaginator(Paginator paginator){
+		this.paginator = paginator;
+	}
+
+	/**
+	 * Configures a {@link Paginator} to handle multiple pages of remote content that needs to parsed.
+	 *
 	 * @return a {@link Paginator} associated with the current {@code RemoteParserSettings}
 	 */
 	public Paginator getPaginator() {
