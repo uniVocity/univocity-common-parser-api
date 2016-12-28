@@ -104,18 +104,4 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 				", ignoreLinkFollowingErrors=" + ignoreLinkFollowingErrors +
 				'}';
 	}
-
-	@Override
-	protected RemoteLinkFollower<S,T,R> clone() {
-		try {
-			RemoteLinkFollower<S, T, R> out = (RemoteLinkFollower<S, T, R>) super.clone();
-//			out.entityList = (T) entityList.clone();
-			out.parserSettings = (R) parserSettings.clone();
-//			out.parentEntitySettings = (S) parentEntitySettings.clone();
-//			out.baseUrl = baseUrl.clone();
-			return out;
-		} catch (CloneNotSupportedException e) {
-			throw new IllegalStateException(e);
-		}
-	}
 }

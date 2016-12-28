@@ -135,11 +135,7 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	@Override
 	protected EntitySettings<C, S, G> clone() {
 		RemoteEntitySettings<C, S, G, T> out = (RemoteEntitySettings<C, S, G, T>) super.clone();
-		Map<String, T> linkFollowerClone = new HashMap<String, T>();
-		for (Map.Entry<String, T> entry : linkFollowers.entrySet()) {
-			linkFollowerClone.put(entry.getKey(), (T) entry.getValue().clone());
-		}
-
+		out.linkFollowers = new HashMap<String, T>();
 		requestParameters = new LinkedHashSet<String>();
 		return out;
 	}
