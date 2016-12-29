@@ -68,7 +68,7 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	 *
 	 * @param ignoreLinkFollowingErrors true if the parser will ignore errors when accessing linked page, false otherwise.
 	 */
-	public void setIgnoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
+	public void ignoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
 		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
 	}
 
