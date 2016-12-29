@@ -124,10 +124,6 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 		return Collections.unmodifiableMap(linkFollowers);
 	}
 
-	void clearLinkFollowers() {
-		linkFollowers.clear();
-	}
-
 	protected RemoteEntityList getParentEntityList() {
 		return (RemoteEntityList) super.getParentEntityList();
 	}

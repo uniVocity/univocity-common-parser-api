@@ -33,19 +33,6 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		this.parentEntitySettings = entityList.addEntitySettings(parentEntitySettings);
 		parserSettings = (R) entityList.getParserSettings();
 
-		/*
-			we need to remove link followers or else previous link followers created in parent entity list
-			will be run inside this link follower
-		*/
-//		removeLinkFollowers();
-	}
-
-	private void removeLinkFollowers() {
-		for (RemoteEntitySettings entitySettings : entityList) {
-			if (!entitySettings.getEntityName().equals(Paginator.ENTITY_NAME)) {
-				entitySettings.clearLinkFollowers();
-			}
-		}
 
 	}
 
