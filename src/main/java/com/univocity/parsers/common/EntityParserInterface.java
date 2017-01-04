@@ -9,7 +9,6 @@ package com.univocity.parsers.common;
 import com.univocity.api.io.*;
 import com.univocity.parsers.common.processor.core.*;
 import com.univocity.parsers.common.record.*;
-import com.univocity.parsers.remote.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -40,8 +39,6 @@ import java.util.*;
  *
  * Concrete parser implementations may provide additional operations.
  *
- * @param <C> the pagination context implementation supported by the parser.
- *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see EntityList
  * @see EntityParserSettings
@@ -50,7 +47,7 @@ import java.util.*;
  * @see FileProvider
  * @see Record
  */
-public interface EntityParserInterface<C extends PaginationContext> {
+public interface EntityParserInterface {
 
 	/**
 	 * Given an input, made available from a {@link ReaderProvider}, parses all records of all entities
@@ -384,13 +381,4 @@ public interface EntityParserInterface<C extends PaginationContext> {
 	 */
 	void parse(File file, String encoding);
 
-	/**
-	 * Returns the {@link PaginationContext} object with information collected for the configured {@link Paginator}, if
-	 * any. The information returned comes from the last input processed, and might have been modified by a
-	 * {@link PaginationHandler} if it has been associated with the {@link Paginator}
-	 * using {@link Paginator#setPaginationHandler(PaginationHandler)}.
-	 *
-	 * @return the current {@link PaginationContext} with pagination information captured after parsing a given input.
-	 */
-	C getPaginationContext();
 }
