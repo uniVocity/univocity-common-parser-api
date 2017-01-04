@@ -114,6 +114,13 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <li>/tmp/file_{date}: prints /tmp/file_23423423423.pdf, /tmp/file_234234324231.html, etc</li>
 	 * </ul>
 	 * </li>
+	 *
+	 * <li>&lt;$query&gt; prints the value associated with the supplied query located in the HTML page's URL. Examples:
+	 * <ul>
+	 * <li>/tmp/search_{$q} on HTML page with url 'http://google.com/search?q=cup': prints /tmp/search_cup.html</li>
+	 * </ul>
+	 * </li>
+	 *
 	 * </ul>
 	 *
 	 *
@@ -152,6 +159,13 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <li>/tmp/file_{date}: prints /tmp/file_23423423423.pdf, /tmp/file_234234324231.html, etc</li>
 	 * </ul>
 	 * </li>
+	 *
+	 * <li>&lt;$query&gt; prints the value associated with the supplied query located in the HTML page's URL. Examples:
+	 * <ul>
+	 * <li>/tmp/search_{$q} on HTML page with url 'http://google.com/search?q=cup': prints /tmp/search_cup.html</li>
+	 * </ul>
+	 * </li>
+	 *
 	 * </ul>
 	 *
 	 * <i>defaults to @code{file_{number}}</i>
