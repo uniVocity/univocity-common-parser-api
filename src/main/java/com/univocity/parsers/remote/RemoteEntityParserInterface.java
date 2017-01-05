@@ -7,6 +7,7 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
+import com.univocity.parsers.common.record.*;
 
 /**
  * //TODO: javadoc
@@ -15,7 +16,7 @@ import com.univocity.parsers.common.*;
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface RemoteEntityParserInterface<C extends PaginationContext> extends EntityParserInterface {
+public interface RemoteEntityParserInterface<P extends PaginationContext, R extends Record, C extends Context, T extends Result<R, C>> extends EntityParserInterface<R, C, T> {
 
 	/**
 	 * Returns the {@link PaginationContext} object with information collected for the configured {@link Paginator}, if
@@ -25,5 +26,5 @@ public interface RemoteEntityParserInterface<C extends PaginationContext> extend
 	 *
 	 * @return the current {@link PaginationContext} with pagination information captured after parsing a given input.
 	 */
-	C getPaginationContext();
+	P getPaginationContext();
 }

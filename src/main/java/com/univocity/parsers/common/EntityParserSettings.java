@@ -7,7 +7,6 @@
 package com.univocity.parsers.common;
 
 import com.univocity.api.*;
-import com.univocity.api.common.*;
 
 import java.util.*;
 

@@ -7,12 +7,15 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
-import com.univocity.parsers.common.record.*;
+
+import java.util.*;
 
 /**
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface RemoteResult<T extends Record, C extends Context, P extends PaginationContext> extends Result<T, C> {
+public interface RemoteResult<R extends RemoteRecord, C extends Context> extends Result<R, C> {
 
-	P getPaginationContext();
+	RemoteResult<R, C> getLinkedFieldData(int rowIndex);
+
+	Map<String, RemoteResult<R, C>> getLinkedEntityData(int rowIndex);
 }

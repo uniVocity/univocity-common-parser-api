@@ -47,223 +47,7 @@ import java.util.*;
  * @see FileProvider
  * @see Record
  */
-public interface EntityParserInterface {
-
-	/**
-	 * Given an input, made available from a {@link ReaderProvider}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * @param readerProvider an input provider with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(ReaderProvider readerProvider);
-
-	/**
-	 * Given an input file, made available from a {@link FileProvider}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * @param fileProvider the input file with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(FileProvider fileProvider);
-
-	/**
-	 * Given a {@link java.io.Reader}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * @param reader the input with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(Reader reader);
-
-	/**
-	 * Given an {@link java.io.InputStream}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * <i>The default system encoding will be used to read text from the given input.</i>
-	 *
-	 * @param inputStream the input with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(InputStream inputStream);
-
-	/**
-	 * Given an {@link java.io.InputStream}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * @param inputStream the input with content to be parsed
-	 * @param encoding    the encoding to be used when reading text from the given input.
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(InputStream inputStream, Charset encoding);
-
-	/**
-	 * Given an {@link java.io.InputStream}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * @param inputStream the input with content to be parsed
-	 * @param encoding    the encoding to be used when reading text from the given input.
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(InputStream inputStream, String encoding);
-
-
-	/**
-	 * Given a {@link java.io.File}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * <i>The default system encoding will be used to read text from the given input.</i>
-	 *
-	 * @param file the input with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(File file);
-
-	/**
-	 * Given a {@link java.io.File}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * @param file     the input with content to be parsed
-	 * @param encoding the encoding to be used when reading text from the given input.
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(File file, Charset encoding);
-
-	/**
-	 * Given a {@link java.io.File}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of rows produced for that entity.
-	 *
-	 * @param file     the input with content to be parsed
-	 * @param encoding the encoding to be used when reading text from the given input.
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<String[]>> parseAll(File file, String encoding);
-
-
-	/**
-	 * Given an input, made available from a {@link ReaderProvider}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * @param readerProvider an input provider with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(ReaderProvider readerProvider);
-
-	/**
-	 * Given an input file, made available from a {@link FileProvider}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * @param fileProvider an input file with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(FileProvider fileProvider);
-
-	/**
-	 * Given a {@link java.io.Reader}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * @param reader the input with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(Reader reader);
-
-	/**
-	 * Given an {@link java.io.InputStream}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * <i>The default system encoding will be used to read text from the given input.</i>
-	 *
-	 * @param inputStream the input with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(InputStream inputStream);
-
-	/**
-	 * Given an {@link java.io.InputStream}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * @param inputStream the input with content to be parsed
-	 * @param encoding    the encoding to be used when reading text from the given input.
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(InputStream inputStream, Charset encoding);
-
-	/**
-	 * Given an {@link java.io.InputStream}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * @param inputStream the input with content to be parsed
-	 * @param encoding    the encoding to be used when reading text from the given input.
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(InputStream inputStream, String encoding);
-
-	/**
-	 * Given a {@link java.io.File}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map. Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * <i>The default system encoding will be used to read text from the given input.</i>
-	 *
-	 * @param file the input with content to be parsed
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(File file);
-
-	/**
-	 * Given a {@link java.io.File}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map.  Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * @param file     the input with content to be parsed
-	 * @param encoding the encoding to be used when reading text from the given input.
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(File file, Charset encoding);
-
-	/**
-	 * Given a {@link java.io.File}, parses all records of all entities
-	 * defined in the {@link EntityList} of this parser, and returns them in a map.  Keys are the entity names
-	 * and values are lists of {@link Record} produced for that entity.
-	 *
-	 * @param file     the input with content to be parsed
-	 * @param encoding the encoding to be used when reading text from the given input.
-	 *
-	 * @return a map of entity names and the corresponding records extracted from the given input.
-	 */
-	Map<String, List<Record>> parseAllRecords(File file, String encoding);
+public interface EntityParserInterface<R extends Record, C extends Context, T extends Result<R, C>> {
 
 	/**
 	 * Given an input, made available from a {@link ReaderProvider}, parses all records of all entities
@@ -275,7 +59,7 @@ public interface EntityParserInterface {
 	 *
 	 * @param readerProvider an input provider with content to be parsed
 	 */
-	void parse(ReaderProvider readerProvider);
+	Map<String, T> parse(ReaderProvider readerProvider);
 
 	/**
 	 * Given an input, made available from a {@link FileProvider}, parses all records of all entities
@@ -287,7 +71,7 @@ public interface EntityParserInterface {
 	 *
 	 * @param fileProvider the input file with content to be parsed
 	 */
-	void parse(FileProvider fileProvider);
+	Map<String, T> parse(FileProvider fileProvider);
 
 	/**
 	 * Given a {@link java.io.Reader}, parses all records of all entities
@@ -299,7 +83,7 @@ public interface EntityParserInterface {
 	 *
 	 * @param reader the input with content to be parsed
 	 */
-	void parse(Reader reader);
+	Map<String, T> parse(Reader reader);
 
 	/**
 	 * Given an {@link java.io.InputStream}, parses all records of all entities
@@ -313,7 +97,7 @@ public interface EntityParserInterface {
 	 *
 	 * @param inputStream the input with content to be parsed
 	 */
-	void parse(InputStream inputStream);
+	Map<String, T> parse(InputStream inputStream);
 
 	/**
 	 * Given an {@link java.io.InputStream}, parses all records of all entities
@@ -326,7 +110,7 @@ public interface EntityParserInterface {
 	 * @param inputStream the input with content to be parsed
 	 * @param encoding    the encoding to be used when reading text from the given input.
 	 */
-	void parse(InputStream inputStream, Charset encoding);
+	Map<String, T> parse(InputStream inputStream, Charset encoding);
 
 	/**
 	 * Given an {@link java.io.InputStream}, parses all records of all entities
@@ -339,7 +123,7 @@ public interface EntityParserInterface {
 	 * @param inputStream the input with content to be parsed
 	 * @param encoding    the encoding to be used when reading text from the given input.
 	 */
-	void parse(InputStream inputStream, String encoding);
+	Map<String, T> parse(InputStream inputStream, String encoding);
 
 	/**
 	 * Given a {@link java.io.File}, parses all records of all entities
@@ -353,7 +137,7 @@ public interface EntityParserInterface {
 	 *
 	 * @param file the input with content to be parsed
 	 */
-	void parse(File file);
+	Map<String, T> parse(File file);
 
 	/**
 	 * Given a {@link java.io.File}, parses all records of all entities
@@ -366,7 +150,7 @@ public interface EntityParserInterface {
 	 * @param file     the input with content to be parsed
 	 * @param encoding the encoding to be used when reading text from the given input.
 	 */
-	void parse(File file, Charset encoding);
+	Map<String, T> parse(File file, Charset encoding);
 
 	/**
 	 * Given a {@link java.io.File}, parses all records of all entities
@@ -379,6 +163,6 @@ public interface EntityParserInterface {
 	 * @param file     the input with content to be parsed
 	 * @param encoding the encoding to be used when reading text from the given input.
 	 */
-	void parse(File file, String encoding);
+	Map<String, T> parse(File file, String encoding);
 
 }

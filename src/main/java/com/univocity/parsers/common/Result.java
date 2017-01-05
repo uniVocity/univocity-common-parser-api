@@ -6,32 +6,31 @@
 
 package com.univocity.parsers.common;
 
+import com.univocity.parsers.common.processor.core.*;
 import com.univocity.parsers.common.record.*;
 
 import java.util.*;
 
 /**
- * //TODO: javadoc
- *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface Result<T extends Record, C extends Context> {
+public interface Result<R extends Record, C extends Context> {
 
-	Map<String, List<String[]>> getRows();
+	String getEntityName();
 
-	List<String[]> getRows(String entityName);
+	C getContext();
 
-	Map<String, IterableResult<String[], C>> iterateRows();
+	RecordMetaData getRecordMetaData();
 
-	IterableResult<String[], C> iterateRows(String entityName);
+	String[] getHeaders();
 
-	Map<String, List<T>> getRecords();
+	List<String[]> getRows();
 
-	List<T> getRecords(String entityName);
+	Iterable<String[]> iterateRows();
 
-	Map<String, IterableResult<T, C>> iterateRecords();
+	List<R> getRecords();
 
-	IterableResult<T, C> iterateRecords(String entityName);
+	Iterable<R> iterateRecords();
 
-	C getParsingContext();
+	void process(Processor<C> processor);
 }
