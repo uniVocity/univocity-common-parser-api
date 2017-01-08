@@ -16,7 +16,7 @@ import com.univocity.parsers.common.record.*;
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface RemoteEntityParserInterface<P extends PaginationContext, R extends Record, C extends Context, T extends Result<R, C>> extends EntityParserInterface<R, C, T> {
+public interface RemoteEntityParserInterface<P extends PaginationContext, R extends RemoteRecord, C extends Context, T extends RemoteResult<R, C>> extends EntityParserInterface<R, C, T> {
 
 	/**
 	 * Returns the {@link PaginationContext} object with information collected for the configured {@link Paginator}, if
