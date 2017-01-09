@@ -17,5 +17,5 @@ public interface RemoteResult<R extends RemoteRecord, C extends Context> extends
 
 	RemoteResult<R, C> getLinkedFieldData(int rowIndex);
 
-	Map<String, RemoteResult<R, C>> getLinkedEntityData(int rowIndex);
+	Map<String, ? extends RemoteResult<R, C>> getLinkedEntityData(int rowIndex);
 }
