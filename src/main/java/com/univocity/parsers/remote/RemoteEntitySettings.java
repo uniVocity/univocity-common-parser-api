@@ -7,6 +7,7 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
+import com.univocity.parsers.common.processor.*;
 
 import java.util.*;
 
@@ -133,8 +134,12 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	protected abstract RemoteEntityList createLinkedEntityList();
 
 
-
 	public RemoteEntitySettings<C,S,G,T> addLinkedEntity(String entityName) {
+		return addLinkedEntity(entityName, RowPlacement.BOTTOM);
+	}
+
+
+	public RemoteEntitySettings<C,S,G,T> addLinkedEntity(String entityName, RowPlacement rowPlacement) {
 		return linkedEntities.configureEntity(entityName);
 	}
 
