@@ -8,6 +8,8 @@ package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
 
+import java.util.*;
+
 /**
  * A list of remote entities to be parsed by some implementation of {@link EntityParserInterface},
  * and their specific configurations.
@@ -24,6 +26,7 @@ import com.univocity.parsers.common.*;
  */
 public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends EntityList<S> {
 
+	private Map<String, List<String>> linkedEntitiesMap = new HashMap<String, List<String>>();
 	/**
 	 * Creates a new, empty {@code RemoteEntityList}, applying the global configuration object, used by the
 	 * {@link EntityParserInterface} implementation, to all entity-specific settings in this list.
@@ -46,6 +49,23 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 
 	@Override
 	protected abstract RemoteEntityList<S> newInstance();
+
+	public void linkEntities(S parent, S firstChild, S... restOfChildren) {
+		if (linkedEntitiesMap.get(parent.getEntityName()) == null) {
+			linkedEntitiesMap.put(parent.getEntityName(), new ArrayList<String>());
+		}
+
+		List<String> children = linkedEntitiesMap.get(parent.getEntityName());
+		children.add(firstChild.getEntityName());
+		for (S child : restOfChildren) {
+			children.add(child.getEntityName());
+		}
+		parent.linkedEntities.addAll(children);
+	}
+
+	public Map<String, List<String>> getLinkedEntitiesMap() {
+		return Collections.unmodifiableMap(linkedEntitiesMap);
+	}
 
 }
 
