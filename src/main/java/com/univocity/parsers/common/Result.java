@@ -33,4 +33,6 @@ public interface Result<R extends Record, C extends Context> {
 	Iterable<R> iterateRecords();
 
 	void process(Processor<C> processor);
+
+	void process(Processor<C> processor, ProcessorErrorHandler<C> errorHandler);
 }
