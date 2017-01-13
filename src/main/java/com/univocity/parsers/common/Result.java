@@ -35,4 +35,12 @@ public interface Result<R extends Record, C extends Context> {
 	void process(Processor<C> processor);
 
 	void process(Processor<C> processor, ProcessorErrorHandler<C> errorHandler);
+
+	<T> List<T> getBeans(Class<T> beanType);
+
+	<T> List<T> getBeans(Class<T> beanType, ProcessorErrorHandler<C> errorHandler);
+
+	<T> Iterable<T> iterateBeans(Class<T> beanType);
+
+	<T> Iterable<T> iterateBeans(Class<T> beanType, ProcessorErrorHandler<C> errorHandler);
 }
