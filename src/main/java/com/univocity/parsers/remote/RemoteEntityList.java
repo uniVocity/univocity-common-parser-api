@@ -52,7 +52,6 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 	protected abstract RemoteEntityList<S> newInstance();
 
 	public void linkEntities(S parent, S firstChild, S... restOfChildren) {
-		determineIfTopLevel(parent.getEntityName());
 		if (linkedEntitiesMap.get(parent.getEntityName()) == null) {
 			linkedEntitiesMap.put(parent.getEntityName(), new ArrayList<String>());
 		}
@@ -65,19 +64,6 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 		parent.linkedEntities.addAll(children);
 	}
 
-	private void determineIfTopLevel(String entityName) {
-		for (List<String> list: linkedEntitiesMap.values()) {
-			if (list.contains(entityName)) {
-				return;
-			}
-		}
-		topLevelEntities.add(entityName);
-
-	}
-
-	public Set<String> getTopLevelEntities() {
-		return Collections.unmodifiableSet(topLevelEntities);
-	}
 
 	public Map<String, List<String>> getLinkedEntitiesMap() {
 		return Collections.unmodifiableMap(linkedEntitiesMap);
