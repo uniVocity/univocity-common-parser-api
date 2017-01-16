@@ -26,7 +26,8 @@ import java.util.*;
  */
 public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends EntityList<S> {
 
-	private Map<String, List<String>> linkedEntitiesMap = new HashMap<String, List<String>>();
+	private final Map<String, List<String>> linkedEntitiesMap = new HashMap<String, List<String>>();
+	private final Set<String> topLevelEntities = new HashSet<String>();
 	/**
 	 * Creates a new, empty {@code RemoteEntityList}, applying the global configuration object, used by the
 	 * {@link EntityParserInterface} implementation, to all entity-specific settings in this list.
@@ -51,6 +52,7 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 	protected abstract RemoteEntityList<S> newInstance();
 
 	public void linkEntities(S parent, S firstChild, S... restOfChildren) {
+		determineIfTopLevel(parent.getEntityName());
 		if (linkedEntitiesMap.get(parent.getEntityName()) == null) {
 			linkedEntitiesMap.put(parent.getEntityName(), new ArrayList<String>());
 		}
@@ -61,6 +63,20 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 			children.add(child.getEntityName());
 		}
 		parent.linkedEntities.addAll(children);
+	}
+
+	private void determineIfTopLevel(String entityName) {
+		for (List<String> list: linkedEntitiesMap.values()) {
+			if (list.contains(entityName)) {
+				return;
+			}
+		}
+		topLevelEntities.add(entityName);
+
+	}
+
+	public Set<String> getTopLevelEntities() {
+		return Collections.unmodifiableSet(topLevelEntities);
 	}
 
 	public Map<String, List<String>> getLinkedEntitiesMap() {
