@@ -44,6 +44,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private String fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
 	private boolean combineLinkFollowingRows = true;
+	private boolean removeLinkedEntityFields = false;
 
 	private DownloadListener downloadListener;
 	private int downloadThreads = Runtime.getRuntime().availableProcessors();
@@ -385,6 +386,14 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		this.combineLinkFollowingRows = combineLinkFollowingRows;
 	}
 
+
+	public boolean isRemoveLinkedEntityFields() {
+		return removeLinkedEntityFields;
+	}
+
+	public void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {
+		this.removeLinkedEntityFields = removeLinkedEntityFields;
+	}
 
 	@Override
 	protected RemoteParserSettings<S, L, C> clone() {
