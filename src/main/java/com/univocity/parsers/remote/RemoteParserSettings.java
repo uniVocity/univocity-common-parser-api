@@ -13,6 +13,7 @@ import com.univocity.api.statistics.*;
 import com.univocity.parsers.common.*;
 
 import java.io.*;
+import java.util.concurrent.*;
 
 /**
  * Base configuration class of a parser that can connect to a remote location, obtain data to parse and produce records
@@ -48,6 +49,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 	private DownloadListener downloadListener;
 	private int downloadThreads = Runtime.getRuntime().availableProcessors();
+
+	private ExecutorService executorService = Executors.newCachedThreadPool();
 
 	/**
 	 * Creates a new configuration object for an implementation of {@link EntityParserInterface}, which will process
@@ -378,14 +381,25 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return downloadThreads <= 0 ? 1 : downloadThreads;
 	}
 
+	//FIXME: javadoc
 	public final boolean isCombineLinkFollowingRows() {
 		return combineLinkFollowingRows;
 	}
 
+	//FIXME: javadoc
 	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
 		this.combineLinkFollowingRows = combineLinkFollowingRows;
 	}
 
+	//FIXME: javadoc
+	public final void setExecutorService(ExecutorService executorService){
+		this.executorService = executorService;
+	}
+
+	//FIXME: javadoc
+	public final ExecutorService getExecutorService(){
+		return this.executorService;
+	}
 
 	public boolean isRemoveLinkedEntityFields() {
 		return removeLinkedEntityFields;
