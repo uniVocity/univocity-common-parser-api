@@ -51,6 +51,57 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 	@Override
 	protected abstract RemoteEntityList<S> newInstance();
 
+	/**
+	 * Links the supplied children entities to the given parent entity. When a {@link RemoteResult} for an entity is
+	 * returned by the parser, it's linked entity results can be accessed via {@link RemoteResult#getLinkedEntityData(int)}.
+	 *
+	 * <p>
+	 * Leaf entities (entities that are linked to but have no child links) need to have one field that matches the name
+	 * of a field in each parent entity in the hierarchy. For example, there are 3 entities in a link hierarchy shown in
+	 * the diagram below:
+	 * </p>
+	 *
+	 * <pre>
+	 *   Entities:  Day("Day") -> Station("Name") -> Fuel("Price", "Type")
+	 *   (fields in brackets)
+	 * </pre>
+	 *
+	 * <p>Fuel, as a leaf entity, <strong>must have</strong> fields that match a field from both Day and Station. Adding
+	 * these fields result in the below diagram: </p>
+	 *
+	 * <pre>
+	 *   Entities:  Day("Day") -> Station("Name") -> Fuel("Price", "Type", "Day", "Name")
+	 * </pre>
+	 *
+	 * <p>When the parser runs, it will attempt to link rows where the leaf row 'linked fields' matches it's associated
+	 * parents fields. For instance, assume that the rows parsed are: </p>
+	 *
+	 * <pre>
+	 *     	                         Day("Day"): ["MON"], ["TUE"]
+	 *                          Station("Name"): ["Station A"], ["Station B']
+	 *     Fuel("Price", "Type", "Day", "Name"): ["$1.00", "UL", "MON", "Station A"],  ["$1.00", "UL", "TUE", "Station C"]
+	 * </pre>
+	 * 
+	 * <p>
+	 *     The first row of Fuel {@code ["$1.00", "UL", "MON", "Station A"]} will be linked with the first row of Station
+	 *     {@code ["Station A"]} as their 'Name' field values match. This Station row will then be linked to first row of day
+	 *     {@code ["MON"]} as it matches the 'Day' field in the Fuel row. A diagram showing this linking can be seen
+	 *     below:
+	 * </p>
+	 *
+	 * <pre>
+	 *     Code: RemoteResult dayEntityResult = parser.parse(file).get("Day");
+	 *           RemoteResult linkedStationResult = dayEntityResult.getLinkedEntityData(0).get("Station");
+	 *           RemoteResult linkedFuelResult = linkedStationResult.getLinkedEntityData(0).get("Fuel");
+	 *
+	 *     Result:
+	 *           ["Mon"] -> ["Station A"] -> ["$1.00", "UL", "MON", "Station A"]
+	 * </pre>
+	 *
+	 * @param parent the entity that the children entities will link to
+	 * @param firstChild the first entity that will be linked to the parent entity
+	 * @param restOfChildren any other entities that will be linked to the parent
+	 */
 	public void linkEntities(S parent, S firstChild, S... restOfChildren) {
 		ArgumentUtils.noNulls("Linked entities", parent, firstChild);
 		if (isParentInChildren(parent, firstChild, restOfChildren)) {
@@ -66,7 +117,6 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 		for (S child : restOfChildren) {
 			children.add(child.getEntityName());
 		}
-		parent.linkedEntities.addAll(children);
 	}
 
 	private boolean isParentInChildren(S parent, S firstChild, S... restOfChildren) {
@@ -82,7 +132,12 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 		return false;
 	}
 
-
+	/**
+	 * Returns a map describing the linked entities where <strong>key = parent entity name</strong> and <strong>value = names of entities linked
+	 * to the parent.</strong>
+	 *
+	 * @return a map where the values are the names of entities linked to the key (which is a name of a entity).
+	 */
 	public Map<String, List<String>> getLinkedEntitiesMap() {
 		return Collections.unmodifiableMap(linkedEntitiesMap);
 	}
