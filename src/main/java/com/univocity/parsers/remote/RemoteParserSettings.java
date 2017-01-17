@@ -381,12 +381,46 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return downloadThreads <= 0 ? 1 : downloadThreads;
 	}
 
-	//FIXME: javadoc
+	/**
+	 * Returns true if the parser will join link following rows, false if otherwise.
+	 *
+	 * @return a flag indicating if the parser will join original rows with link following rows
+	 */
 	public final boolean isCombineLinkFollowingRows() {
 		return combineLinkFollowingRows;
 	}
 
-	//FIXME: javadoc
+	/**
+	 * Sets whether or not rows parsed in a linked page will be combined with the original row it cam from. The way that
+	 * the parser will join rows is by inserting a linked row into the link following field. If there are multiple rows
+	 * parsed in the linked page, it will duplicate the original row to fit every link following row. An example can be seen below:
+	 *
+	 * <table>
+	 *     <tr>
+	 *         <th>Original Page</th>
+	 *         <th>Linked Page (linkedPage.com)</th>
+	 *     </tr>
+	 *     <tr>
+	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
+	 *         <td>["mobile", "04 123 321"]</td>
+	 *     </tr>
+	 *     <tr>
+	 *         <td></td>
+	 *         <td>["home", "851 154 110"]</td>
+	 *     </tr>
+	 * </table>
+	 *
+	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As there are 2
+	 * rows parsed from the linked page, the original row will be duplicated to complete the join. The join of the above rows
+	 * can be seen below: </p>
+	 *
+	 * <pre>
+	 *      ["17", "123 real street", "mobile", "04 123 321"]
+	 *      ["17", "123 real street", "home", "851 154 110"]
+	 * </pre>
+	 *
+	 * @param combineLinkFollowingRows sets if the parser will join original rows with linked page rows
+	 */
 	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
 		this.combineLinkFollowingRows = combineLinkFollowingRows;
 	}

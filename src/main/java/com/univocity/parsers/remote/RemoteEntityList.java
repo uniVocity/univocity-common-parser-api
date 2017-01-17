@@ -81,22 +81,23 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 	 *                          Station("Name"): ["Station A"], ["Station B']
 	 *     Fuel("Price", "Type", "Day", "Name"): ["$1.00", "UL", "MON", "Station A"],  ["$1.00", "UL", "TUE", "Station C"]
 	 * </pre>
-	 * 
+	 *
 	 * <p>
 	 *     The first row of Fuel {@code ["$1.00", "UL", "MON", "Station A"]} will be linked with the first row of Station
 	 *     {@code ["Station A"]} as their 'Name' field values match. This Station row will then be linked to first row of day
 	 *     {@code ["MON"]} as it matches the 'Day' field in the Fuel row. A diagram showing this linking can be seen
-	 *     below:
+	 *     below. No other rows will be linked.
 	 * </p>
 	 *
 	 * <pre>
-	 *     Code: RemoteResult dayEntityResult = parser.parse(file).get("Day");
-	 *           RemoteResult linkedStationResult = dayEntityResult.getLinkedEntityData(0).get("Station");
-	 *           RemoteResult linkedFuelResult = linkedStationResult.getLinkedEntityData(0).get("Fuel");
+	 *     Code: (a) RemoteResult dayEntityResult = parser.parse(file).get("Day");
+	 *           (b) RemoteResult linkedStationResult = dayEntityResult.getLinkedEntityData(0).get("Station");
+	 *           (c) RemoteResult linkedFuelResult = linkedStationResult.getLinkedEntityData(0).get("Fuel");
 	 *
 	 *     Result:
-	 *           ["Mon"] -> ["Station A"] -> ["$1.00", "UL", "MON", "Station A"]
+	 *           (a) ["Mon"] -> (b) ["Station A"] -> (c) ["$1.00", "UL", "MON", "Station A"]
 	 * </pre>
+	 *
 	 *
 	 * @param parent the entity that the children entities will link to
 	 * @param firstChild the first entity that will be linked to the parent entity
