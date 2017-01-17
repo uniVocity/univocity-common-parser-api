@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * A list of remote entities to be parsed by some implementation of {@link EntityParserInterface},
  * and their specific configurations.
- *
+ * <p>
  * The configuration applied over individual {@link RemoteEntitySettings} elements override their counterparts in the
  * global parser settings, usually a subclass of {@link RemoteParserSettings}
  *
@@ -27,7 +27,7 @@ import java.util.*;
 public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends EntityList<S> {
 
 	private final Map<String, List<String>> linkedEntitiesMap = new HashMap<String, List<String>>();
-	private final Set<String> topLevelEntities = new HashSet<String>();
+
 	/**
 	 * Creates a new, empty {@code RemoteEntityList}, applying the global configuration object, used by the
 	 * {@link EntityParserInterface} implementation, to all entity-specific settings in this list.
@@ -52,6 +52,11 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 	protected abstract RemoteEntityList<S> newInstance();
 
 	public void linkEntities(S parent, S firstChild, S... restOfChildren) {
+		ArgumentUtils.noNulls("Linked entities", parent, firstChild);
+		if (isParentInChildren(parent, firstChild, restOfChildren)) {
+			throw new IllegalArgumentException("Can not link entity: '" + parent + "' to itself");
+		}
+
 		if (linkedEntitiesMap.get(parent.getEntityName()) == null) {
 			linkedEntitiesMap.put(parent.getEntityName(), new ArrayList<String>());
 		}
@@ -62,6 +67,19 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 			children.add(child.getEntityName());
 		}
 		parent.linkedEntities.addAll(children);
+	}
+
+	private boolean isParentInChildren(S parent, S firstChild, S... restOfChildren) {
+		if (parent == firstChild) {
+			return true;
+		}
+
+		for (S child : restOfChildren) {
+			if (parent == child) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
