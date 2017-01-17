@@ -391,7 +391,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	/**
-	 * Sets whether or not rows parsed in a linked page will be combined with the original row it cam from. The way that
+	 * Sets whether or not rows parsed in a linked page will be combined with the original row it came from. The way that
 	 * the parser will join rows is by inserting a linked row into the link following field. If there are multiple rows
 	 * parsed in the linked page, it will duplicate the original row to fit every link following row. An example can be seen below:
 	 *
@@ -435,10 +435,47 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return this.executorService;
 	}
 
+	/**
+	 * SGets whether or not fields in an entity used to link entities should be removed. Linking entity fields occur
+	 * in a leaf entity as described in
+	 * {@link RemoteEntityList#linkEntities(RemoteEntitySettings parent, RemoteEntitySettings child, RemoteEntitySettings[] restOfChildren)}.
+	 * An example of removing entity fields can be seen below:
+	 *
+	 * <pre>
+	 *      Person entity is linked to pet entity
+	 *      Entities    : Person("Name", "Age")| Pet("Species", "Age", "Name")
+	 *      Original Row: ["Bob", "12"]        | ["Dog", "3", "Bob"]
+	 *
+	 *      Result:
+	 *         setRemoveLinkedEntityFields(true) : ["Bob", "12"] -> ["Dog", "3"]
+	 *         setRemoveLinkedEntityFields(false): ["Bob", "12"] -> ["Dog", "3", "Bob"]
+	 *
+	 * </pre>
+	 * @return a flag indicating if linked entity fields will be removed
+	 */
 	public boolean isRemoveLinkedEntityFields() {
 		return removeLinkedEntityFields;
 	}
 
+
+	/**
+	 * Sets whether or not fields in an entity used to link entities should be removed. Linking entity fields occur
+	 * in a leaf entity as described in
+	 * {@link RemoteEntityList#linkEntities(RemoteEntitySettings parent, RemoteEntitySettings child, RemoteEntitySettings[] restOfChildren)}.
+	 * An example of removing entity fields can be seen below:
+	 *
+	 * <pre>
+	 *      Person entity is linked to pet entity
+	 *      Entities    : Person("Name", "Age")| Pet("Species", "Age", "Name")
+	 *      Original Row: ["Bob", "12"]        | ["Dog", "3", "Bob"]
+	 *
+	 *      Result:
+	 *         setRemoveLinkedEntityFields(true) : ["Bob", "12"] -> ["Dog", "3"]
+	 *         setRemoveLinkedEntityFields(false): ["Bob", "12"] -> ["Dog", "3", "Bob"]
+	 *
+	 * </pre>
+	 * @param removeLinkedEntityFields a flag indicating if linked entity fields will be removed
+	 */
 	public void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {
 		this.removeLinkedEntityFields = removeLinkedEntityFields;
 	}
