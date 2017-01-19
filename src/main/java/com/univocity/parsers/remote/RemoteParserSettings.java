@@ -50,7 +50,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private DownloadListener downloadListener;
 	private int downloadThreads = Runtime.getRuntime().availableProcessors();
 
-	private ExecutorService executorService = Executors.newCachedThreadPool();
+	private ExecutorService executorService;
 
 	/**
 	 * Creates a new configuration object for an implementation of {@link EntityParserInterface}, which will process
@@ -188,7 +188,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @param paginator a {@link Paginator} to be associated with the current {@code RemoteParserSettings}
 	 */
-	public void setPaginator(Paginator paginator){
+	public void setPaginator(Paginator paginator) {
 		this.paginator = paginator;
 	}
 
@@ -395,6 +395,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * the parser will join rows is by inserting a linked row into the link following field. If there are multiple rows
 	 * parsed in the linked page, it will duplicate the original row to fit every link following row. An example can be seen below:
 	 *
+	 * <hr><blockquote><pre><code>
 	 * <table>
 	 *     <tr>
 	 *         <th>Original Page</th>
@@ -409,6 +410,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *         <td>["home", "851 154 110"]</td>
 	 *     </tr>
 	 * </table>
+	 * </code><hr><blockquote><pre>
 	 *
 	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As there are 2
 	 * rows parsed from the linked page, the original row will be duplicated to complete the join. The join of the above rows
@@ -425,13 +427,30 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		this.combineLinkFollowingRows = combineLinkFollowingRows;
 	}
 
-	//FIXME: javadoc
-	public final void setExecutorService(ExecutorService executorService){
+	/**
+	 * Assigns an {@link ExecutorService} to be parser, which will be used to manage the multiple threads that can be
+	 * started. These threads are used to parse/download data from a given input and any remote resources associated with it.
+	 *
+	 * <em>Defaults to:</em> {@code Executors.newCachedThreadPool();}
+	 *
+	 * @param executorService the executor service to be used by the parser for the creation of new threads.
+	 */
+	public final void setExecutorService(ExecutorService executorService) {
 		this.executorService = executorService;
 	}
 
-	//FIXME: javadoc
-	public final ExecutorService getExecutorService(){
+	/**
+	 * Returns the {@link ExecutorService} to be used by the parser for managing the multiple threads that can be
+	 * started. These threads are used to parse/download data from a given input and any remote resources associated with it.
+	 *
+	 * <em>Defaults to:</em> {@code Executors.newCachedThreadPool();}
+	 *
+	 * @return the executor service to be used by the parser for the creation of new threads.
+	 */
+	public final ExecutorService getExecutorService() {
+		if (executorService == null) {
+			executorService = Executors.newCachedThreadPool();
+		}
 		return this.executorService;
 	}
 
@@ -451,6 +470,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *         setRemoveLinkedEntityFields(false): ["Bob", "12"] -> ["Dog", "3", "Bob"]
 	 *
 	 * </pre>
+	 *
 	 * @return a flag indicating if linked entity fields will be removed
 	 */
 	public boolean isRemoveLinkedEntityFields() {
@@ -474,6 +494,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *         setRemoveLinkedEntityFields(false): ["Bob", "12"] -> ["Dog", "3", "Bob"]
 	 *
 	 * </pre>
+	 *
 	 * @param removeLinkedEntityFields a flag indicating if linked entity fields will be removed
 	 */
 	public void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {

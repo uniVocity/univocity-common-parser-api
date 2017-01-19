@@ -7,14 +7,26 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
-import com.univocity.parsers.common.record.*;
 
 /**
- * //TODO: javadoc
+ * An extension of the {@link EntityParserInterface} for parsers that access remote content.
  *
- * @param <C> the pagination context implementation supported by the parser.
+ * All parsers should work with a concrete implementation of a {@link RemoteParserSettings} object that provides
+ * configuration options for the given parser. The definition of entities and their configuration should be managed by
+ * an implementation of {@link RemoteEntityList}, which provides individual {@link RemoteEntitySettings} to allow user
+ * to configure how the records of each individual entity should be handled.
+ *
+ * Concrete parser implementations may provide additional operations.
+ *
+ * @param <C> the pagination context implementation supported by the parser, to support reading through records available
+ *            remotely in multiple result pages.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @see EntityParserInterface
+ * @see PaginationContext
+ * @see RemoteRecord
+ * @see Context
+ * @see RemoteResult
  */
 public interface RemoteEntityParserInterface<P extends PaginationContext, R extends RemoteRecord, C extends Context, T extends RemoteResult<R, C>> extends EntityParserInterface<R, C, T> {
 

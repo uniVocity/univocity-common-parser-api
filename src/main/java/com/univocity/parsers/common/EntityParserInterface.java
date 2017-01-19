@@ -21,22 +21,6 @@ import java.util.*;
  * individual {@link EntitySettings} to allow user to configure how the records of each individual entity should be
  * handled.
  *
- * At a minimum, all parser implementations must provide the following ways to handle records parsed from a given input:
- *
- * <ul>
- * <li>Using the <b>parseAll*</b> methods which parse the input in its entirety and accumulate all records collected
- * for all entities in memory. These methods return a map of entity names and their corresponding lists of simple
- * {@code String} arrays.</li>
- * <li>The <b>parseAllRecords*</b> methods work in a similar fashion as the previous method, but lists of more useful
- * {@link Record} objects are provided, which provide convenient data manipulation operations</li>
- * <li>Finally, the <b>parse*</b> methods will stream every record of every entity to an associated {@link Processor}
- * implementation as soon as it the record is generated. This won't accumulate results in memory (unless the
- * {@link Processor} itself does so) and is the preferred way to process larger inputs as fast as possible.</li>
- * </ul>
- *
- * If a {@link Processor} is assigned to a given entity, it will <b>always</b> be triggered for each parsed record,
- * regardless of which one of the aforementioned parsing methods are used.
- *
  * Concrete parser implementations may provide additional operations.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
