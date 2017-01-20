@@ -44,6 +44,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private FileProvider downloadContentDirectory;
 	private String fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
+
+	//TODO: review naming and default value. Update javadoc to mention default.
 	private boolean combineLinkFollowingRows = true;
 	private boolean removeLinkedEntityFields = false;
 
@@ -199,7 +201,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 */
 	public Paginator getPaginator() {
 		if (paginator == null) {
-			paginator = newPaginator();
+			paginator = newPaginator(this);
 		}
 		return paginator;
 	}
@@ -209,7 +211,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * @return a new {@link Paginator} instance
 	 */
-	protected abstract Paginator newPaginator();
+	protected abstract Paginator newPaginator(RemoteParserSettings parserSettings);
 
 	/**
 	 * Returns the value to be used when the content parsed for a field of some record evaluates to an empty {@code String}
@@ -382,24 +384,15 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	/**
-	 * Returns true if the parser will join link following rows, false if otherwise.
+	 * Indicates whether or not rows parsed from a link will be combined with a "parent" row. The way that
+	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
+	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
 	 *
-	 * @return a flag indicating if the parser will join original rows with link following rows
-	 */
-	public final boolean isCombineLinkFollowingRows() {
-		return combineLinkFollowingRows;
-	}
-
-	/**
-	 * Sets whether or not rows parsed in a linked page will be combined with the original row it came from. The way that
-	 * the parser will join rows is by inserting a linked row into the link following field. If there are multiple rows
-	 * parsed in the linked page, it will duplicate the original row to fit every link following row. An example can be seen below:
-	 *
-	 * <hr><blockquote><pre><code>
+	 * <hr><blockquote><pre>
 	 * <table>
 	 *     <tr>
-	 *         <th>Original Page</th>
-	 *         <th>Linked Page (linkedPage.com)</th>
+	 *         <th>Rows from original page</th>
+	 *         <th>Rows from linked page (linkedPage.com)</th>
 	 *     </tr>
 	 *     <tr>
 	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
@@ -410,18 +403,56 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *         <td>["home", "851 154 110"]</td>
 	 *     </tr>
 	 * </table>
-	 * </code><hr><blockquote><pre>
+	 * <hr></blockquote></pre>
 	 *
-	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As there are 2
-	 * rows parsed from the linked page, the original row will be duplicated to complete the join. The join of the above rows
-	 * can be seen below: </p>
+	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
+	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
+	 * will be: </p>
 	 *
-	 * <pre>
+	 * <hr><blockquote><pre>
 	 *      ["17", "123 real street", "mobile", "04 123 321"]
 	 *      ["17", "123 real street", "home", "851 154 110"]
-	 * </pre>
+	 * <hr></></blockquote></pre>
 	 *
-	 * @param combineLinkFollowingRows sets if the parser will join original rows with linked page rows
+	 * @return a flag indicating whether the parser should join original rows with their corresponding linked rows
+	 */
+	public final boolean isCombineLinkFollowingRows() {
+		return combineLinkFollowingRows;
+	}
+
+	/**
+	 * Sets whether or not rows parsed from a link will be combined with a "parent" row. The way that
+	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
+	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
+	 *
+	 *
+	 * <hr><blockquote><pre>
+	 * <table>
+	 *     <tr>
+	 *         <th>Rows from original page</th>
+	 *         <th>Rows from linked page (linkedPage.com)</th>
+	 *     </tr>
+	 *     <tr>
+	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
+	 *         <td>["mobile", "04 123 321"]</td>
+	 *     </tr>
+	 *     <tr>
+	 *         <td></td>
+	 *         <td>["home", "851 154 110"]</td>
+	 *     </tr>
+	 * </table>
+	 * <hr></blockquote></pre>
+	 *
+	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
+	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
+	 * will be: </p>
+	 *
+	 * <hr><blockquote><pre>
+	 *      ["17", "123 real street", "mobile", "04 123 321"]
+	 *      ["17", "123 real street", "home", "851 154 110"]
+	 * <hr></></blockquote></pre>
+	 *
+	 * @param combineLinkFollowingRows flag indicating whether the parser should join original rows with their corresponding linked rows
 	 */
 	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
 		this.combineLinkFollowingRows = combineLinkFollowingRows;

@@ -23,6 +23,7 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	protected S parentEntitySettings;
 	private UrlReaderProvider baseUrl;
 
+	private boolean combineLinkFollowingRows;
 	private boolean ignoreLinkFollowingErrors = true;
 
 	/**
@@ -33,7 +34,86 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		this.parentEntitySettings = entityList.addEntitySettings(parentEntitySettings);
 		parserSettings = (R) entityList.getParserSettings();
 
+		combineLinkFollowingRows = parserSettings.isCombineLinkFollowingRows();
+	}
 
+	/**
+	 * Indicates whether or not rows parsed from a link accessed by this link follower will be combined with a "parent" row. The way that
+	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
+	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
+	 *
+	 * <hr><blockquote><pre>
+	 * <table>
+	 *     <tr>
+	 *         <th>Rows from original page</th>
+	 *         <th>Rows from linked page (linkedPage.com)</th>
+	 *     </tr>
+	 *     <tr>
+	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
+	 *         <td>["mobile", "04 123 321"]</td>
+	 *     </tr>
+	 *     <tr>
+	 *         <td></td>
+	 *         <td>["home", "851 154 110"]</td>
+	 *     </tr>
+	 * </table>
+	 * <hr></blockquote></pre>
+	 *
+	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
+	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
+	 * will be: </p>
+	 *
+	 * <hr><blockquote><pre>
+	 *      ["17", "123 real street", "mobile", "04 123 321"]
+	 *      ["17", "123 real street", "home", "851 154 110"]
+	 * <hr></></blockquote></pre>
+	 *
+	 * Defaults to the parent entity's {@link RemoteEntitySettings#isCombineLinkFollowingRows()} setting.
+	 *
+	 * @return a flag indicating whether the parser should join original rows with their corresponding linked rows
+	 */
+	public final boolean isCombineLinkFollowingRows() {
+		return combineLinkFollowingRows;
+	}
+
+	/**
+	 * Sets whether or not rows parsed from by this link follower will be combined with a "parent" row. The way that
+	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
+	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
+	 *
+	 *
+	 * <hr><blockquote><pre>
+	 * <table>
+	 *     <tr>
+	 *         <th>Rows from original page</th>
+	 *         <th>Rows from linked page (linkedPage.com)</th>
+	 *     </tr>
+	 *     <tr>
+	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
+	 *         <td>["mobile", "04 123 321"]</td>
+	 *     </tr>
+	 *     <tr>
+	 *         <td></td>
+	 *         <td>["home", "851 154 110"]</td>
+	 *     </tr>
+	 * </table>
+	 * <hr></blockquote></pre>
+	 *
+	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
+	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
+	 * will be: </p>
+	 *
+	 * <hr><blockquote><pre>
+	 *      ["17", "123 real street", "mobile", "04 123 321"]
+	 *      ["17", "123 real street", "home", "851 154 110"]
+	 * <hr></></blockquote></pre>
+	 *
+	 * Defaults to the parent entity's {@link RemoteEntitySettings#isCombineLinkFollowingRows()} setting.
+	 *
+	 * @param combineLinkFollowingRows flag indicating whether the parser should join original rows with their corresponding linked rows
+	 */
+	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
+		this.combineLinkFollowingRows = combineLinkFollowingRows;
 	}
 
 	public final T getEntityList() {

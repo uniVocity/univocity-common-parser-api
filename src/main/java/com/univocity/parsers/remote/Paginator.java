@@ -44,8 +44,8 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	/**
 	 * Creates a new {@code Paginator}
 	 */
-	protected Paginator() {
-		entitySettings = newEntitySettings();
+	protected Paginator(RemoteParserSettings parserSettings) {
+		entitySettings = newEntitySettings(parserSettings);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	 * @return a new instance of a concrete implementation of {@link RemoteEntitySettings}, used to configure all
 	 * pagination-related elements.
 	 */
-	protected abstract E newEntitySettings();
+	protected abstract E newEntitySettings(RemoteParserSettings parserSettings);
 
 
 	/**
