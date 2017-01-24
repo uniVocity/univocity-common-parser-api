@@ -163,12 +163,6 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 
 	@Override
 	public String toString() {
-		return "RemoteLinkFollower{" +
-				"entityList=" + entityList +
-				", parserSettings=" + parserSettings +
-				", parentEntitySettings=" + parentEntitySettings +
-				", baseUrl=" + baseUrl +
-				", ignoreLinkFollowingErrors=" + ignoreLinkFollowingErrors +
-				'}';
+		return ">>" + parentEntitySettings.getEntityName();
 	}
 }
