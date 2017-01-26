@@ -18,18 +18,16 @@ import java.util.*;
  * @param <E> type of {@link RemoteEntitySettings} of a parser with support for pagination. A paginator is essentially
  *            an entity specifically configured and used for the purpose of retrieving more content from a current
  *            state (or page), if available.
- * @param <C> the concrete {link PaginationContext} which provides additional information about the
- *            pagination process of a specific {@link com.univocity.parsers.common.EntityParserInterface} implementation.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see RemoteParserSettings
  * @see PaginationContext
  * @see PaginationHandler
  */
-public abstract class Paginator<E extends RemoteEntitySettings, C extends PaginationContext> {
+public abstract class Paginator<E extends RemoteEntitySettings> {
 	protected final E entitySettings;
 	private int followCount = -1;
-	private PaginationHandler<C> paginationHandler;
+	private PaginationHandler paginationHandler;
 	private boolean urlTestingEnabled = false;
 
 	public static final String ENTITY_NAME = "*paginator*";
@@ -88,7 +86,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	 *
 	 * @param paginationHandler the {@link PaginationHandler} that will be associated with this {@code Paginator}
 	 */
-	public final void setPaginationHandler(PaginationHandler<C> paginationHandler) {
+	public final void setPaginationHandler(PaginationHandler paginationHandler) {
 		this.paginationHandler = paginationHandler;
 	}
 
@@ -100,7 +98,7 @@ public abstract class Paginator<E extends RemoteEntitySettings, C extends Pagina
 	 *
 	 * @return the {@link PaginationHandler} associated with this {@code Paginator}
 	 */
-	public final PaginationHandler<C> getPaginationHandler() {
+	public final PaginationHandler getPaginationHandler() {
 		return paginationHandler;
 	}
 

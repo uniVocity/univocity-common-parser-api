@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface RemoteRecord<R extends RemoteRecord, C extends Context, P extends PaginationContext> extends Record {
+public interface RemoteRecord<R extends RemoteRecord, C extends Context> extends Record {
 
 	RemoteResult<R, C> getLinkedFieldData();
 

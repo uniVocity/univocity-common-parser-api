@@ -124,5 +124,26 @@ public interface PaginationContext {
 	 */
 	void stopPagination();
 
+	/**
+	 * Returns the {@link HttpResponse} object with all information returned by the remote server
+	 * in its HTTP response message (which generated the current page).
+	 *
+	 * @return the {@link HttpResponse} received for the current page. Will be {@code null} if the
+	 * pagination is running over local files.
+	 */
+	HttpResponse getCurrentPageResponse();
+
+	/**
+	 * Returns the {@link UrlReaderProvider} prepared by the parser to access the next page. It inherits all configuration
+	 * options defined in the call to the previous page. Cookies set in the {@link HttpResponse} of the current page
+	 * are automatically set into this request.
+	 * You can alter its configuration before its {@link HttpRequest} is executed to
+	 * fetch the next page.
+	 *
+	 * @return the {@link UrlReaderProvider} which will be used to fetch the next page. Will be {@code null} if the
+	 * pagination is running over local files.
+	 */
+	UrlReaderProvider getNextPageRequest();
+
 
 }

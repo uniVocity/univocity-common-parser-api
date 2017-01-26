@@ -28,7 +28,7 @@ import com.univocity.parsers.common.*;
  * @see Context
  * @see RemoteResult
  */
-public interface RemoteEntityParserInterface<P extends PaginationContext, R extends RemoteRecord, C extends Context, T extends RemoteResult<R, C>> extends EntityParserInterface<R, C, T> {
+public interface RemoteEntityParserInterface<R extends RemoteRecord, C extends Context, T extends RemoteResult<R, C>> extends EntityParserInterface<R, C, T> {
 
 	/**
 	 * Returns the {@link PaginationContext} object with information collected for the configured {@link Paginator}, if
@@ -38,5 +38,5 @@ public interface RemoteEntityParserInterface<P extends PaginationContext, R exte
 	 *
 	 * @return the current {@link PaginationContext} with pagination information captured after parsing a given input.
 	 */
-	P getPaginationContext();
+	PaginationContext getPaginationContext();
 }

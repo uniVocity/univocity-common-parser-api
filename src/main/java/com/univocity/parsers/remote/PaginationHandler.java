@@ -14,13 +14,11 @@ package com.univocity.parsers.remote;
  * the {@link #prepareCallToNextPage(PaginationContext)} method. Users can for example manipulate the remote request to
  * control how the next page should be fetched by modifying the configuration to access the next page of data.
  *
- * @param <C> the {@link PaginationContext} implementation supported by this handler.
- *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see Paginator
  * @see PaginationContext
  */
-public interface PaginationHandler<C extends PaginationContext> {
+public abstract class PaginationHandler {
 
 	/**
 	 * Method invoked by the parser internally when a {@link Paginator} is defined and new pages of content have been
@@ -29,5 +27,5 @@ public interface PaginationHandler<C extends PaginationContext> {
 	 *
 	 * @param paginationContext the {@link PaginationContext} used to get information from the pagination process.
 	 */
-	void prepareCallToNextPage(C paginationContext);
+	public abstract void prepareCallToNextPage(PaginationContext paginationContext);
 }
