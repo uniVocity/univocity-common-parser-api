@@ -116,10 +116,23 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		this.combineLinkFollowingRows = combineLinkFollowingRows;
 	}
 
+	/**
+	 * Returns the list of entities available from this link follower
+	 *
+	 * @return the list of entities available from this link follower
+	 */
 	public final T getEntityList() {
 		return entityList;
 	}
 
+	/**
+	 * Adds a new entity to this link follower if it doesn't exist and returns its configuration. The global settings
+	 * made for the parser will be used by default. You can configure your entity to use different settings if required.
+	 *
+	 * @param entityName name of the entity whose configuration that will be returned.
+	 *
+	 * @return an existing or new entity configuration associated with the given entity name
+	 */
 	public final S addEntity(String entityName) {
 		return entityList.configureEntity(entityName);
 	}
@@ -134,17 +147,31 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		return parserSettings;
 	}
 
+	/**
+	 * Returns the URL the link follower should work with. Used for processing links that point to other remote hosts, and
+	 * to ensure that relative resource paths are resolved against the given base URL.
+	 *
+	 * @return the base URL to resolve the remote address to be accessed by this link follower.
+	 */
 	public final UrlReaderProvider getBaseUrl() {
 		return baseUrl;
 	}
 
+	/**
+	 * Defines a base URL for the link follower to run. Used for processing links that point to other remote hosts, and
+	 * to ensure that relative resource paths are resolved against the given base URL.
+	 *
+	 * @return the base URL to resolve the remote address to be accessed by this link follower.
+	 */
 	public final void setBaseUrl(UrlReaderProvider baseUrlReaderProvider) {
 		this.baseUrl = baseUrlReaderProvider;
 	}
 
 	/**
-	 * If set to false, the parser will throw an Exception when the parser tries to follow a link that is invalid or
-	 * malformed. Set to true, the parser will simply ignore following an invalid or malformed link.
+	 * If set to {@code false}, the parser will throw an Exception when the parser tries to follow a link that is invalid or
+	 * malformed. Set to {@code true}, the parser will simply ignore following an invalid or malformed link.
+	 *
+	 * Defaults to {@code true}
 	 *
 	 * @param ignoreLinkFollowingErrors true if the parser will ignore errors when accessing linked page, false otherwise.
 	 */
@@ -154,8 +181,9 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 
 	/**
 	 * Returns if the parser will ignore invalid or malformed link following urls.
+	 * Defaults to {@code true}
 	 *
-	 * @return if the parser is set to ignore errors when accessing linked page
+	 * @return {@code true} if the parser is set to ignore errors when accessing linked page
 	 */
 	public boolean isIgnoreLinkFollowingErrors() {
 		return ignoreLinkFollowingErrors;
