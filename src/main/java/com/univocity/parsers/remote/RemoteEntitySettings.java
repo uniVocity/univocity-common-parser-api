@@ -23,7 +23,7 @@ import java.util.*;
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public abstract class RemoteEntitySettings<C extends Context, S extends CommonParserSettings, G extends RemoteParserSettings, T extends RemoteLinkFollower> extends EntitySettings<C, S, G> {
+public abstract class RemoteEntitySettings<C extends Context, S extends CommonParserSettings, G extends RemoteParserSettings, T extends RemoteLinkFollower> extends EntitySettings<C, S, G> implements CommonLinkFollowerOptions {
 
 	private boolean localEmptyValue;
 	private String emptyValue = null;
@@ -32,93 +32,61 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	protected Set<String> requestParameters = new LinkedHashSet<String>();
 	protected Map<String, T> linkFollowers = new HashMap<String, T>();
 
+	private Boolean removeLinkedEntityFields;
+	private Boolean ignoreLinkFollowingErrors;
 	private Boolean combineLinkFollowingRows;
+	protected Object owner;
 
-
-	protected RemoteEntitySettings(String entityName, S entitySettings) {
-		super(entityName, entitySettings);
+	protected RemoteEntitySettings(String entityName, S entitySettings, RemoteEntitySettings parentEntity) {
+		super(entityName, entitySettings, parentEntity);
 	}
 
-	/**
-	 * Indicates whether or not rows parsed from link followers associated with this entity will be combined with each "parent" row. The way that
-	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
-	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
-	 *
-	 * <hr><blockquote><pre>
-	 * <table>
-	 *     <tr>
-	 *         <th>Rows from original page</th>
-	 *         <th>Rows from linked page (linkedPage.com)</th>
-	 *     </tr>
-	 *     <tr>
-	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
-	 *         <td>["mobile", "04 123 321"]</td>
-	 *     </tr>
-	 *     <tr>
-	 *         <td></td>
-	 *         <td>["home", "851 154 110"]</td>
-	 *     </tr>
-	 * </table>
-	 * <hr></blockquote></pre>
-	 *
-	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
-	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
-	 * will be: </p>
-	 *
-	 * <hr><blockquote><pre>
-	 *      ["17", "123 real street", "mobile", "04 123 321"]
-	 *      ["17", "123 real street", "home", "851 154 110"]
-	 * <hr></></blockquote></pre>
-	 *
-	 * Defaults to the parser's {@link RemoteParserSettings#isCombineLinkFollowingRows()} setting.
-	 *
-	 * @return a flag indicating whether the parser should join original rows with their corresponding linked rows
-	 */
+	@Override
 	public final boolean isCombineLinkFollowingRows() {
-		if(combineLinkFollowingRows == null){
-			combineLinkFollowingRows = parserSettings.isCombineLinkFollowingRows();
+		if (combineLinkFollowingRows == null) {
+			if (parentEntity != null) {
+				return ((RemoteEntitySettings) parentEntity).isCombineLinkFollowingRows();
+			}
+			return parserSettings.isCombineLinkFollowingRows();
 		}
 		return combineLinkFollowingRows;
 	}
 
-	/**
-	 * Sets whether or not rows parsed from link followers associated with this entity will be combined with each "parent" row. The way that
-	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
-	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
-	 *
-	 *
-	 * <hr><blockquote><pre>
-	 * <table>
-	 *     <tr>
-	 *         <th>Rows from original page</th>
-	 *         <th>Rows from linked page (linkedPage.com)</th>
-	 *     </tr>
-	 *     <tr>
-	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
-	 *         <td>["mobile", "04 123 321"]</td>
-	 *     </tr>
-	 *     <tr>
-	 *         <td></td>
-	 *         <td>["home", "851 154 110"]</td>
-	 *     </tr>
-	 * </table>
-	 * <hr></blockquote></pre>
-	 *
-	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
-	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
-	 * will be: </p>
-	 *
-	 * <hr><blockquote><pre>
-	 *      ["17", "123 real street", "mobile", "04 123 321"]
-	 *      ["17", "123 real street", "home", "851 154 110"]
-	 * <hr></></blockquote></pre>
-	 *
-	 * Defaults to the parser's {@link RemoteParserSettings#isCombineLinkFollowingRows()} setting.
-	 *
-	 * @param combineLinkFollowingRows flag indicating whether the parser should join original rows with their corresponding linked rows
-	 */
+	@Override
 	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
 		this.combineLinkFollowingRows = combineLinkFollowingRows;
+	}
+
+	@Override
+	public final void ignoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
+		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
+	}
+
+	@Override
+	public final boolean isIgnoreLinkFollowingErrors() {
+		if (ignoreLinkFollowingErrors == null) {
+			if (parentEntity != null) {
+				return ((RemoteEntitySettings) parentEntity).isIgnoreLinkFollowingErrors();
+			}
+			return parserSettings.isIgnoreLinkFollowingErrors();
+		}
+		return ignoreLinkFollowingErrors;
+	}
+
+	@Override
+	public final boolean isRemoveLinkedEntityFields() {
+		if (removeLinkedEntityFields == null) {
+			if (parentEntity != null) {
+				return ((RemoteEntitySettings) parentEntity).isRemoveLinkedEntityFields();
+			}
+			return parserSettings.isRemoveLinkedEntityFields();
+		}
+		return removeLinkedEntityFields;
+	}
+
+	@Override
+	public final void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {
+		this.removeLinkedEntityFields = removeLinkedEntityFields;
 	}
 
 	@Override

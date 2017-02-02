@@ -43,6 +43,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 
 	protected final String name;
 	protected Processor<C> processor;
+	protected final EntitySettings parentEntity;
 
 	/**
 	 * Internal constructor to be invoked the subclasses of {@code EntitySettings}
@@ -52,9 +53,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 *                         of elements shared with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>.
 	 *                         Not meant to be exposed/accessed directly by users.
 	 */
-	protected EntitySettings(String name, S internalSettings) {
+	protected EntitySettings(String name, S internalSettings, EntitySettings parentEntity) {
 		this.name = name;
 		this.internalSettings = internalSettings;
+		this.parentEntity = parentEntity;
 	}
 
 	/**
@@ -97,8 +99,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return the String representation of a null value
 	 */
 	public final String getNullValue() {
-		if (localNullValue || parserSettings == null) {
+		if (localNullValue || (parserSettings == null && parentEntity == null)) {
 			return internalSettings.getNullValue();
+		} else if (parentEntity != null) {
+			return parentEntity.getNullValue();
 		} else {
 			return parserSettings.globalSettings.getNullValue();
 		}
@@ -286,8 +290,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return the callback error handler with custom code to manage occurrences of {@link DataProcessingException}.
 	 */
 	public final <T extends Context> ProcessorErrorHandler<T> getProcessorErrorHandler() {
-		if (localProcessorErrorHandler || parserSettings == null) {
+		if (localProcessorErrorHandler || (parserSettings == null && parentEntity == null)) {
 			return internalSettings.getProcessorErrorHandler();
+		} else if (parentEntity != null) {
+			return parentEntity.getProcessorErrorHandler();
 		} else {
 			return parserSettings.globalSettings.getProcessorErrorHandler();
 		}
@@ -316,8 +322,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return {@code true} if the parser/writer is configured to use a {@link ProcessorErrorHandler}
 	 */
 	public final boolean isProcessorErrorHandlerDefined() {
-		if (localProcessorErrorHandler || parserSettings == null) {
+		if (localProcessorErrorHandler || (parserSettings == null && parentEntity == null)) {
 			return internalSettings.isProcessorErrorHandlerDefined();
+		} else if (parentEntity != null) {
+			return parentEntity.isProcessorErrorHandlerDefined();
 		} else {
 			return parserSettings.globalSettings.isProcessorErrorHandlerDefined();
 		}
@@ -343,8 +351,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return the maximum length of contents displayed in exception messages in case of errors while parsing/writing.
 	 */
 	public final int getErrorContentLength() {
-		if (localErrorContentLength || parserSettings == null) {
+		if (localErrorContentLength || (parserSettings == null && parentEntity == null)) {
 			return internalSettings.getErrorContentLength();
+		} else if (parentEntity != null) {
+			return parentEntity.getErrorContentLength();
 		} else {
 			return parserSettings.globalSettings.getErrorContentLength();
 		}
@@ -419,8 +429,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return {@code true} if trailing whitespaces from values being read/written should be trimmed, {@code false} otherwise
 	 */
 	public final boolean getTrimTrailingWhitespaces() {
-		if (localTrimTrailing || parserSettings == null) {
+		if (localTrimTrailing || (parserSettings == null && parentEntity == null)) {
 			return internalSettings.getIgnoreTrailingWhitespaces();
+		} else if (parentEntity != null) {
+			return parentEntity.getTrimTrailingWhitespaces();
 		}
 		return parserSettings.globalSettings.getIgnoreTrailingWhitespaces();
 	}
@@ -441,8 +453,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @return {@code true} if leading whitespaces from values being read/written should be trimmed, {@code false} otherwise
 	 */
 	public final boolean getTrimLeadingWhitespaces() {
-		if (localTrimLeading || parserSettings == null) {
+		if (localTrimLeading || (parserSettings == null && parentEntity == null)) {
 			return internalSettings.getIgnoreLeadingWhitespaces();
+		} else if (parentEntity != null) {
+			return parentEntity.getTrimLeadingWhitespaces();
 		}
 		return parserSettings.globalSettings.getIgnoreLeadingWhitespaces();
 	}

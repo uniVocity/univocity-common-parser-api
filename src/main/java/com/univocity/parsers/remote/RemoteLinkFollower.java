@@ -7,6 +7,7 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.api.net.*;
+import com.univocity.parsers.common.*;
 
 /**
  * An abstract class that allow parsers that use {@link RemoteParserSettings} and {@link RemoteEntityList} to access and
@@ -17,103 +18,29 @@ import com.univocity.api.net.*;
  *            can be thought of as a special type of {@link RemoteEntityList} that is used on linked pages.
  * @param <R> The type of settings that configures a RemoteParser
  */
-public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T extends RemoteEntityList<S>, R extends RemoteParserSettings> implements Cloneable {
+public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T extends RemoteEntityList<S>, R extends RemoteParserSettings> implements Cloneable, CommonLinkFollowerOptions {
 	protected T entityList;
 	protected R parserSettings;
-	protected S parentEntitySettings;
+	protected S entitySettings;
+	protected final RemoteLinkFollower parentLinkFollower;
 	private UrlReaderProvider baseUrl;
 
-	private boolean combineLinkFollowingRows;
-	private boolean ignoreLinkFollowingErrors = true;
+	private Boolean removeLinkedEntityFields = null;
+	private Boolean combineLinkFollowingRows = null;
+	private Boolean ignoreLinkFollowingErrors = null;
 
 	/**
 	 * Creates a new LinkFollower
 	 */
 	protected RemoteLinkFollower(S parentEntitySettings) {
-		entityList = (T) parentEntitySettings.getParentEntityList().newInstance();
-		this.parentEntitySettings = entityList.addEntitySettings(parentEntitySettings);
-		parserSettings = (R) entityList.getParserSettings();
+		ArgumentUtils.notEmpty("Parent of link follower", parentEntitySettings);
+		this.entityList = (T) parentEntitySettings.getParentEntityList().newInstance();
+		this.entitySettings = entityList.addEntitySettings(parentEntitySettings);
+//		this.entitySettings.
+		this.parserSettings = (R) entityList.getParserSettings();
+		this.parentLinkFollower = (RemoteLinkFollower) this.entitySettings.owner;
+		this.entitySettings.owner = this;
 
-		combineLinkFollowingRows = parserSettings.isCombineLinkFollowingRows();
-	}
-
-	/**
-	 * Indicates whether or not rows parsed from a link accessed by this link follower will be combined with a "parent" row. The way that
-	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
-	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
-	 *
-	 * <hr><blockquote><pre>
-	 * <table>
-	 *     <tr>
-	 *         <th>Rows from original page</th>
-	 *         <th>Rows from linked page (linkedPage.com)</th>
-	 *     </tr>
-	 *     <tr>
-	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
-	 *         <td>["mobile", "04 123 321"]</td>
-	 *     </tr>
-	 *     <tr>
-	 *         <td></td>
-	 *         <td>["home", "851 154 110"]</td>
-	 *     </tr>
-	 * </table>
-	 * <hr></blockquote></pre>
-	 *
-	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
-	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
-	 * will be: </p>
-	 *
-	 * <hr><blockquote><pre>
-	 *      ["17", "123 real street", "mobile", "04 123 321"]
-	 *      ["17", "123 real street", "home", "851 154 110"]
-	 * <hr></></blockquote></pre>
-	 *
-	 * Defaults to the parent entity's {@link RemoteEntitySettings#isCombineLinkFollowingRows()} setting.
-	 *
-	 * @return a flag indicating whether the parser should join original rows with their corresponding linked rows
-	 */
-	public final boolean isCombineLinkFollowingRows() {
-		return combineLinkFollowingRows;
-	}
-
-	/**
-	 * Sets whether or not rows parsed from by this link follower will be combined with a "parent" row. The way that
-	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
-	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
-	 *
-	 *
-	 * <hr><blockquote><pre>
-	 * <table>
-	 *     <tr>
-	 *         <th>Rows from original page</th>
-	 *         <th>Rows from linked page (linkedPage.com)</th>
-	 *     </tr>
-	 *     <tr>
-	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
-	 *         <td>["mobile", "04 123 321"]</td>
-	 *     </tr>
-	 *     <tr>
-	 *         <td></td>
-	 *         <td>["home", "851 154 110"]</td>
-	 *     </tr>
-	 * </table>
-	 * <hr></blockquote></pre>
-	 *
-	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
-	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
-	 * will be: </p>
-	 *
-	 * <hr><blockquote><pre>
-	 *      ["17", "123 real street", "mobile", "04 123 321"]
-	 *      ["17", "123 real street", "home", "851 154 110"]
-	 * <hr></></blockquote></pre>
-	 *
-	 * Defaults to the parent entity's {@link RemoteEntitySettings#isCombineLinkFollowingRows()} setting.
-	 *
-	 * @param combineLinkFollowingRows flag indicating whether the parser should join original rows with their corresponding linked rows
-	 */
-	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
-		this.combineLinkFollowingRows = combineLinkFollowingRows;
 	}
 
 	/**
@@ -134,7 +61,9 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	 * @return an existing or new entity configuration associated with the given entity name
 	 */
 	public final S addEntity(String entityName) {
-		return entityList.configureEntity(entityName);
+		S out = entityList.configureEntity(entityName, entitySettings);
+		out.owner = this;
+		return out;
 	}
 
 	/**
@@ -167,30 +96,57 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 		this.baseUrl = baseUrlReaderProvider;
 	}
 
-	/**
-	 * If set to {@code false}, the parser will throw an Exception when the parser tries to follow a link that is invalid or
-	 * malformed. Set to {@code true}, the parser will simply ignore following an invalid or malformed link.
-	 *
-	 * Defaults to {@code true}
-	 *
-	 * @param ignoreLinkFollowingErrors true if the parser will ignore errors when accessing linked page, false otherwise.
-	 */
-	public void ignoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
+	@Override
+	public final void ignoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
 		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
 	}
 
-	/**
-	 * Returns if the parser will ignore invalid or malformed link following urls.
-	 * Defaults to {@code true}
-	 *
-	 * @return {@code true} if the parser is set to ignore errors when accessing linked page
-	 */
-	public boolean isIgnoreLinkFollowingErrors() {
+	@Override
+	public final boolean isIgnoreLinkFollowingErrors() {
+		if (ignoreLinkFollowingErrors == null) {
+			if (parentLinkFollower != null) {
+				return parentLinkFollower.isIgnoreLinkFollowingErrors();
+			}
+			return entitySettings.isIgnoreLinkFollowingErrors();
+
+		}
 		return ignoreLinkFollowingErrors;
 	}
 
 	@Override
+	public final boolean isCombineLinkFollowingRows() {
+		if (combineLinkFollowingRows == null) {
+			if (parentLinkFollower != null) {
+				return parentLinkFollower.isCombineLinkFollowingRows();
+			}
+			return entitySettings.isCombineLinkFollowingRows();
+		}
+		return combineLinkFollowingRows;
+	}
+
+	@Override
+	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
+		this.combineLinkFollowingRows = combineLinkFollowingRows;
+	}
+
+	@Override
+	public boolean isRemoveLinkedEntityFields() {
+		if (removeLinkedEntityFields == null) {
+			if (parentLinkFollower != null) {
+				return parentLinkFollower.isRemoveLinkedEntityFields();
+			}
+			return entitySettings.isRemoveLinkedEntityFields();
+		}
+		return removeLinkedEntityFields;
+	}
+
+	@Override
+	public void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {
+		this.removeLinkedEntityFields = removeLinkedEntityFields;
+	}
+
+	@Override
 	public String toString() {
-		return ">>" + parentEntitySettings.getEntityName();
+		return ">>" + entitySettings.getEntityName();
 	}
 }

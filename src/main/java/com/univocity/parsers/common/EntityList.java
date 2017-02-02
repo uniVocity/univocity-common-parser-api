@@ -52,10 +52,25 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	 * @return an existing or new entity configuration associated with the given entity name
 	 */
 	public final E configureEntity(String entityName) {
+		return configureEntity(entityName, null);
+	}
+
+	/**
+	 * Returns the configuration object associated with the given entityName. If there is no entity with that
+	 * name, a new configuration will be created and returned. The global settings made for the parser will be used
+	 * by default. You can configure your entity to use different settings if required.
+	 *
+	 * @param entityName   name of the entity whose configuration that will be returned.
+	 * @param parentEntity the "parent" entity (which can be {@code null}), whose settings will
+	 *                     be passed on to the new entity.
+	 *
+	 * @return an existing or new entity configuration associated with the given entity name
+	 */
+	protected E configureEntity(String entityName, E parentEntity) {
 		Args.notBlank(entityName, "Entity name");
 		String normalizedEntityName = entityName.trim().toLowerCase();
 		if (entities.get(normalizedEntityName) == null) {
-			E newEntity = newEntity(entityName);
+			E newEntity = newEntity(entityName, parentEntity);
 			newEntity.setParent(this);
 			entities.put(normalizedEntityName, newEntity);
 			originalEntityNames.put(entityName, normalizedEntityName);
@@ -69,11 +84,13 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	/**
 	 * Creates a new configuration object for the given entity name
 	 *
-	 * @param entityName name of the new entity
+	 * @param entityName   name of the new entity
+	 * @param parentEntity the "parent" entity (which can be {@code null}), whose settings will
+	 *                     be passed on to the new entity.
 	 *
 	 * @return new configuration object to be used by the new entity.
 	 */
-	protected abstract E newEntity(String entityName);
+	protected abstract E newEntity(String entityName, E parentEntity);
 
 	/**
 	 * Returns the entity names stored in the {@code EntityList} as a set of {@code String}s. Returns an empty set if no

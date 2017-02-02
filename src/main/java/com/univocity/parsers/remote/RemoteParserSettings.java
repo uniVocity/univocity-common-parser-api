@@ -35,7 +35,7 @@ import java.util.concurrent.*;
  * @see RemoteEntityList
  * @see Paginator
  */
-public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList, C extends Context> extends EntityParserSettings<S, L, C> {
+public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList, C extends Context> extends EntityParserSettings<S, L, C> implements CommonLinkFollowerOptions {
 
 	private String emptyValue;
 	protected Paginator paginator;
@@ -45,9 +45,10 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private String fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
 
-	//TODO: review naming and default value. Update javadoc to mention default.
+	//TODO: review naming and default values. Update javadoc to mention defaults.
 	private boolean combineLinkFollowingRows = true;
 	private boolean removeLinkedEntityFields = false;
+	private boolean ignoreLinkFollowingErrors = false;
 
 	private DownloadListener downloadListener;
 	private int downloadThreads = Runtime.getRuntime().availableProcessors();
@@ -383,77 +384,12 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return downloadThreads <= 0 ? 1 : downloadThreads;
 	}
 
-	/**
-	 * Indicates whether or not rows parsed from a link will be combined with a "parent" row. The way that
-	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
-	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
-	 *
-	 * <hr><blockquote><pre>
-	 * <table>
-	 *     <tr>
-	 *         <th>Rows from original page</th>
-	 *         <th>Rows from linked page (linkedPage.com)</th>
-	 *     </tr>
-	 *     <tr>
-	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
-	 *         <td>["mobile", "04 123 321"]</td>
-	 *     </tr>
-	 *     <tr>
-	 *         <td></td>
-	 *         <td>["home", "851 154 110"]</td>
-	 *     </tr>
-	 * </table>
-	 * <hr></blockquote></pre>
-	 *
-	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
-	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
-	 * will be: </p>
-	 *
-	 * <hr><blockquote><pre>
-	 *      ["17", "123 real street", "mobile", "04 123 321"]
-	 *      ["17", "123 real street", "home", "851 154 110"]
-	 * <hr></></blockquote></pre>
-	 *
-	 * @return a flag indicating whether the parser should join original rows with their corresponding linked rows
-	 */
+	@Override
 	public final boolean isCombineLinkFollowingRows() {
 		return combineLinkFollowingRows;
 	}
 
-	/**
-	 * Sets whether or not rows parsed from a link will be combined with a "parent" row. The way that
-	 * the parser will join rows is by replacing the link following field by the contents collected from a linked result.
-	 * If there are multiple rows parsed in the link, it will duplicate the original row to fit every link following row. For example:
-	 *
-	 *
-	 * <hr><blockquote><pre>
-	 * <table>
-	 *     <tr>
-	 *         <th>Rows from original page</th>
-	 *         <th>Rows from linked page (linkedPage.com)</th>
-	 *     </tr>
-	 *     <tr>
-	 *         <td>["17", "123 real street", "linkedPage.com"]</td>
-	 *         <td>["mobile", "04 123 321"]</td>
-	 *     </tr>
-	 *     <tr>
-	 *         <td></td>
-	 *         <td>["home", "851 154 110"]</td>
-	 *     </tr>
-	 * </table>
-	 * <hr></blockquote></pre>
-	 *
-	 * <p>The link following field can be seen in the original row with the value "linkedPage.com".  As 2 rows
-	 * got parsed from the link, the original row will be duplicated to complete the join. The resulting output
-	 * will be: </p>
-	 *
-	 * <hr><blockquote><pre>
-	 *      ["17", "123 real street", "mobile", "04 123 321"]
-	 *      ["17", "123 real street", "home", "851 154 110"]
-	 * <hr></></blockquote></pre>
-	 *
-	 * @param combineLinkFollowingRows flag indicating whether the parser should join original rows with their corresponding linked rows
-	 */
+	@Override
 	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
 		this.combineLinkFollowingRows = combineLinkFollowingRows;
 	}
@@ -485,51 +421,22 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return this.executorService;
 	}
 
-	/**
-	 * SGets whether or not fields in an entity used to link entities should be removed. Linking entity fields occur
-	 * in a leaf entity as described in
-	 * {@link RemoteEntityList#linkEntities(RemoteEntitySettings parent, RemoteEntitySettings child, RemoteEntitySettings[] restOfChildren)}.
-	 * An example of removing entity fields can be seen below:
-	 *
-	 * <pre>
-	 *      Person entity is linked to pet entity
-	 *      Entities    : Person("Name", "Age")| Pet("Species", "Age", "Name")
-	 *      Original Row: ["Bob", "12"]        | ["Dog", "3", "Bob"]
-	 *
-	 *      Result:
-	 *         setRemoveLinkedEntityFields(true) : ["Bob", "12"] -> ["Dog", "3"]
-	 *         setRemoveLinkedEntityFields(false): ["Bob", "12"] -> ["Dog", "3", "Bob"]
-	 *
-	 * </pre>
-	 *
-	 * @return a flag indicating if linked entity fields will be removed
-	 */
 	public boolean isRemoveLinkedEntityFields() {
 		return removeLinkedEntityFields;
 	}
 
-
-	/**
-	 * Sets whether or not fields in an entity used to link entities should be removed. Linking entity fields occur
-	 * in a leaf entity as described in
-	 * {@link RemoteEntityList#linkEntities(RemoteEntitySettings parent, RemoteEntitySettings child, RemoteEntitySettings[] restOfChildren)}.
-	 * An example of removing entity fields can be seen below:
-	 *
-	 * <pre>
-	 *      Person entity is linked to pet entity
-	 *      Entities    : Person("Name", "Age")| Pet("Species", "Age", "Name")
-	 *      Original Row: ["Bob", "12"]        | ["Dog", "3", "Bob"]
-	 *
-	 *      Result:
-	 *         setRemoveLinkedEntityFields(true) : ["Bob", "12"] -> ["Dog", "3"]
-	 *         setRemoveLinkedEntityFields(false): ["Bob", "12"] -> ["Dog", "3", "Bob"]
-	 *
-	 * </pre>
-	 *
-	 * @param removeLinkedEntityFields a flag indicating if linked entity fields will be removed
-	 */
 	public void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {
 		this.removeLinkedEntityFields = removeLinkedEntityFields;
+	}
+
+	@Override
+	public void ignoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
+		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
+	}
+
+	@Override
+	public boolean isIgnoreLinkFollowingErrors() {
+		return ignoreLinkFollowingErrors;
 	}
 
 	@Override
