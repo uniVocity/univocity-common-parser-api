@@ -7,7 +7,6 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
-import com.univocity.parsers.common.processor.*;
 
 import java.util.*;
 
@@ -23,18 +22,18 @@ import java.util.*;
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public abstract class RemoteEntitySettings<C extends Context, S extends CommonParserSettings, G extends RemoteParserSettings, T extends RemoteLinkFollower> extends EntitySettings<C, S, G> implements CommonLinkFollowerOptions {
+public abstract class RemoteEntitySettings<C extends Context, S extends CommonParserSettings, G extends RemoteParserSettings, T extends RemoteFollower> extends EntitySettings<C, S, G> implements CommonFollowerOptions {
 
 	private boolean localEmptyValue;
 	private String emptyValue = null;
 
 	private boolean localColumnReorderingEnabled;
 	protected Set<String> requestParameters = new LinkedHashSet<String>();
-	protected Map<String, T> linkFollowers = new HashMap<String, T>();
+	protected Map<String, T> followers = new HashMap<String, T>();
 
-	private Boolean removeLinkedEntityFields;
+
 	private Boolean ignoreLinkFollowingErrors;
-	private Boolean combineLinkFollowingRows;
+	private Nesting nesting;
 	protected Object owner;
 
 	protected RemoteEntitySettings(String entityName, S entitySettings, RemoteEntitySettings parentEntity) {
@@ -42,51 +41,35 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	}
 
 	@Override
-	public final boolean isCombineLinkFollowingRows() {
-		if (combineLinkFollowingRows == null) {
+	public final Nesting getNesting() {
+		if (nesting == null) {
 			if (parentEntity != null) {
-				return ((RemoteEntitySettings) parentEntity).isCombineLinkFollowingRows();
+				return ((RemoteEntitySettings) parentEntity).getNesting();
 			}
-			return parserSettings.isCombineLinkFollowingRows();
+			return parserSettings.getNesting();
 		}
-		return combineLinkFollowingRows;
+		return nesting;
 	}
 
 	@Override
-	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
-		this.combineLinkFollowingRows = combineLinkFollowingRows;
+	public final void setNesting(Nesting combineLinkFollowingRows) {
+		this.nesting = combineLinkFollowingRows;
 	}
 
 	@Override
-	public final void ignoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
+	public final void ignoreFollowingErrors(boolean ignoreLinkFollowingErrors) {
 		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
 	}
 
 	@Override
-	public final boolean isIgnoreLinkFollowingErrors() {
+	public final boolean isIgnoreFollowingErrors() {
 		if (ignoreLinkFollowingErrors == null) {
 			if (parentEntity != null) {
-				return ((RemoteEntitySettings) parentEntity).isIgnoreLinkFollowingErrors();
+				return ((RemoteEntitySettings) parentEntity).isIgnoreFollowingErrors();
 			}
-			return parserSettings.isIgnoreLinkFollowingErrors();
+			return parserSettings.isIgnoreFollowingErrors();
 		}
 		return ignoreLinkFollowingErrors;
-	}
-
-	@Override
-	public final boolean isRemoveLinkedEntityFields() {
-		if (removeLinkedEntityFields == null) {
-			if (parentEntity != null) {
-				return ((RemoteEntitySettings) parentEntity).isRemoveLinkedEntityFields();
-			}
-			return parserSettings.isRemoveLinkedEntityFields();
-		}
-		return removeLinkedEntityFields;
-	}
-
-	@Override
-	public final void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {
-		this.removeLinkedEntityFields = removeLinkedEntityFields;
 	}
 
 	@Override
@@ -174,8 +157,13 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 		this.emptyValue = emptyValue;
 	}
 
-	public Map<String, T> getLinkFollowers() {
-		return Collections.unmodifiableMap(linkFollowers);
+	/**
+	 * Returns a (unmodifiable) map of {@link RemoteFollower}s associated with this entity.
+	 *
+	 * @return the {@link RemoteFollower}s associated with this entity.
+	 */
+	public Map<String, T> getRemoteFollowers() {
+		return Collections.unmodifiableMap(followers);
 	}
 
 	protected RemoteEntityList getParentEntityList() {
@@ -186,7 +174,7 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	@Override
 	protected EntitySettings<C, S, G> clone() {
 		RemoteEntitySettings<C, S, G, T> out = (RemoteEntitySettings<C, S, G, T>) super.clone();
-		out.linkFollowers = new HashMap<String, T>();
+		out.followers = new HashMap<String, T>();
 		requestParameters = new LinkedHashSet<String>();
 		return out;
 	}

@@ -35,7 +35,7 @@ import java.util.concurrent.*;
  * @see RemoteEntityList
  * @see Paginator
  */
-public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList, C extends Context> extends EntityParserSettings<S, L, C> implements CommonLinkFollowerOptions {
+public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList, C extends Context> extends EntityParserSettings<S, L, C> implements CommonFollowerOptions {
 
 	private String emptyValue;
 	protected Paginator paginator;
@@ -45,9 +45,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private String fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
 
-	//TODO: review naming and default values. Update javadoc to mention defaults.
-	private boolean combineLinkFollowingRows = true;
-	private boolean removeLinkedEntityFields = false;
+	private Nesting nesting = Nesting.LINK;
 	private boolean ignoreLinkFollowingErrors = false;
 
 	private DownloadListener downloadListener;
@@ -385,13 +383,16 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	@Override
-	public final boolean isCombineLinkFollowingRows() {
-		return combineLinkFollowingRows;
+	public final Nesting getNesting() {
+		return nesting;
 	}
 
 	@Override
-	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
-		this.combineLinkFollowingRows = combineLinkFollowingRows;
+	public final void setNesting(Nesting nesting) {
+		if (nesting == null) {
+			nesting = Nesting.LINK;
+		}
+		this.nesting = nesting;
 	}
 
 	/**
@@ -421,21 +422,13 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return this.executorService;
 	}
 
-	public boolean isRemoveLinkedEntityFields() {
-		return removeLinkedEntityFields;
-	}
-
-	public void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {
-		this.removeLinkedEntityFields = removeLinkedEntityFields;
-	}
-
 	@Override
-	public void ignoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
+	public void ignoreFollowingErrors(boolean ignoreLinkFollowingErrors) {
 		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
 	}
 
 	@Override
-	public boolean isIgnoreLinkFollowingErrors() {
+	public boolean isIgnoreFollowingErrors() {
 		return ignoreLinkFollowingErrors;
 	}
 

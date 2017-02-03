@@ -18,42 +18,41 @@ import com.univocity.parsers.common.*;
  *            can be thought of as a special type of {@link RemoteEntityList} that is used on linked pages.
  * @param <R> The type of settings that configures a RemoteParser
  */
-public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T extends RemoteEntityList<S>, R extends RemoteParserSettings> implements Cloneable, CommonLinkFollowerOptions {
+public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends RemoteEntityList<S>, R extends RemoteParserSettings> implements Cloneable, CommonFollowerOptions {
 	protected T entityList;
 	protected R parserSettings;
 	protected S entitySettings;
-	protected final RemoteLinkFollower parentLinkFollower;
+	protected final RemoteFollower parentLinkFollower;
 	private UrlReaderProvider baseUrl;
 
-	private Boolean removeLinkedEntityFields = null;
-	private Boolean combineLinkFollowingRows = null;
+	private Nesting nesting = null;
 	private Boolean ignoreLinkFollowingErrors = null;
 
 	/**
 	 * Creates a new LinkFollower
 	 */
-	protected RemoteLinkFollower(S parentEntitySettings) {
-		ArgumentUtils.notEmpty("Parent of link follower", parentEntitySettings);
+	protected RemoteFollower(S parentEntitySettings) {
+		ArgumentUtils.notEmpty("Parent of remote follower", parentEntitySettings);
 		this.entityList = (T) parentEntitySettings.getParentEntityList().newInstance();
 		this.entitySettings = entityList.addEntitySettings(parentEntitySettings);
 //		this.entitySettings.
 		this.parserSettings = (R) entityList.getParserSettings();
-		this.parentLinkFollower = (RemoteLinkFollower) this.entitySettings.owner;
+		this.parentLinkFollower = (RemoteFollower) this.entitySettings.owner;
 		this.entitySettings.owner = this;
 
 	}
 
 	/**
-	 * Returns the list of entities available from this link follower
+	 * Returns the list of entities available from this remote follower
 	 *
-	 * @return the list of entities available from this link follower
+	 * @return the list of entities available from this remote follower
 	 */
 	public final T getEntityList() {
 		return entityList;
 	}
 
 	/**
-	 * Adds a new entity to this link follower if it doesn't exist and returns its configuration. The global settings
+	 * Adds a new entity to this remote follower if it doesn't exist and returns its configuration. The global settings
 	 * made for the parser will be used by default. You can configure your entity to use different settings if required.
 	 *
 	 * @param entityName name of the entity whose configuration that will be returned.
@@ -67,82 +66,66 @@ public abstract class RemoteLinkFollower<S extends RemoteEntitySettings, T exten
 	}
 
 	/**
-	 * Returns the settings object associated with the link follower. This configuration object is used to configure the
-	 * link follower when it parses a linked page.
+	 * Returns the settings object associated with the remote follower. This configuration object is used to configure the
+	 * remote follower when it parses a linked page.
 	 *
-	 * @return the link follower's associated settings object
+	 * @return the remote follower's associated settings object
 	 */
 	public final R getParserSettings() {
 		return parserSettings;
 	}
 
 	/**
-	 * Returns the URL the link follower should work with. Used for processing links that point to other remote hosts, and
+	 * Returns the URL the remote follower should work with. Used for processing links that point to other remote hosts, and
 	 * to ensure that relative resource paths are resolved against the given base URL.
 	 *
-	 * @return the base URL to resolve the remote address to be accessed by this link follower.
+	 * @return the base URL to resolve the remote address to be accessed by this remote follower.
 	 */
 	public final UrlReaderProvider getBaseUrl() {
 		return baseUrl;
 	}
 
 	/**
-	 * Defines a base URL for the link follower to run. Used for processing links that point to other remote hosts, and
+	 * Defines a base URL for the remote follower to run. Used for processing links that point to other remote hosts, and
 	 * to ensure that relative resource paths are resolved against the given base URL.
 	 *
-	 * @return the base URL to resolve the remote address to be accessed by this link follower.
+	 * @return the base URL to resolve the remote address to be accessed by this remote follower.
 	 */
 	public final void setBaseUrl(UrlReaderProvider baseUrlReaderProvider) {
 		this.baseUrl = baseUrlReaderProvider;
 	}
 
 	@Override
-	public final void ignoreLinkFollowingErrors(boolean ignoreLinkFollowingErrors) {
+	public final void ignoreFollowingErrors(boolean ignoreLinkFollowingErrors) {
 		this.ignoreLinkFollowingErrors = ignoreLinkFollowingErrors;
 	}
 
 	@Override
-	public final boolean isIgnoreLinkFollowingErrors() {
+	public final boolean isIgnoreFollowingErrors() {
 		if (ignoreLinkFollowingErrors == null) {
 			if (parentLinkFollower != null) {
-				return parentLinkFollower.isIgnoreLinkFollowingErrors();
+				return parentLinkFollower.isIgnoreFollowingErrors();
 			}
-			return entitySettings.isIgnoreLinkFollowingErrors();
+			return entitySettings.isIgnoreFollowingErrors();
 
 		}
 		return ignoreLinkFollowingErrors;
 	}
 
 	@Override
-	public final boolean isCombineLinkFollowingRows() {
-		if (combineLinkFollowingRows == null) {
+	public final Nesting getNesting() {
+		if (nesting == null) {
 			if (parentLinkFollower != null) {
-				return parentLinkFollower.isCombineLinkFollowingRows();
+				return parentLinkFollower.getNesting();
 			}
-			return entitySettings.isCombineLinkFollowingRows();
+			return entitySettings.getNesting();
 		}
-		return combineLinkFollowingRows;
+		return nesting;
 	}
 
 	@Override
-	public final void setCombineLinkFollowingRows(boolean combineLinkFollowingRows) {
-		this.combineLinkFollowingRows = combineLinkFollowingRows;
-	}
-
-	@Override
-	public boolean isRemoveLinkedEntityFields() {
-		if (removeLinkedEntityFields == null) {
-			if (parentLinkFollower != null) {
-				return parentLinkFollower.isRemoveLinkedEntityFields();
-			}
-			return entitySettings.isRemoveLinkedEntityFields();
-		}
-		return removeLinkedEntityFields;
-	}
-
-	@Override
-	public void setRemoveLinkedEntityFields(boolean removeLinkedEntityFields) {
-		this.removeLinkedEntityFields = removeLinkedEntityFields;
+	public final void setNesting(Nesting nesting) {
+		this.nesting = nesting;
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	 */
 	protected Paginator(RemoteParserSettings parserSettings) {
 		entitySettings = newEntitySettings(parserSettings);
-		entitySettings.setCombineLinkFollowingRows(false);
+		entitySettings.setNesting(Nesting.LINK);
 	}
 
 	/**
