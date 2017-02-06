@@ -43,5 +43,32 @@ public enum Nesting {
 	 * if parent row is [a,b,c] and the data retrieved for [b] has [t,u] and [x,y], the parent row will become as
 	 * [a,c], while rows [t,u] and [x,y] will be accessible through {@link RemoteResult#getLinkedFieldData(int)}
 	 */
-	REPLACE_LINK
+	REPLACE_LINK;
+
+	/**
+	 * Tests if this nesting option replaces the source value used to produce child rows.
+	 *
+	 * @return {@code true} if this nesting option replaces the source value used to produce child rows; {@code false} otherwise.
+	 */
+	public boolean replaces() {
+		return this == REPLACE_LINK || this == REPLACE_JOIN;
+	}
+
+	/**
+	 * Tests if this nesting option joins values of a linked entity with the values of a parent row.
+	 *
+	 * @return {@code true} if this nesting option replaces the source value used to produce child rows; {@code false} otherwise.
+	 */
+	public boolean joins() {
+		return this == JOIN || this == REPLACE_JOIN;
+	}
+
+	/**
+	 * Tests if this nesting option links values of a linked entity to the parent row.
+	 *
+	 * @return {@code true} if this  nesting option links values of a linked entity to the parent row; {@code false} otherwise.
+	 */
+	public boolean links() {
+		return this == LINK || this == REPLACE_LINK;
+	}
 }
