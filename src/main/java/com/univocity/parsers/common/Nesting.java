@@ -4,7 +4,9 @@
  * 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.univocity.parsers.remote;
+package com.univocity.parsers.common;
+
+import com.univocity.parsers.remote.*;
 
 /**
  * Determines how data obtained from a given entity should be associated with the data of its parent.

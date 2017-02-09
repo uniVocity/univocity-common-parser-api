@@ -6,6 +6,8 @@
 
 package com.univocity.parsers.remote;
 
+import com.univocity.parsers.common.*;
+
 /**
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */

@@ -7,6 +7,7 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.api.common.*;
+import com.univocity.parsers.common.*;
 
 import java.net.*;
 import java.util.*;

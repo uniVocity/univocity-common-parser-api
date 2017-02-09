@@ -43,4 +43,23 @@ public interface Result<R extends Record, C extends Context> {
 	<T> Iterable<T> iterateBeans(Class<T> beanType);
 
 	<T> Iterable<T> iterateBeans(Class<T> beanType, ProcessorErrorHandler<C> errorHandler);
+
+	boolean isComplete();
+
+	void waitForCompletion() throws InterruptedException;
+
+	/**
+	 * Associates rows of a given result with the rows of the current one. Rows are associated by matching values of
+	 * a given set of field names that are common to both {@link Result} instances. The output {@link Result} will have
+	 * its rows generated according with the {@link Nesting} rule provided.
+	 *
+	 * @param nesting    the nesting rule that controls how to associate rows
+	 * @param result     the input result whose rows will be associated with the current.
+	 * @param fieldNames fields common to the given result and the current, whose values will be used to identify which
+	 *                   rows should be associated.
+	 *
+	 * @return a {@link Result} with the associated data.
+	 */
+	Result<R, C> associateWith(Nesting nesting, Result<R, C> result, String... fieldNames);
+
 }
