@@ -53,13 +53,14 @@ public interface Result<R extends Record, C extends Context> {
 	 * a given set of field names that are common to both {@link Result} instances. The output {@link Result} will have
 	 * its rows generated according with the {@link Nesting} rule provided.
 	 *
-	 * @param nesting    the nesting rule that controls how to associate rows
 	 * @param result     the input result whose rows will be associated with the current.
+	 * @param nesting    the nesting rule that controls how to associate rows
 	 * @param fieldNames fields common to the given result and the current, whose values will be used to identify which
-	 *                   rows should be associated.
+	 *                   rows should be associated. If none provided the fields that are common to current and given
+	 *                   results will be used.
 	 *
 	 * @return a {@link Result} with the associated data.
 	 */
-	Result<R, C> associateWith(Nesting nesting, Result<R, C> result, String... fieldNames);
+	Result<R, C> associateWith(Result<R, C> result, Nesting nesting, String... fieldNames);
 
 }
