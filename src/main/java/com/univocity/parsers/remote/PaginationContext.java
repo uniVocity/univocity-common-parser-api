@@ -14,58 +14,15 @@ import java.util.*;
 
 /**
  * Contains information about the pagination process managed by a {@link Paginator} and made available to the user
- * through the {@link PaginationHandler} callback.
+ * through the {@link NextInputHandler} callback.
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @see RemoteContext
  * @see Paginator
- * @see PaginationHandler
+ * @see NextInputHandler
  * @see UrlReaderProvider
  */
-public interface PaginationContext {
-
-	/**
-	 * Returns the value parsed from the input that indicates the current page, or {@code null} if not available.
-	 *
-	 * @return the content extracted from the input that provides information about the current page.
-	 */
-	String getCurrentPage();
-
-	/**
-	 * Returns the value parsed from the input that indicates the current page number. If undefined, and
-	 * {@link #getCurrentPage()} returns a valid numeric {@code String} it will be converted to an {@code int}
-	 * number that indicates the current page. If the information is unparseable/unavailable, {@code -1} will be
-	 * returned.
-	 *
-	 * @return the actual page number available from the input, or {@code -1} if unavailable.
-	 */
-	int getCurrentPageNumber();
-
-	/**
-	 * Returns the value parsed from the input that points to the next page. This is usually a link to the next page
-	 * or simply a numeric value representing the next page.
-	 *
-	 * @return the content extracted from the input that provides information about the next page.
-	 */
-	String getNextPage();
-
-	/**
-	 * Returns the value parsed from the input, converted to a valid {@code int} number that indicates the next
-	 * page number. If undefined, and {@link #getNextPage()} returns a valid numeric {@code String} it will be converted
-	 * to an {@code int} number that indicates the next page. If the information is unparseable/unavailable,
-	 * {@code -1} will be returned.
-	 *
-	 * @return the next page number if available from the input, {@code -1} otherwise.
-	 */
-	int getNextPageNumber();
-
-	/**
-	 * Returns a flag indicating whether a next page is available from the current page. It tests if
-	 * {@link #getNextPage()} returns a non-null value OR {@link #getNextPageNumber()} returns a non-negative number and
-	 * returns {@code true}. If no information about a next page is available, {@code false} will be returned
-	 *
-	 * @return {@code true} if information about a next page is available, otherwise {@code false}
-	 */
-	boolean hasMorePages();
+public interface PaginationContext extends RemoteContext {
 
 	/**
 	 * Returns the value parsed from the input and associated with a user provided fields and request parameters of
@@ -104,13 +61,6 @@ public interface PaginationContext {
 	Record getRecord();
 
 	/**
-	 * Returns the number of the pages visited so far by the current {@link Paginator}.
-	 *
-	 * @return the current page count.
-	 */
-	int getPageCount();
-
-	/**
 	 * Returns the local file which will contain the data of the next page to be visited,
 	 * if reading from a remote location. If the parsing process is running on a set of already downloaded files,
 	 * returns the file that is expected to contain information of the next page.
@@ -123,27 +73,5 @@ public interface PaginationContext {
 	 * Stops the pagination and prevents attempts to read more pages.
 	 */
 	void stopPagination();
-
-	/**
-	 * Returns the {@link HttpResponse} object with all information returned by the remote server
-	 * in its HTTP response message (which generated the current page).
-	 *
-	 * @return the {@link HttpResponse} received for the current page. Will be {@code null} if the
-	 * pagination is running over local files.
-	 */
-	HttpResponse getCurrentPageResponse();
-
-	/**
-	 * Returns the {@link UrlReaderProvider} prepared by the parser to access the next page. It inherits all configuration
-	 * options defined in the call to the previous page. Cookies set in the {@link HttpResponse} of the current page
-	 * are automatically set into this request.
-	 * You can alter its configuration before its {@link HttpRequest} is executed to
-	 * fetch the next page.
-	 *
-	 * @return the {@link UrlReaderProvider} which will be used to fetch the next page. Will be {@code null} if the
-	 * pagination is running over local files.
-	 */
-	UrlReaderProvider getNextPageRequest();
-
 
 }

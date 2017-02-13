@@ -23,12 +23,12 @@ import java.util.*;
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see RemoteParserSettings
  * @see PaginationContext
- * @see PaginationHandler
+ * @see NextInputHandler
  */
 public abstract class Paginator<E extends RemoteEntitySettings> {
 	protected final E entitySettings;
 	private int followCount = -1;
-	private PaginationHandler paginationHandler;
+	private NextInputHandler<PaginationContext> paginationHandler;
 	private boolean urlTestingEnabled = false;
 
 	public static final String ENTITY_NAME = "*paginator*";
@@ -82,25 +82,25 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	}
 
 	/**
-	 * Sets the {@link PaginationHandler} which is used to prepare the call to the next page when the parser runs.
-	 * Users can provide their {@link PaginationHandler} to obtain information about the pagination process through a
+	 * Sets the {@link NextInputHandler} which is used to prepare the call to the next page when the parser runs.
+	 * Users can provide their {@link NextInputHandler} to obtain information about the pagination process through a
 	 * {@link PaginationContext}, and if required, to manipulate the remote call used to fetch the next page.
 	 *
-	 * @param paginationHandler the {@link PaginationHandler} that will be associated with this {@code Paginator}
+	 * @param paginationHandler the {@link NextInputHandler} that will be associated with this {@code Paginator}
 	 */
-	public final void setPaginationHandler(PaginationHandler paginationHandler) {
+	public final void setPaginationHandler(NextInputHandler<PaginationContext> paginationHandler) {
 		this.paginationHandler = paginationHandler;
 	}
 
 	/**
-	 * Returns the {@link PaginationHandler} associated with thie {@code Paginator}.
-	 * The {@link PaginationHandler} is used to prepare the call to the next page when the parser runs.
-	 * Users can provide their {@link PaginationHandler} to obtain information about the pagination process through a
+	 * Returns the {@link NextInputHandler} associated with thie {@code Paginator}.
+	 * The {@link NextInputHandler} is used to prepare the call to the next page when the parser runs.
+	 * Users can provide their {@link NextInputHandler} to obtain information about the pagination process through a
 	 * {@link PaginationContext}, and if required, to manipulate the remote call used to fetch the next page.
 	 *
-	 * @return the {@link PaginationHandler} associated with this {@code Paginator}
+	 * @return the {@link NextInputHandler} associated with this {@code Paginator}
 	 */
-	public final PaginationHandler getPaginationHandler() {
+	public final NextInputHandler<PaginationContext> getPaginationHandler() {
 		return paginationHandler;
 	}
 
