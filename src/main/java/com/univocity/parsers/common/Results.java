@@ -12,6 +12,7 @@ import java.util.*;
 
 /**
  * FIXME: javadoc
+ *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
 public final class Results<R extends Result> extends LinkedHashMap<String, R> {
@@ -28,6 +29,15 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 		return out;
 	}
 
+	private String getValidatedKey(Object entityName) {
+		Args.notNull(entityName, "Entity name");
+
+		String key = entityName.toString().trim();
+		Args.notBlank(key, "Entity name");
+
+		return key.toLowerCase();
+	}
+
 	public final R put(String entityName, R result) {
 		Args.notEmpty(entityName, "Entity name");
 		Args.notNull(result, "Result of entity '" + entityName + "'");
@@ -35,8 +45,9 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 		return super.put(entityName.trim().toLowerCase(), result);
 	}
 
-	public final R get(String entityName) {
-		Args.notEmpty(entityName, "Entity name");
+	@Override
+	public final R get(Object entityName) {
+		getValidatedKey(entityName);
 		R results = super.get(entityName);
 		if (results == null) {
 			String normalized = String.valueOf(entityName).trim().toLowerCase();
@@ -46,5 +57,10 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 			}
 		}
 		return results;
+	}
+
+	@Override
+	public final R remove(Object entityName) {
+		return super.remove(getValidatedKey(entityName));
 	}
 }
