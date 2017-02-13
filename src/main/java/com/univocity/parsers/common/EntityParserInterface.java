@@ -12,7 +12,6 @@ import com.univocity.parsers.common.record.*;
 
 import java.io.*;
 import java.nio.charset.*;
-import java.util.*;
 
 /**
  * An interface used by parsers that support multiple entities. All parsers should work with a concrete implementation
@@ -43,7 +42,7 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 *
 	 * @param readerProvider an input provider with content to be parsed
 	 */
-	Map<String, T> parse(ReaderProvider readerProvider);
+	Results<T> parse(ReaderProvider readerProvider);
 
 	/**
 	 * Given an input, made available from a {@link FileProvider}, parses all records of all entities
@@ -55,7 +54,7 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 *
 	 * @param fileProvider the input file with content to be parsed
 	 */
-	Map<String, T> parse(FileProvider fileProvider);
+	Results<T> parse(FileProvider fileProvider);
 
 	/**
 	 * Given a {@link java.io.Reader}, parses all records of all entities
@@ -67,7 +66,7 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 *
 	 * @param reader the input with content to be parsed
 	 */
-	Map<String, T> parse(Reader reader);
+	Results<T> parse(Reader reader);
 
 	/**
 	 * Given an {@link java.io.InputStream}, parses all records of all entities
@@ -81,7 +80,7 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 *
 	 * @param inputStream the input with content to be parsed
 	 */
-	Map<String, T> parse(InputStream inputStream);
+	Results<T> parse(InputStream inputStream);
 
 	/**
 	 * Given an {@link java.io.InputStream}, parses all records of all entities
@@ -94,7 +93,7 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 * @param inputStream the input with content to be parsed
 	 * @param encoding    the encoding to be used when reading text from the given input.
 	 */
-	Map<String, T> parse(InputStream inputStream, Charset encoding);
+	Results<T> parse(InputStream inputStream, Charset encoding);
 
 	/**
 	 * Given an {@link java.io.InputStream}, parses all records of all entities
@@ -107,7 +106,7 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 * @param inputStream the input with content to be parsed
 	 * @param encoding    the encoding to be used when reading text from the given input.
 	 */
-	Map<String, T> parse(InputStream inputStream, String encoding);
+	Results<T> parse(InputStream inputStream, String encoding);
 
 	/**
 	 * Given a {@link java.io.File}, parses all records of all entities
@@ -121,7 +120,7 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 *
 	 * @param file the input with content to be parsed
 	 */
-	Map<String, T> parse(File file);
+	Results<T> parse(File file);
 
 	/**
 	 * Given a {@link java.io.File}, parses all records of all entities
@@ -134,7 +133,7 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 * @param file     the input with content to be parsed
 	 * @param encoding the encoding to be used when reading text from the given input.
 	 */
-	Map<String, T> parse(File file, Charset encoding);
+	Results<T> parse(File file, Charset encoding);
 
 	/**
 	 * Given a {@link java.io.File}, parses all records of all entities
@@ -147,6 +146,6 @@ public interface EntityParserInterface<R extends Record, C extends Context, T ex
 	 * @param file     the input with content to be parsed
 	 * @param encoding the encoding to be used when reading text from the given input.
 	 */
-	Map<String, T> parse(File file, String encoding);
+	Results<T> parse(File file, String encoding);
 
 }
