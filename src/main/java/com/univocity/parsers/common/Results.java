@@ -17,7 +17,7 @@ import java.util.*;
  */
 public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 
-	private final Set<String> originalKeyNames = new TreeSet<String>();
+	private final Map<String, R> copyOfOriginalKeys = new LinkedHashMap<String, R>();
 
 	public final R join(String masterEntity, String entityToLink, String... otherEntitiesToLink) {
 		R master = get(masterEntity);
@@ -39,28 +39,56 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 	}
 
 	public final R put(String entityName, R result) {
-		Args.notEmpty(entityName, "Entity name");
-		Args.notNull(result, "Result of entity '" + entityName + "'");
-		originalKeyNames.add(entityName);
-		return super.put(entityName.trim().toLowerCase(), result);
+		super.put(getValidatedKey(entityName), result);
+		return copyOfOriginalKeys.put(entityName, result);
 	}
 
 	@Override
 	public final R get(Object entityName) {
-		getValidatedKey(entityName);
-		R results = super.get(entityName);
-		if (results == null) {
-			String normalized = String.valueOf(entityName).trim().toLowerCase();
-			results = super.get(normalized);
-			if (results == null) {
-				throw new IllegalArgumentException("Entity name '" + entityName + "' does not exist. Available entities are: " + originalKeyNames);
-			}
-		}
-		return results;
+		return super.get(getValidatedKey(entityName));
 	}
 
 	@Override
 	public final R remove(Object entityName) {
-		return super.remove(getValidatedKey(entityName));
+		R out = super.remove(getValidatedKey(entityName));
+
+		if (out != null) {
+			Iterator<String> it = copyOfOriginalKeys.keySet().iterator();
+			while (it.hasNext()) {
+				String value = it.next();
+				if (value.equalsIgnoreCase(entityName.toString())) {
+					it.remove();
+					break;
+				}
+			}
+		}
+
+		return out;
+	}
+
+	@Override
+	public final boolean containsValue(Object entityName) {
+		return super.containsValue(getValidatedKey(entityName));
+	}
+
+	@Override
+	public final boolean containsKey(Object entityName) {
+		return super.containsKey(getValidatedKey(entityName));
+	}
+
+	@Override
+	public Set<String> keySet() {
+		return Collections.unmodifiableSet(copyOfOriginalKeys.keySet());
+	}
+
+	@Override
+	public final Set<Map.Entry<String, R>> entrySet() {
+		return Collections.unmodifiableSet(copyOfOriginalKeys.entrySet());
+	}
+
+	@Override
+	public final Collection<R> values() {
+		return Collections.unmodifiableCollection(super.values());
 	}
 }
+
