@@ -59,6 +59,6 @@ public interface Result<R extends Record, C extends Context> {
 	 *
 	 * @return a {@link Result} with the associated data.
 	 */
-	Result<R, C> joinWith(Result<R, C> result, String... fieldNames);
+	Result<R, C> join(Result<R, C> result, String... fieldNames);
 
 }

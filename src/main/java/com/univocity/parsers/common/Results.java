@@ -21,9 +21,9 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 	public final R join(String masterEntity, String entityToLink, String... otherEntitiesToLink) {
 		R master = get(masterEntity);
 		R linked = get(entityToLink);
-		R out = (R) master.joinWith(linked);
+		R out = (R) master.join(linked);
 		for (String entityName : otherEntitiesToLink) {
-			out = (R) out.joinWith(get(entityName));
+			out = (R) out.join(get(entityName));
 		}
 		return out;
 	}
