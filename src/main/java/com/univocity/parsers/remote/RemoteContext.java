@@ -93,4 +93,9 @@ public interface RemoteContext {
 	 */
 	UrlReaderProvider getNextRequest();
 
+	/**
+	 * Stops the attempt to read the next input page.
+	 */
+	void stop();
+
 }

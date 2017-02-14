@@ -21,7 +21,7 @@ package com.univocity.parsers.remote;
  * @see Paginator
  * @see PaginationContext
  */
-public abstract class NextInputHandler<C extends RemoteContext> {
+public interface NextInputHandler<C extends RemoteContext> {
 
 	/**
 	 * Method invoked by the parser when a new HTTP request to fetch a remote resource must be performed. Users can
@@ -29,5 +29,5 @@ public abstract class NextInputHandler<C extends RemoteContext> {
 	 *
 	 * @param remoteContext the {@link RemoteContext} used to get information from the current and the next remote HTTP request.
 	 */
-	public abstract void prepareNextCall(C remoteContext);
+	void prepareNextCall(C remoteContext);
 }

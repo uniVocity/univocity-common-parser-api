@@ -72,6 +72,6 @@ public interface PaginationContext extends RemoteContext {
 	/**
 	 * Stops the pagination and prevents attempts to read more pages.
 	 */
-	void stopPagination();
+	void stop();
 
 }

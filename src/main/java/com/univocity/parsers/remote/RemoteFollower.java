@@ -27,6 +27,9 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 
 	private Nesting nesting = null;
 	private Boolean ignoreLinkFollowingErrors = null;
+	protected NextInputHandler<RemoteContext> nextLinkHandler;
+	boolean stopped;
+
 
 	/**
 	 * Creates a new LinkFollower
@@ -131,5 +134,13 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	@Override
 	public String toString() {
 		return ">>" + entitySettings.getEntityName();
+	}
+
+	public NextInputHandler<RemoteContext> getNextLinkHandler() {
+		return nextLinkHandler;
+	}
+
+	public void setNextLinkHandler(NextInputHandler<RemoteContext> nextLinkHandler) {
+		this.nextLinkHandler = nextLinkHandler;
 	}
 }
