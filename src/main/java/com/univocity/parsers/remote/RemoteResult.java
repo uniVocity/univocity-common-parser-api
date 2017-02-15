@@ -8,8 +8,6 @@ package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
 
-import java.util.*;
-
 /**
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
@@ -17,5 +15,5 @@ public interface RemoteResult<R extends RemoteRecord, C extends Context> extends
 
 	RemoteResult<R, C> getLinkedFieldData(int rowIndex);
 
-	Map<String, ? extends RemoteResult<R, C>> getLinkedEntityData(int rowIndex);
+	Results<? extends RemoteResult<R, C>> getLinkedEntityData(int rowIndex);
 }
