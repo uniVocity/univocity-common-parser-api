@@ -49,7 +49,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private boolean ignoreLinkFollowingErrors = false;
 
 	private DownloadListener downloadListener;
-	private int downloadThreads = Runtime.getRuntime().availableProcessors();
+	private int downloadThreads = 8;
 
 	private ExecutorService executorService;
 
@@ -332,7 +332,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 	/**
 	 * Verifies whether the parser will download the remote content before parsing it. If a directory to download
-	 * content has been set (with {@link #setDownloadContentDirectory(String)}, this method will always return {@code true}
+	 * c7ontent has been set (with {@link #setDownloadContentDirectory(String)}, this method will always return {@code true}
 	 * and the parser will download the remote content into the given directory. If no directory has been defined,
 	 * the contents will be downloaded into a temporary directory.
 	 *
@@ -363,11 +363,11 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Sets the number of threads that will be used to download remote content (e.g. images) that is associated with
 	 * the parsed input
 	 *
-	 * <i>Defaults to the available number of processors given by {@link Runtime#availableProcessors()}</i>
+	 * <i>Defaults to 8</i>
 	 *
 	 * @param downloadThreads the maximum number of threads to be used for downloading content
 	 */
-	@Range(min = 1, max = 8)
+	@Range(min = 1, max = 16)
 	@UI(order = 3)
 	public final void setDownloadThreads(int downloadThreads) {
 		Args.positive(downloadThreads, "Number of threads for content download");
@@ -378,12 +378,12 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Sets the number of threads that will be used to download remote content (e.g. images) that is associated with
 	 * the parsed input
 	 *
-	 * <i>Defaults to the available number of processors given by {@link Runtime#availableProcessors()}</i>
+	 * <i>Defaults to 8</i>
 	 *
 	 * @return the maximum number of threads to be used for downloading content
 	 */
 	public final int getDownloadThreads() {
-		return downloadThreads <= 0 ? 1 : downloadThreads;
+		return downloadThreads <= 0 ? 8 : downloadThreads;
 	}
 
 	@Override
