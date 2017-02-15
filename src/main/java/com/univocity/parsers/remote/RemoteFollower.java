@@ -6,8 +6,11 @@
 
 package com.univocity.parsers.remote;
 
+import com.univocity.api.common.*;
 import com.univocity.api.net.*;
 import com.univocity.parsers.common.*;
+
+import java.util.*;
 
 /**
  * An abstract class that allow parsers that use {@link RemoteParserSettings} and {@link RemoteEntityList} to access and
@@ -30,6 +33,7 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	protected NextInputHandler<RemoteContext> nextLinkHandler;
 	boolean stopped;
 
+	protected TreeMap<String, ValueGetter<?>> urlParameters;
 
 	/**
 	 * Creates a new LinkFollower
@@ -38,11 +42,10 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 		ArgumentUtils.notEmpty("Parent of remote follower", parentEntitySettings);
 		this.entityList = (T) parentEntitySettings.getParentEntityList().newInstance();
 		this.entitySettings = entityList.addEntitySettings(parentEntitySettings);
-//		this.entitySettings.
 		this.parserSettings = (R) entityList.getParserSettings();
 		this.parentLinkFollower = (RemoteFollower) this.entitySettings.owner;
 		this.entitySettings.owner = this;
-
+		this.urlParameters = new TreeMap<String, ValueGetter<?>>();
 	}
 
 	/**
@@ -91,11 +94,58 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	/**
 	 * Defines a base URL for the remote follower to run. Used for processing links that point to other remote hosts, and
 	 * to ensure that relative resource paths are resolved against the given base URL.
-	 *
-	 * @return the base URL to resolve the remote address to be accessed by this remote follower.
 	 */
 	public final void setBaseUrl(UrlReaderProvider baseUrlReaderProvider) {
 		this.baseUrl = baseUrlReaderProvider;
+	}
+
+	/**
+	 * Assign the field with name {@code fieldName} to be applied to the parameter of the same name in the Url
+	 *
+	 * For example to replace the search query of a url with a field value:
+	 * <hr><pre><code>{@code
+	 * // setup
+	 * HtmlEntityList entities = new HtmlEntityList();
+	 * HtmlEntitySettings test = entities.configureEntity("test");
+	 * test.addField("name").match("a").getText();
+	 *
+	 * // create a follower and assign the fieldName to the parameter
+	 * HtmlLinkFollower follower = test.followLink("searchFollower", new UrlReaderProvider("http://www.google.com/#q={name}")).assigning("name");
+	 * }
+	 * <hr></code></pre>
+	 *
+	 * @param fieldName the name of the field to be applied
+	 *
+	 * @return this {@link RemoteFollower} to allow for method chaining
+	 */
+	public RemoteFollower assigning(String fieldName) {
+		this.urlParameters.put(fieldName, null);
+		return this;
+	}
+
+	/**
+	 * Assign the parameter in the Url with name {@code parameterName} to the value {@code parameterValue}
+	 *
+	 * @param parameterName  name of the parameter
+	 * @param parameterValue value the parameter should hold
+	 *
+	 * @return this {@link RemoteFollower} to allow for method chaining
+	 */
+	public RemoteFollower assigning(String parameterName, Object parameterValue) {
+		Args.notNull(parameterValue, parameterName);
+		baseUrl.getRequest().setUrlParameter(parameterName, parameterValue);
+		return this;
+	}
+
+	/**
+	 * @param parameterName
+	 * @param valueGetter
+	 *
+	 * @return
+	 */
+	public RemoteFollower assigning(String parameterName, ValueGetter<?> valueGetter) {
+		this.urlParameters.put(parameterName, valueGetter);
+		return this;
 	}
 
 	@Override
@@ -143,4 +193,6 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	public void setNextLinkHandler(NextInputHandler<RemoteContext> nextLinkHandler) {
 		this.nextLinkHandler = nextLinkHandler;
 	}
+
+
 }
