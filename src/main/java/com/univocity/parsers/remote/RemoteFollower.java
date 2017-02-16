@@ -100,31 +100,7 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	}
 
 	/**
-	 * Assign the field with name {@code fieldName} to be applied to the parameter of the same name in the Url
-	 *
-	 * For example to replace the search query of a url with a field value:
-	 * <hr><pre><code>{@code
-	 * // setup
-	 * HtmlEntityList entities = new HtmlEntityList();
-	 * HtmlEntitySettings test = entities.configureEntity("test");
-	 * test.addField("name").match("a").getText();
-	 *
-	 * // create a follower and assign the fieldName to the parameter
-	 * HtmlLinkFollower follower = test.followLink("searchFollower", new UrlReaderProvider("http://www.google.com/#q={name}")).assigning("name");
-	 * }
-	 * <hr></code></pre>
-	 *
-	 * @param fieldName the name of the field to be applied
-	 *
-	 * @return this {@link RemoteFollower} to allow for method chaining
-	 */
-	public RemoteFollower assigning(String fieldName) {
-		this.urlParameters.put(fieldName, null);
-		return this;
-	}
-
-	/**
-	 * Assign the parameter in the Url with name {@code parameterName} to the value {@code parameterValue}
+	 * Assign the parameter in the Url with the name {@code parameterName} to the value {@code parameterValue}
 	 *
 	 * @param parameterName  name of the parameter
 	 * @param parameterValue value the parameter should hold
@@ -138,10 +114,12 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	}
 
 	/**
-	 * @param parameterName
-	 * @param valueGetter
+	 * Assign the parameter in the Url with the name {@code ParameterName} to the value supplied by the {@link ValueGetter}
 	 *
-	 * @return
+	 * @param parameterName name of the parameter in the Url to assign to
+	 * @param valueGetter   the {@link ValueGetter} that will provide the value to be used as the parameter
+	 *
+	 * @return this {@link RemoteFollower} to allow for method chaining
 	 */
 	public RemoteFollower assigning(String parameterName, ValueGetter<?> valueGetter) {
 		this.urlParameters.put(parameterName, valueGetter);
