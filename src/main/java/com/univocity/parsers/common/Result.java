@@ -40,9 +40,9 @@ public interface Result<R extends Record, C extends Context> {
 
 	<T> List<T> getBeans(Class<T> beanType, ProcessorErrorHandler<C> errorHandler);
 
-	<T> Iterable<T> iterateBeans(Class<T> beanType);
+	<T> IterableResult<T, C> iterateBeans(Class<T> beanType);
 
-	<T> Iterable<T> iterateBeans(Class<T> beanType, ProcessorErrorHandler<C> errorHandler);
+	<T> IterableResult<T, C> iterateBeans(Class<T> beanType, ProcessorErrorHandler<C> errorHandler);
 
 	boolean isComplete();
 
