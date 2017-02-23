@@ -7,6 +7,7 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
+import com.univocity.parsers.common.record.*;
 
 /**
  * An extension of the {@link EntityParserInterface} for parsers that access remote content.
@@ -24,11 +25,11 @@ import com.univocity.parsers.common.*;
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see EntityParserInterface
  * @see PaginationContext
- * @see RemoteRecord
+ * @see Record
  * @see Context
- * @see RemoteResult
+ * @see Result
  */
-public interface RemoteEntityParserInterface<R extends RemoteRecord, C extends Context, T extends RemoteResult<R, C>> extends EntityParserInterface<R, C, T> {
+public interface RemoteEntityParserInterface<R extends Record, C extends Context, T extends Result<R, C>> extends EntityParserInterface<R, C, T> {
 
 	/**
 	 * Returns the {@link PaginationContext} object with information collected for the configured {@link Paginator}, if

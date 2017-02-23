@@ -8,13 +8,15 @@ package com.univocity.parsers.common;
 
 import com.univocity.parsers.common.processor.core.*;
 import com.univocity.parsers.common.record.*;
+import com.univocity.parsers.remote.*;
 
+import java.io.*;
 import java.util.*;
 
 /**
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface Result<R extends Record, C extends Context> {
+public interface Result<R extends Record, C extends Context> extends Closeable {
 
 	String getEntityName();
 
@@ -61,4 +63,9 @@ public interface Result<R extends Record, C extends Context> {
 	 */
 	Result<R, C> join(Result<R, C> result, String... fieldNames);
 
+	Result<R, C> getLinkedFieldData(int rowIndex);
+
+	Results<? extends Result<R, C>> getLinkedEntityData(int rowIndex);
+
+	void close();
 }
