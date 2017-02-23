@@ -29,6 +29,15 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 		return out;
 	}
 
+	public final void link(String masterEntity, String entityToLink, String... otherEntitiesToLink) {
+		R master = get(masterEntity);
+		R linked = get(entityToLink);
+		master.link(linked);
+		for (String entityName : otherEntitiesToLink) {
+			master.link(get(entityName));
+		}
+	}
+
 	private String getValidatedKey(Object entityName) {
 		Args.notNull(entityName, "Entity name");
 

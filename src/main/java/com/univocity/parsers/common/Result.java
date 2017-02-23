@@ -8,7 +8,6 @@ package com.univocity.parsers.common;
 
 import com.univocity.parsers.common.processor.core.*;
 import com.univocity.parsers.common.record.*;
-import com.univocity.parsers.remote.*;
 
 import java.io.*;
 import java.util.*;
@@ -62,6 +61,8 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	 * @return a {@link Result} with the associated data.
 	 */
 	Result<R, C> join(Result<R, C> result, String... fieldNames);
+
+	void link(Result<R, C> result, String... fieldNames);
 
 	Result<R, C> getLinkedFieldData(int rowIndex);
 
