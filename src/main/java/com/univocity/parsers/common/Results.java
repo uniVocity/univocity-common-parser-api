@@ -47,6 +47,10 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 		return key.toLowerCase();
 	}
 
+	public final R put(String entityName, Object result) {
+		return this.put(entityName, (R) result);
+	}
+
 	public final R put(String entityName, R result) {
 		super.put(getValidatedKey(entityName), result);
 		return copyOfOriginalKeys.put(entityName, result);

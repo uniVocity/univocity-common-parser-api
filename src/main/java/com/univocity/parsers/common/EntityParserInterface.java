@@ -30,7 +30,7 @@ import java.nio.charset.*;
  * @see FileProvider
  * @see Record
  */
-public interface EntityParserInterface<R extends Record, C extends Context, T extends Result<R, C>> {
+public interface EntityParserInterface<R extends ResultRecord<C>, C extends Context, T extends Result<R, C>> {
 
 	/**
 	 * Given an input, made available from a {@link ReaderProvider}, parses all records of all entities

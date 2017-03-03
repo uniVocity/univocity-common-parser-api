@@ -29,7 +29,7 @@ import com.univocity.parsers.common.record.*;
  * @see Context
  * @see Result
  */
-public interface RemoteEntityParserInterface<R extends Record, C extends Context, T extends Result<R, C>> extends EntityParserInterface<R, C, T> {
+public interface RemoteEntityParserInterface<R extends ResultRecord<C>, C extends Context, T extends Result<R, C>> extends EntityParserInterface<R, C, T> {
 
 	/**
 	 * Returns the {@link PaginationContext} object with information collected for the configured {@link Paginator}, if
