@@ -6,8 +6,6 @@
 
 package com.univocity.parsers.common;
 
-import com.univocity.parsers.remote.*;
-
 /**
  * Determines how data obtained from a given entity should be associated with the data of its parent.
  *
