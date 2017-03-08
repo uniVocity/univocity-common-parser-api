@@ -309,7 +309,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Returns a flag indicating whether the parser will overwrite content already downloaded. If disabled, the parser
 	 * will skip the download of contents already available in the filesystem, and use the content available locally.
 	 *
-	 * <i>Defaults to {@true}</i>
+	 * <i>Defaults to {@code true}</i>
 	 *
 	 * @return flag to indicate overwriting of downloaded content is enabled.
 	 */
@@ -321,7 +321,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Configures the parser to overwrite content already downloaded. If disabled, the parser will skip the download
 	 * of contents already available in the filesystem, and use the content available locally.
 	 *
-	 * <i>Defaults to {@true}</i>
+	 * <i>Defaults to {@code true}</i>
 	 *
 	 * @param downloadOverwritingEnabled flag to enable or disable overwriting of downloaded content.
 	 */
