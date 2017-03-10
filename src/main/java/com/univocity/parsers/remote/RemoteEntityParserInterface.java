@@ -9,6 +9,8 @@ package com.univocity.parsers.remote;
 import com.univocity.parsers.common.*;
 import com.univocity.parsers.common.record.*;
 
+import java.util.*;
+
 /**
  * An extension of the {@link EntityParserInterface} for parsers that access remote content.
  *
@@ -40,4 +42,22 @@ public interface RemoteEntityParserInterface<R extends ResultRecord<C>, C extend
 	 * @return the current {@link PaginationContext} with pagination information captured after parsing a given input.
 	 */
 	PaginationContext getPaginationContext();
+
+	/**
+	 * When loading a file that has been saved from previous parses a date can be set so only files with that date as
+	 * a timestamp in the filename will be loaded.
+	 * This is so multiple parsing results can be saved in a single directory and only one set loaded at a time.
+	 *
+	 * @param calendar the date of the files that will be loaded.
+	 */
+	void setReparseDate(Calendar calendar);
+
+	/**
+	 * When loading a file that has been saved from previous parses a date can be set so only files with that date as
+	 * a timestamp in the filename will be loaded.
+	 * This is so multiple parsing results can be saved in a single directory and only one set loaded at a time.
+	 *
+	 * @param date the date of the file that will be loaded.
+	 */
+	void setReparseDate(Date date);
 }
