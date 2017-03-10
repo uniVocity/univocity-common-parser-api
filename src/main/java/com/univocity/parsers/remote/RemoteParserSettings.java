@@ -143,6 +143,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	/**
+	 * TODO: Update filenamePattern parameter documentation to what it actually is
 	 * Returns the pattern that names of downloaded files should follow. For example, setting the pattern as
 	 * "/search/file{number}" will make pages stored in the search folder with the name "file1.html", "file2.html"
 	 * etc. Note that the file extension will be automatically added if it is known.
