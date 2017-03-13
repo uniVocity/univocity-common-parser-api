@@ -11,13 +11,7 @@ import com.univocity.parsers.common.record.*;
 /**
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface ResultRecord<C extends Context> extends Record {
+public interface ResultRecordMetaData<C extends Context> extends RecordMetaData {
 
-	Result<? extends ResultRecord, C> getLinkedFieldData();
-
-	Results<? extends Result<? extends ResultRecord, C>> getLinkedEntityData();
-
-	boolean hasLinkedData();
-
-	ResultRecordMetaData getMetaData();
+	String entityName();
 }
