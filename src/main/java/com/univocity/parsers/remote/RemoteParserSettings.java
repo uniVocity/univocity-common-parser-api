@@ -13,6 +13,7 @@ import com.univocity.api.statistics.*;
 import com.univocity.parsers.common.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -42,7 +43,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 	private boolean downloadBeforeParsingEnabled = false;
 	private FileProvider downloadContentDirectory;
-	private String fileNamePattern;
+	private ParameterizedString fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
 
 	private Nesting nesting = Nesting.LINK;
@@ -139,7 +140,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 */
 	@UI(order = 2)
 	public final void setFileNamePattern(String pattern) {
-		fileNamePattern = pattern;
+		fileNamePattern = new ParameterizedString(pattern);
 	}
 
 	/**
@@ -183,10 +184,30 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @return the pattern used to generate file names for downloaded content.
 	 */
 	public final String getFileNamePattern() {
+		return getParameterizedFileName().applyParameterValues();
+	}
+
+	final ParameterizedString getParameterizedFileName() {
 		if (fileNamePattern == null) {
-			return "file_{number}";
+			fileNamePattern = new ParameterizedString("file_{number}");
 		}
 		return fileNamePattern;
+	}
+
+	public final void setFileNameParameter(String parameterName, Object parameterValue) {
+		getParameterizedFileName().set(parameterName, parameterValue);
+	}
+
+	public final Object getFileNameParameter(String parameterName) {
+		return getParameterizedFileName().get(parameterName);
+	}
+
+	public final Set<String> getFileNameParameters() {
+		return getParameterizedFileName().getParameters();
+	}
+
+	public final void clearFileNameParameters() {
+		this.getParameterizedFileName().clearValues();
 	}
 
 	/**
