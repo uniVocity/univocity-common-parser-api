@@ -54,7 +54,7 @@ interface CommonFollowerOptions {
 	 * Defaults to the parent entity's {@link RemoteEntitySettings#getNesting()} or if undefined,
 	 * the {@link RemoteParserSettings#getNesting()} setting.
 	 *
-	 * @oaram nesting the nesting strategy to use when processing results associated with a parent row.
+	 * @param nesting the nesting strategy to use when processing results associated with a parent row.
 	 */
 	void setNesting(Nesting nesting);
 }
