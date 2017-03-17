@@ -95,46 +95,59 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	/**
-	 * The pattern that names of downloaded files should follow. For example, setting the pattern as
-	 * "/search/file{number}" will make pages stored in the search folder with the name "file1.html", "file2.html"
+	 * Sets the pattern that names of downloaded files should follow. For example, setting the pattern as
+	 * "/search/file{page}" will make pages stored in the search folder with the name "file1.html", "file2.html"
 	 * etc. Note that the file extension will be automatically added if it is known.
 	 *
-	 * The following patterns are recognized:
+	 * The following patterns are recognised:
 	 * <ul>
-	 * <li>number, &lt;padding&gt; prints a sequential number, starting from {@code 1}.
-	 * Numbers can be padded with leading zeros if the optional padding number is provided.
-	 *
+	 * <li>{@code {page, <padding>}} prints the current page number from the paginator.
+	 * Number can be padded with leading zeroes if the optional padding number is provided.
 	 * Examples:
 	 * <ul>
-	 * <li>/tmp/page{number, 4}: prints /tmp/page0001.html, /tmp/page0321.html, etc</li>
-	 * <li>/tmp/page{number}: prints /tmp/page1.html, /tmp/page543.html, etc</li>
-	 * <li>/tmp/page{number, 2}: prints /tmp/page01.html, /tmp/page89.html, /tmp/page289.html, etc</li>
+	 * <li>{@code /tmp/page{page, 4}}: prints {@code /tmp/page0001.html, /tmp/page0321.html}, etc.</li>
+	 * <li>{@code /tmp/page{page}}: prints {@code /tmp/page1.html, /tmp/page2.html, /tmp/page543.html}, etc.</li>
+	 * <li>{@code /tmp/page{page, 2}}: prints {@code /tmp/page01.html, /tmp/page89.html, /tmp/page289.html}, etc</li>
 	 * </ul>
 	 * </li>
-	 * <li>date, &lt;mask&gt; prints the current date as a timestamp. A date mask can be provided to configure
+	 * <li>{@code {date, <mask>}} prints the current date as a timestamp. A date mask can be provided to configure
 	 * how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
-	 *
 	 * Examples:
 	 * <ul>
-	 * <li>/tmp/file_{date, yyyy-MMM-dd}: prints /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html, etc</li>
-	 * <li>/tmp/file_{date}: prints /tmp/file_23423423423.pdf, /tmp/file_234234324231.html, etc</li>
+	 * <li>{@code /tmp/file_{date, yyyy-MMM-dd}}: prints {@code /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html}, etc</li>
+	 * <li>{@code /tmp/file_{date}}: prints {@code /tmp/file_23423423423.pdf, /tmp/file_234234324231.html}, etc</li>
 	 * </ul>
 	 * </li>
-	 *
-	 * <li>&lt;$query&gt; prints the value associated with the supplied query located in the HTML page's URL. Examples:
+	 * <li>{@code {$query}} prints the value associated with the supplied query located in the HTML page's URL. Examples:
 	 * <ul>
-	 * <li>/tmp/search_{$q} on HTML page with url 'http://google.com/search?q=cup': prints /tmp/search_cup.html</li>
+	 * <li>{@code /tmp/search_{$q}} on HTML page with url {@code 'http://google.com/search?q=cup'}: prints {@code /tmp/search_cup.html}</li>
 	 * </ul>
 	 * </li>
-	 *
 	 * <li>
-	 *
+	 * {@code {follower, <padding>}} prints the number of followers that have been parsed. Basically the same as {@code page}
+	 * except for link followers.
+	 * Examples:
+	 * <ul>
+	 * <li>{@code /tmp/file_{follower, 3}}: prints {@code /tmp/file_001, /tmp/file_014}, etc.</li>
+	 * </ul>
 	 * </li>
-	 *
+	 * <li>
+	 * {@code {parent}} prints the name of the "parent" file without the extension. The "parent" file is the one that
+	 * the "parent" entity saved to. In the case of a link follower the "parent" entity would be the entity that parsed
+	 * the row which triggered the link follower to start parsing.
+	 * Examples:
+	 * <ul>
+	 * <li>{@code {parent}/followedPage} with a parent entity saving to the file {@code /tmp/page_1.html} would print
+	 * {@code /tmp/page_1/followedPage.html}</li>
+	 * <li>
+	 * {@code {parent}/file_{follower}} with a parent entity saving to the file {@code /tmp/page_4.html} would print
+	 * {@code /tmp/page_4/file_1.html, /tmp/page_4/file_2.html}, etc.
+	 * </li>
+	 * </ul>
+	 * </li>
 	 * </ul>
 	 *
-	 *
-	 * <i>defaults to @code{file_{number}}</i>
+	 * <i>Defaults to {@code file_{page}}</i>
 	 *
 	 * @param pattern the pattern used to generate file names for downloaded content.
 	 */
@@ -144,42 +157,59 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	/**
-	 * TODO: Update filenamePattern parameter documentation to what it actually is
-	 * Returns the pattern that names of downloaded files should follow. For example, setting the pattern as
-	 * "/search/file{number}" will make pages stored in the search folder with the name "file1.html", "file2.html"
+	 * Gets the pattern that names of downloaded files should follow. For example, setting the pattern as
+	 * "/search/file{page}" will make pages stored in the search folder with the name "file1.html", "file2.html"
 	 * etc. Note that the file extension will be automatically added if it is known.
 	 *
-	 * The following patterns are recognized:
+	 * The following patterns are recognised:
 	 * <ul>
-	 * <li>number, &lt;padding&gt; prints a sequential number, starting from {@code 1}.
-	 * Numbers can be padded with leading zeros if the optional padding number is provided.
-	 *
+	 * <li>{@code {page, <padding>}} prints the current page number from the paginator.
+	 * Number can be padded with leading zeroes if the optional padding number is provided.
 	 * Examples:
 	 * <ul>
-	 * <li>/tmp/page{number, 4}: prints /tmp/page0001.html, /tmp/page0321.html, etc</li>
-	 * <li>/tmp/page{number}: prints /tmp/page1.html, /tmp/page543.html, etc</li>
-	 * <li>/tmp/page{number, 2}: prints /tmp/page01.html, /tmp/page89.html, /tmp/page289.html, etc</li>
+	 * <li>{@code /tmp/page{page, 4}}: prints {@code /tmp/page0001.html, /tmp/page0321.html}, etc.</li>
+	 * <li>{@code /tmp/page{page}}: prints {@code /tmp/page1.html, /tmp/page2.html, /tmp/page543.html}, etc.</li>
+	 * <li>{@code /tmp/page{page, 2}}: prints {@code /tmp/page01.html, /tmp/page89.html, /tmp/page289.html}, etc</li>
 	 * </ul>
 	 * </li>
-	 * <li>date, &lt;mask&gt; prints the current date as a timestamp. A date mask can be provided to configure
+	 * <li>{@code {date, <mask>}} prints the current date as a timestamp. A date mask can be provided to configure
 	 * how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
-	 *
 	 * Examples:
 	 * <ul>
-	 * <li>/tmp/file_{date, yyyy-MMM-dd}: prints /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html, etc</li>
-	 * <li>/tmp/file_{date}: prints /tmp/file_23423423423.pdf, /tmp/file_234234324231.html, etc</li>
+	 * <li>{@code /tmp/file_{date, yyyy-MMM-dd}}: prints {@code /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html}, etc</li>
+	 * <li>{@code /tmp/file_{date}}: prints {@code /tmp/file_23423423423.pdf, /tmp/file_234234324231.html}, etc</li>
 	 * </ul>
 	 * </li>
-	 *
-	 * <li>&lt;$query&gt; prints the value associated with the supplied query located in the HTML page's URL. Examples:
+	 * <li>{@code {$query}} prints the value associated with the supplied query located in the HTML page's URL. Examples:
 	 * <ul>
-	 * <li>/tmp/search_{$q} on HTML page with url 'http://google.com/search?q=cup': prints /tmp/search_cup.html</li>
+	 * <li>{@code /tmp/search_{$q}} on HTML page with url {@code 'http://google.com/search?q=cup'}: prints {@code /tmp/search_cup.html}</li>
 	 * </ul>
 	 * </li>
-	 *
+	 * <li>
+	 * {@code {follower, <padding>}} prints the number of followers that have been parsed. Basically the same as {@code page}
+	 * except for link followers.
+	 * Examples:
+	 * <ul>
+	 * <li>{@code /tmp/file_{follower, 3}}: prints {@code /tmp/file_001, /tmp/file_014}, etc.</li>
+	 * </ul>
+	 * </li>
+	 * <li>
+	 * {@code {parent}} prints the name of the "parent" file without the extension. The "parent" file is the one that
+	 * the "parent" entity saved to. In the case of a link follower the "parent" entity would be the entity that parsed
+	 * the row which triggered the link follower to start parsing.
+	 * Examples:
+	 * <ul>
+	 * <li>{@code {parent}/followedPage} with a parent entity saving to the file {@code /tmp/page_1.html} would print
+	 * {@code /tmp/page_1/followedPage.html}</li>
+	 * <li>
+	 * {@code {parent}/file_{follower}} with a parent entity saving to the file {@code /tmp/page_4.html} would print
+	 * {@code /tmp/page_4/file_1.html, /tmp/page_4/file_2.html}, etc.
+	 * </li>
+	 * </ul>
+	 * </li>
 	 * </ul>
 	 *
-	 * <i>defaults to @code{file_{number}}</i>
+	 * <i>Defaults to {@code file_{page}}</i>
 	 *
 	 * @return the pattern used to generate file names for downloaded content.
 	 */
@@ -189,7 +219,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 	final ParameterizedString getParameterizedFileName() {
 		if (fileNamePattern == null) {
-			fileNamePattern = new ParameterizedString("file_{number}");
+			fileNamePattern = new ParameterizedString("file_{page}");
 		}
 		return fileNamePattern;
 	}
