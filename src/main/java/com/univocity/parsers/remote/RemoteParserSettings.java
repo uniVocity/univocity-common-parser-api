@@ -99,7 +99,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * "/search/file{page}" will make pages stored in the search folder with the name "file1.html", "file2.html"
 	 * etc. Note that the file extension will be automatically added if it is known.
 	 *
-	 * The following patterns are recognised:
+	 * The following patterns are recognized:
 	 * <ul>
 	 * <li>{@code {page, <padding>}} prints the current page number from the paginator.
 	 * Number can be padded with leading zeroes if the optional padding number is provided.
@@ -161,7 +161,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * "/search/file{page}" will make pages stored in the search folder with the name "file1.html", "file2.html"
 	 * etc. Note that the file extension will be automatically added if it is known.
 	 *
-	 * The following patterns are recognised:
+	 * The following patterns are recognized:
 	 * <ul>
 	 * <li>{@code {page, <padding>}} prints the current page number from the paginator.
 	 * Number can be padded with leading zeroes if the optional padding number is provided.
