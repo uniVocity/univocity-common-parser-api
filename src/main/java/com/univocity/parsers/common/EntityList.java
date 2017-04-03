@@ -165,6 +165,8 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 	 * will be lost.
 	 *
 	 * @param settings the configuration to be associated with the given entity.
+	 *
+	 * @return the new configuration object
 	 */
 	protected E addEntitySettings(E settings) {
 		Args.notNull(settings, "Entity settings");
@@ -190,5 +192,10 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 		return globalSettings;
 	}
 
+	/**
+	 * Creates a new instance of {@link EntityList} using properties from this instance.
+	 *
+	 * @return the new {@link EntityList}
+	 */
 	protected abstract EntityList newInstance();
 }
