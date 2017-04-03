@@ -41,6 +41,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 * the {@link Processor} implementation used.
 	 *
 	 * @param readerProvider an input provider with content to be parsed
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(ReaderProvider readerProvider);
 
@@ -53,6 +55,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 * the {@link Processor} implementation used.
 	 *
 	 * @param fileProvider the input file with content to be parsed
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(FileProvider fileProvider);
 
@@ -65,6 +69,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 * the {@link Processor} implementation used.
 	 *
 	 * @param reader the input with content to be parsed
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(Reader reader);
 
@@ -79,6 +85,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 * <i>The default system encoding will be used to read text from the given input.</i>
 	 *
 	 * @param inputStream the input with content to be parsed
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(InputStream inputStream);
 
@@ -92,6 +100,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 *
 	 * @param inputStream the input with content to be parsed
 	 * @param encoding    the encoding to be used when reading text from the given input.
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(InputStream inputStream, Charset encoding);
 
@@ -105,6 +115,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 *
 	 * @param inputStream the input with content to be parsed
 	 * @param encoding    the encoding to be used when reading text from the given input.
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(InputStream inputStream, String encoding);
 
@@ -119,6 +131,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 * <i>The default system encoding will be used to read text from the given input.</i>
 	 *
 	 * @param file the input with content to be parsed
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(File file);
 
@@ -132,6 +146,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 *
 	 * @param file     the input with content to be parsed
 	 * @param encoding the encoding to be used when reading text from the given input.
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(File file, Charset encoding);
 
@@ -145,6 +161,8 @@ public interface EntityParserInterface<R extends ResultRecord<C>, C extends Cont
 	 *
 	 * @param file     the input with content to be parsed
 	 * @param encoding the encoding to be used when reading text from the given input.
+	 *
+	 * @return the {@link Results} of parsing the given input
 	 */
 	Results<T> parse(File file, String encoding);
 
