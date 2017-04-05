@@ -39,6 +39,9 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 
 	/**
 	 * Creates a new LinkFollower
+	 * Uses the {@code parentEntitySettings} as a basis for the LinkFollower settings
+	 *
+	 * @param parentEntitySettings the parent entity settings used as a basis for LinkFollower settings
 	 */
 	protected RemoteFollower(S parentEntitySettings) {
 		ArgumentUtils.notEmpty("Parent of remote follower", parentEntitySettings);
@@ -99,6 +102,8 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	/**
 	 * Defines a base URL for the remote follower to run. Used for processing links that point to other remote hosts, and
 	 * to ensure that relative resource paths are resolved against the given base URL.
+	 *
+	 * @param baseUrlReaderProvider the new baseUrl for processing links.
 	 */
 	public final void setBaseUrl(UrlReaderProvider baseUrlReaderProvider) {
 		this.baseUrl = baseUrlReaderProvider;
@@ -169,10 +174,18 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 		return ">>" + entitySettings.getEntityName();
 	}
 
+	/**
+	 * @return the next link handler.
+	 */
 	public NextInputHandler<RemoteContext> getNextLinkHandler() {
 		return nextLinkHandler;
 	}
 
+	/**
+	 * Sets the next link handler.
+	 *
+	 * @param nextLinkHandler the new link handler.
+	 */
 	public void setNextLinkHandler(NextInputHandler<RemoteContext> nextLinkHandler) {
 		this.nextLinkHandler = nextLinkHandler;
 	}
