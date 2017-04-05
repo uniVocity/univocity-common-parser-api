@@ -11,7 +11,7 @@ import com.univocity.api.common.*;
 import java.util.*;
 
 /**
- * FIXME: javadoc
+ * A map of "Entity Name" => {@link Result} returned from parsing with {@link EntityParserInterface#parse}
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
@@ -19,6 +19,17 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 
 	private final Map<String, R> copyOfOriginalKeys = new LinkedHashMap<String, R>();
 
+	/**
+	 * Joins the results of the entity {@code entityToLink} to the results of the entity {@code masterEntity}
+	 *
+	 * The optional {@code otherEntitiesToLink} list other entities to join to the {@code masterEntity}
+	 *
+	 * @param masterEntity        the name of the entity to join all other specified entities to.
+	 * @param entityToLink        the name of the entity to join to the {@code masterEntity}
+	 * @param otherEntitiesToLink optional, other entities to join to the {@code masterEntity}
+	 *
+	 * @return the result of joining the {@code entityToLink}, and {@code otherEntitiesToLink} to {@code masterEntity}
+	 */
 	public final R join(String masterEntity, String entityToLink, String... otherEntitiesToLink) {
 		R master = get(masterEntity);
 		R linked = get(entityToLink);
@@ -29,6 +40,17 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 		return out;
 	}
 
+	/**
+	 * Links the results of the entity {@code entityToLink} to the results of the entity {@code masterEntity}
+	 *
+	 * The optional {@code otherEntitiesToLink} list other entities to link to the {@code masterEntity}
+	 *
+	 * @param masterEntity        the name of the entity to link all other specified entities to.
+	 * @param entityToLink        the name of the entity to link to the {@code masterEntity}
+	 * @param otherEntitiesToLink optional, other entities to link to the {@code masterEntity}
+	 *
+	 * @return the result of linking the {@code entityToLink}, and {@code otherEntitiesToLink} to {@code masterEntity}
+	 */
 	public final void link(String masterEntity, String entityToLink, String... otherEntitiesToLink) {
 		R master = get(masterEntity);
 		R linked = get(entityToLink);
@@ -47,6 +69,14 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 		return key.toLowerCase();
 	}
 
+	/**
+	 * Puts the {@code result} into the map, associated with {@code entityName}
+	 *
+	 * @param entityName the name of the entity associated with the {@code result}
+	 * @param result     an object that is cast to {@code <R>}
+	 *
+	 * @return the previous {@code result} associated with {@code entityName}
+	 */
 	public final R put(String entityName, Object result) {
 		return this.put(entityName, (R) result);
 	}

@@ -19,19 +19,19 @@ public interface ResultRecord<C extends Context> extends Record {
 	/**
 	 * Gets {@link Result}s with data for additional fields linked to the current record.
 	 *
-	 * @return a {@link Result} linked to this {@link ResultRecord}
+	 * @return the result linked to this {@link ResultRecord}
 	 */
 	Result<? extends ResultRecord, C> getLinkedFieldData();
 
 	/**
 	 * Gets all of the associated {@link Result} for this {@link ResultRecord}.
 	 *
-	 * @return a {@link Results} of all of the associated {@link Record}s.
+	 * @return all of the associated {@link Record}s.
 	 */
 	Results<? extends Result<? extends ResultRecord, C>> getLinkedEntityData();
 
 	/**
-	 * @return whether or not there is any linked {@link Result}s.
+	 * @return whether or not there is any linked results
 	 */
 	boolean hasLinkedData();
 

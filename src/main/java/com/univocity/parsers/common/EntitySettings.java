@@ -52,7 +52,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * @param internalSettings an internal implementation of a {@link CommonSettings}, used to manage configuration
 	 *                         of elements shared with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>.
 	 *                         Not meant to be exposed/accessed directly by users.
-	 * @param parentEntity     parent entity {@link EntitySettings} to build settings on top of
+	 * @param parentEntity     parent entity to build settings on top of
 	 */
 	protected EntitySettings(String name, S internalSettings, EntitySettings parentEntity) {
 		this.name = name;

@@ -63,32 +63,31 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	List<String[]> getRows();
 
 	/**
-	 * Get an {@link Iterable} of {@code String[]} that iterates over each row.
+	 * Get an iterable of {@code String[]} that iterates over each row.
 	 *
 	 * @return an {@link Iterable} over each row.
 	 */
 	Iterable<String[]> iterateRows();
 
 	/**
-	 * Get a {@link List} of {@link Record} where each {@link Record} represents a row in the results.
-	 * Each {@link Record} contains the {@link String} captured for each field and also many convenience methods
+	 * Get a {@link List} of {@link Record} where each record represents a row in the results.
+	 * Each record contains the {@link String} captured for each field and also many convenience methods
 	 * for further data manipulation.
 	 *
-	 * @return a {@link List} of {@link Record} for each row of the result.
+	 * @return a list of records for each row of the result.
 	 */
 	List<R> getRecords();
 
 	/**
-	 * Get an {@link Iterable} of {@link Record} that iterates over each row.
+	 * Get an iterable of records that iterates over each row.
 	 *
 	 * @return an {@link Iterable} over each row
 	 */
 	Iterable<R> iterateRecords();
 
-
 	/**
 	 * Uses the provided {@link Processor} to process each row of the result using a
-	 * default {@link NoopProcessorErrorHandler} to  not handle any errors and simply rethrow them.
+	 * default {@link NoopProcessorErrorHandler} to not handle any errors and simply rethrow them.
 	 *
 	 * @param processor the {@link Processor} used to process each row of the result.
 	 */
@@ -105,9 +104,9 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	void process(Processor<C> processor, ProcessorErrorHandler<C> errorHandler);
 
 	/**
-	 * Using the {@link Class} {@code beanType} that has to contain one or more annotations from
-	 * {@link com.univocity.parsers.annotations}, the fields of this {@link Result} are parsed into the matching fields
-	 * of the {@code beanType}. Each row of this {@link Result}, if successfully parsed, will be returned as an object
+	 * Using the {@code beanType} that has to contain one or more annotations from
+	 * {@link com.univocity.parsers.annotations}, the fields of this result are parsed into the matching fields
+	 * of the {@code beanType}. Each row of this result, if successfully parsed, will be returned as an object
 	 * in a {@link List} of the specified type {@code <T>}. A null value for a field linked to a property of the bean
 	 * encountered during parsing results in the default value for primitives and a null value for objects being set.
 	 *
@@ -122,9 +121,9 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	<T> List<T> getBeans(Class<T> beanType);
 
 	/**
-	 * Using the {@link Class} {@code beanType} that has to contain one or more annotations from
-	 * {@link com.univocity.parsers.annotations}, the fields of this {@link Result} are parsed into the matching fields
-	 * of the {@code beanType}. Each row of this {@link Result}, if successfully parsed, will be returned as an object
+	 * Using the {@code beanType} that has to contain one or more annotations from
+	 * {@link com.univocity.parsers.annotations}, the fields of this result are parsed into the matching fields
+	 * of the {@code beanType}. Each row of this result, if successfully parsed, will be returned as an object
 	 * in a {@link List} of the specified type {@code <T>}. A null value for a field linked to a property of the bean
 	 * encountered during parsing results in the default value for primitives and a null value for objects being set.
 	 *
@@ -140,11 +139,11 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	<T> List<T> getBeans(Class<T> beanType, ProcessorErrorHandler<C> errorHandler);
 
 	/**
-	 * Using the {@link Class} {@code beanType} that has to contain one or more annotations from
-	 * {@link com.univocity.parsers.annotations}, the fields of this {@link Result} are parsed into the matching fields
+	 * Using the {@code beanType} that has to contain one or more annotations from
+	 * {@link com.univocity.parsers.annotations}, the fields of this result are parsed into the matching fields
 	 * of the {@code beanType}.
 	 *
-	 * Returns an {@link IterableResult} of the {@link Class} {@code beanType} which is just like an {@link Iterator}
+	 * Returns an {@link IterableResult} of {@code beanType} which is just like an {@link Iterator}
 	 * except it has the added {@link Context} for the parsing session.
 	 *
 	 * A default {@link NoopProcessorErrorHandler} will be used as a {@link ProcessorErrorHandler} to not handle any
@@ -158,11 +157,11 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	<T> IterableResult<T, C> iterateBeans(Class<T> beanType);
 
 	/**
-	 * Using the {@link Class} {@code beanType} that has to contain one or more annotations from
-	 * {@link com.univocity.parsers.annotations}, the fields of this {@link Result} are parsed into the matching fields
+	 * Using the {@code beanType} that has to contain one or more annotations from
+	 * {@link com.univocity.parsers.annotations}, the fields of this result are parsed into the matching fields
 	 * of the {@code beanType}.
 	 *
-	 * Returns an {@link IterableResult} of the {@link Class} {@code beanType} which is just like an {@link Iterator}
+	 * Returns an {@link IterableResult} of {@code beanType} which is just like an {@link Iterator}
 	 * except it has the added {@link Context} for the parsing session.
 	 *
 	 * Any errors during parsing will be handled by the {@code errorHandler}.
@@ -215,11 +214,11 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	void link(Result<R, C> result, String... fieldNames);
 
 	/**
-	 * Gets {@link Result}s with data for additional fields linked to the record at {@code rowIndex}.
+	 * Gets then result with data for additional fields linked to the record at {@code rowIndex}.
 	 *
 	 * @param rowIndex which row to get the linked field data from
 	 *
-	 * @return a {@link Result} linked to the row at {@code rowIndex}
+	 * @return the result linked to the row at {@code rowIndex}
 	 */
 	Result<R, C> getLinkedFieldData(int rowIndex);
 
@@ -229,7 +228,7 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	 *
 	 * @param rowIndex which row to get the linked entity data from
 	 *
-	 * @return a {@link Results} linked to the row at {@code rowIndex}
+	 * @return all of the results linked to the row at {@code rowIndex}
 	 */
 	Results<? extends Result<R, C>> getLinkedEntityData(int rowIndex);
 

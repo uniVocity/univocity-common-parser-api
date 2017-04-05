@@ -17,9 +17,9 @@ import com.univocity.parsers.common.record.*;
 public interface ResultRecordMetaData<C extends Context> extends RecordMetaData {
 
 	/**
-	 * Get the name of the {@link EntitySettings} that was used to create the results.
+	 * Get the name of the entity that contains the current results.
 	 *
-	 * @return the name of the {@link EntitySettings} used.
+	 * @return the name of the entity.
 	 */
 	String entityName();
 }
