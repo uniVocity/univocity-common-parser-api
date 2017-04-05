@@ -31,11 +31,19 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	protected Set<String> requestParameters = new LinkedHashSet<String>();
 	protected Map<String, T> followers = new HashMap<String, T>();
 
-
 	private Boolean ignoreLinkFollowingErrors;
 	private Nesting nesting;
 	protected Object owner;
 
+	/**
+	 * Internal constructor to be invoked the subclasses of {@code EntitySettings}
+	 *
+	 * @param entityName     the entity name, usually provided by the user
+	 * @param entitySettings an internal implementation of a {@link CommonSettings}, used to manage configuration
+	 *                       of elements shared with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>.
+	 *                       Not meant to be exposed/accessed directly by users.
+	 * @param parentEntity   parent entity to build settings on top of
+	 */
 	protected RemoteEntitySettings(String entityName, S entitySettings, RemoteEntitySettings parentEntity) {
 		super(entityName, entitySettings, parentEntity);
 	}
