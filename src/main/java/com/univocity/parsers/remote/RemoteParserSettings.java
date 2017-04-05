@@ -224,18 +224,37 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return fileNamePattern;
 	}
 
+	/**
+	 * Sets the value of a parameter in the filename pattern.
+	 *
+	 * @param parameterName  the name of the parameter
+	 * @param parameterValue the value of the parameter
+	 */
 	public final void setFileNameParameter(String parameterName, Object parameterValue) {
 		getParameterizedFileName().set(parameterName, parameterValue);
 	}
 
+	/**
+	 * Gets the value of a parameter in the filename pattern.
+	 *
+	 * @param parameterName the name of the parameter to get
+	 *
+	 * @return the value of the parameter
+	 */
 	public final Object getFileNameParameter(String parameterName) {
 		return getParameterizedFileName().get(parameterName);
 	}
 
+	/**
+	 * @return the set of parameter names in the filename pattern
+	 */
 	public final Set<String> getFileNameParameters() {
 		return getParameterizedFileName().getParameters();
 	}
 
+	/**
+	 * Clears all filename pattern parameter values
+	 */
 	public final void clearFileNameParameters() {
 		this.getParameterizedFileName().clearValues();
 	}
@@ -263,6 +282,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 	/**
 	 * Creates an instance of a concrete implementation of {@link Paginator}
+	 *
+	 * @param parserSettings the parser settings that should be used for the new paginator
 	 *
 	 * @return a new {@link Paginator} instance
 	 */
