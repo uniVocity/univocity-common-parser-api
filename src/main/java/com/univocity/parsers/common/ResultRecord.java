@@ -17,8 +17,7 @@ import com.univocity.parsers.common.record.*;
 public interface ResultRecord<C extends Context> extends Record {
 
 	/**
-	 * Gets the {@link Result} from all of the associated {@link Result}s that is of the same entity. i.e.
-	 * uses the same {@link EntitySettings}.
+	 * Gets {@link Result}s with data for additional fields linked to the current record.
 	 *
 	 * @return a {@link Result} linked to this {@link ResultRecord}
 	 */

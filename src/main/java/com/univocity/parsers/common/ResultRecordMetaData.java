@@ -9,9 +9,17 @@ package com.univocity.parsers.common;
 import com.univocity.parsers.common.record.*;
 
 /**
+ * {@link RecordMetaData} with the name of the {@link EntitySettings} used.
+ *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @see RecordMetaData
  */
 public interface ResultRecordMetaData<C extends Context> extends RecordMetaData {
 
+	/**
+	 * Get the name of the {@link EntitySettings} that was used to create the results.
+	 *
+	 * @return the name of the {@link EntitySettings} used.
+	 */
 	String entityName();
 }
