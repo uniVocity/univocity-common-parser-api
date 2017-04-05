@@ -215,7 +215,8 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	void link(Result<R, C> result, String... fieldNames);
 
 	/**
-	 * Gets the {@link Result} linked with the specific {@code rowIndex}
+	 * Gets the {@link Result} from all of the associated {@link Result}'s that is of the same entity,  uses the same
+	 * {@link EntitySettings}, as the row specififed by {@code rowIndex}.
 	 *
 	 * @param rowIndex which row to get the linked field data from
 	 *
@@ -224,10 +225,10 @@ public interface Result<R extends Record, C extends Context> extends Closeable {
 	Result<R, C> getLinkedFieldData(int rowIndex);
 
 	/**
-	 * Gets all of the {@link Result} linked with the specific {@code rowIndex}
+	 * Gets all of the {@link Result} associated with the specific {@code rowIndex}
 	 * in a {@link Results} list.
 	 *
-	 * @param rowIndex which row to get the linked field data from
+	 * @param rowIndex which row to get the linked entity data from
 	 *
 	 * @return a {@link Results} linked to the row at {@code rowIndex}
 	 */
