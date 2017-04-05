@@ -175,6 +175,10 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	}
 
 	/**
+	 * Gets the next link handler.
+	 * Which will have the {@link NextInputHandler#prepareNextCall(RemoteContext)} method called before the
+	 * next remote page is fetched.
+	 *
 	 * @return the next link handler.
 	 */
 	public NextInputHandler<RemoteContext> getNextLinkHandler() {
@@ -182,7 +186,9 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	}
 
 	/**
-	 * Sets the next link handler.
+	 * Sets the next link handler which will have the {@link NextInputHandler#prepareNextCall(RemoteContext)} method
+	 * called before the next remote page is fetched.
+	 * For example this could be used to modify the HTTP request configuration.
 	 *
 	 * @param nextLinkHandler the new link handler.
 	 */

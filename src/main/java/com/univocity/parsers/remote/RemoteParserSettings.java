@@ -225,7 +225,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	/**
-	 * Sets the value of a parameter in the filename pattern.
+	 * Sets the value of a parameter in the filename pattern defined in {@link #setFileNamePattern(String)}.
 	 *
 	 * @param parameterName  the name of the parameter
 	 * @param parameterValue the value of the parameter
@@ -235,7 +235,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	/**
-	 * Gets the value of a parameter in the filename pattern.
+	 * Gets the value of a parameter in the filename pattern defined in {@link #setFileNamePattern(String)}.
 	 *
 	 * @param parameterName the name of the parameter to get
 	 *
@@ -246,14 +246,14 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	}
 
 	/**
-	 * @return the set of parameter names in the filename pattern
+	 * @return the set of parameter names in the filename pattern defined in {@link #setFileNamePattern(String)}.
 	 */
 	public final Set<String> getFileNameParameters() {
 		return getParameterizedFileName().getParameters();
 	}
 
 	/**
-	 * Clears all filename pattern parameter values
+	 * Clears all values from the filename pattern defined in {@link #setFileNamePattern(String)}
 	 */
 	public final void clearFileNameParameters() {
 		this.getParameterizedFileName().clearValues();
