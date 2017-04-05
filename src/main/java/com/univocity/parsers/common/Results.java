@@ -48,8 +48,6 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 	 * @param masterEntity        the name of the entity to link all other specified entities to.
 	 * @param entityToLink        the name of the entity to link to the {@code masterEntity}
 	 * @param otherEntitiesToLink optional, other entities to link to the {@code masterEntity}
-	 *
-	 * @return the result of linking the {@code entityToLink}, and {@code otherEntitiesToLink} to {@code masterEntity}
 	 */
 	public final void link(String masterEntity, String entityToLink, String... otherEntitiesToLink) {
 		R master = get(masterEntity);

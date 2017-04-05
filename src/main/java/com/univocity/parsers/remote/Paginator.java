@@ -31,17 +31,34 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	private NextInputHandler<PaginationContext> paginationHandler;
 	private boolean urlTestingEnabled = false;
 
+	/**
+	 * Reserved field name used by the paginator to store itself as an entity
+	 */
 	public static final String ENTITY_NAME = "*paginator*";
+	/**
+	 * Reserved field name used by the paginator to store the current page matching entity
+	 */
 	public static final String CURRENT_PAGE = "currentPage";
+	/**
+	 * Reserved field name used by the paginator to store the current page number
+	 */
 	public static final String CURRENT_PAGE_NUMBER = "currentPageNumber";
+	/**
+	 * Reserved field name used by the paginator to store the next page matching entity
+	 */
 	public static final String NEXT_PAGE = "nextPage";
+	/**
+	 * Reserved field name used by the paginator to store the next page number
+	 */
 	public static final String NEXT_PAGE_NUMBER = "nextPageNumber";
 
-	public static Set<String> RESERVED_NAMES = Collections.unmodifiableSet(
+	static Set<String> RESERVED_NAMES = Collections.unmodifiableSet(
 			new TreeSet<String>(Arrays.asList(CURRENT_PAGE, CURRENT_PAGE_NUMBER, NEXT_PAGE, NEXT_PAGE_NUMBER)));
 
 	/**
 	 * Creates a new {@code Paginator}
+	 *
+	 * @param parserSettings the parser settings to use
 	 */
 	protected Paginator(RemoteParserSettings parserSettings) {
 		entitySettings = newEntitySettings(parserSettings);
@@ -51,6 +68,8 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	/**
 	 * Internally, the {@code Paginator} uses an instance of {@link RemoteEntitySettings} that should allow
 	 * the definition of fields specifically to control the available pagination elements found in the parsed content.
+	 *
+	 * @param parserSettings the parser settings to use in the new Entity settings
 	 *
 	 * @return a new instance of a concrete implementation of {@link RemoteEntitySettings}, used to configure all
 	 * pagination-related elements.
