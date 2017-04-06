@@ -9,6 +9,9 @@ package com.univocity.parsers.remote;
 import com.univocity.parsers.common.*;
 
 /**
+ * The basic follower options that all followers should implement;
+ * Ignoring errors and setting {@link Nesting}
+ *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
 interface CommonFollowerOptions {
