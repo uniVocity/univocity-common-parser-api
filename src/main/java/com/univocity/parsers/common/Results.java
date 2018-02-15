@@ -11,7 +11,7 @@ import com.univocity.api.common.*;
 import java.util.*;
 
 /**
- * A map of "Entity Name" => {@link Result} returned from parsing with {@link EntityParserInterface#parse}
+ * A map of "Entity Name" to {@link Result} returned from parsing with {@link EntityParserInterface#parse}
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */

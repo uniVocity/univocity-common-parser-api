@@ -18,7 +18,7 @@ public enum Nesting {
 	 * [a,b,c] and the data retrieved for [b] has [t,u] and [x,y], the resulting join will produce
 	 * [a,b,t,u,c] and [a,b,x,y,c].
 	 *
-	 * Rows [t,u] and [x,y] will still be accessible through {@link RemoteResult#getLinkedFieldData(int)}
+	 * Rows [t,u] and [x,y] will still be accessible through {@link Result#getLinkedFieldData(int)}
 	 */
 	JOIN,
 
@@ -27,21 +27,21 @@ public enum Nesting {
 	 * For example, if parent row is [a,b,c] and the data retrieved for [b] has [t,u] and [x,y], the resulting join will produce
 	 * [a,t,u,c] and [a,x,y,c].
 	 *
-	 * Rows [t,u] and [x,y] will still be accessible through {@link RemoteResult#getLinkedFieldData(int)}
+	 * Rows [t,u] and [x,y] will still be accessible through {@link Result#getLinkedFieldData(int)}
 	 */
 	REPLACE_JOIN,
 
 	/**
 	 * Links all data retrieved to a given field of the parent row. For example, if parent row is
 	 * [a,b,c] and the data retrieved for [b] has [t,u] and [x,y], the parent row will remain as
-	 * [a,b,c], while rows [t,u] and [x,y] will be accessible through {@link RemoteResult#getLinkedFieldData(int)}
+	 * [a,b,c], while rows [t,u] and [x,y] will be accessible through {@link Result#getLinkedFieldData(int)}
 	 */
 	LINK,
 
 	/**
 	 * Links all data retrieved the parent row, removing the source value used to produce child rows. For example,
 	 * if parent row is [a,b,c] and the data retrieved for [b] has [t,u] and [x,y], the parent row will become as
-	 * [a,c], while rows [t,u] and [x,y] will be accessible through {@link RemoteResult#getLinkedFieldData(int)}
+	 * [a,c], while rows [t,u] and [x,y] will be accessible through {@link Result#getLinkedFieldData(int)}
 	 */
 	REPLACE_LINK;
 
