@@ -20,8 +20,8 @@ import java.util.*;
  * @param <S> an internal configuration object that extends from {@link CommonParserSettings}, and is used to
  *            manage configuration of elements shared with <a href="http://www.univocity.com/pages/about-parsers">univocity-parsers</a>
  * @param <L> the {@link EntityList} implementation supported by an {@link EntityParserInterface}.
- * @param <C> the {@link Context} implementation which provides information about the entity parser and its execution.
  *
+ * @param <C> the {@link Context} implementation which provides information about the entity parser and its execution.
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
 public abstract class EntityParserSettings<S extends CommonParserSettings, L extends EntityList, C extends Context> implements Cloneable {
