@@ -15,9 +15,10 @@ import java.util.*;
  *
  * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public final class Results<R extends Result> extends LinkedHashMap<String, R> {
+public final class Results<R extends Result> implements Map<String, R> {
 
-	private final Map<String, R> copyOfOriginalKeys = new LinkedHashMap<String, R>();
+	private final Map<String, R> normalizedKeyMap = new HashMap<String, R>();
+	private final Map<String, R> originalKeyMap = new LinkedHashMap<String, R>();
 
 	/**
 	 * Joins the results of the entity {@code entityToLink} to the results of the entity {@code masterEntity}
@@ -76,25 +77,26 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 	 * @return the previous {@code result} associated with {@code entityName}
 	 */
 	public final R put(String entityName, Object result) {
-		return this.put(entityName, (R) result);
+		normalizedKeyMap.put(getValidatedKey(entityName), (R) result);
+		return originalKeyMap.put(entityName, (R) result);
 	}
 
 	public final R put(String entityName, R result) {
-		super.put(getValidatedKey(entityName), result);
-		return copyOfOriginalKeys.put(entityName, result);
+		normalizedKeyMap.put(getValidatedKey(entityName), result);
+		return originalKeyMap.put(entityName, result);
 	}
 
 	@Override
 	public final R get(Object entityName) {
-		return super.get(getValidatedKey(entityName));
+		return normalizedKeyMap.get(getValidatedKey(entityName));
 	}
 
 	@Override
 	public final R remove(Object entityName) {
-		R out = super.remove(getValidatedKey(entityName));
+		R out = normalizedKeyMap.remove(getValidatedKey(entityName));
 
 		if (out != null) {
-			Iterator<String> it = copyOfOriginalKeys.keySet().iterator();
+			Iterator<String> it = originalKeyMap.keySet().iterator();
 			while (it.hasNext()) {
 				String value = it.next();
 				if (value.equalsIgnoreCase(entityName.toString())) {
@@ -109,27 +111,50 @@ public final class Results<R extends Result> extends LinkedHashMap<String, R> {
 
 	@Override
 	public final boolean containsValue(Object entityName) {
-		return super.containsValue(getValidatedKey(entityName));
+		return normalizedKeyMap.containsValue(getValidatedKey(entityName));
 	}
 
 	@Override
 	public final boolean containsKey(Object entityName) {
-		return super.containsKey(getValidatedKey(entityName));
+		return normalizedKeyMap.containsKey(getValidatedKey(entityName));
 	}
 
 	@Override
 	public Set<String> keySet() {
-		return Collections.unmodifiableSet(copyOfOriginalKeys.keySet());
+		return Collections.unmodifiableSet(originalKeyMap.keySet());
 	}
 
 	@Override
 	public final Set<Map.Entry<String, R>> entrySet() {
-		return Collections.unmodifiableSet(copyOfOriginalKeys.entrySet());
+		return Collections.unmodifiableSet(originalKeyMap.entrySet());
 	}
 
 	@Override
 	public final Collection<R> values() {
-		return Collections.unmodifiableCollection(super.values());
+		return Collections.unmodifiableCollection(originalKeyMap.values());
+	}
+
+	@Override
+	public int size() {
+		return originalKeyMap.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return originalKeyMap.isEmpty();
+	}
+
+	@Override
+	public void putAll(Map<? extends String, ? extends R> m) {
+		for (Map.Entry e : m.entrySet()) {
+			this.put(String.valueOf(e.getKey()), (R) e.getValue());
+		}
+	}
+
+	@Override
+	public void clear() {
+		normalizedKeyMap.clear();
+		originalKeyMap.clear();
 	}
 }
 
