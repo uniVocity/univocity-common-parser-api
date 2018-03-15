@@ -60,6 +60,18 @@ public final class Results<R extends Result> implements Map<String, R> {
 	}
 
 	private String getValidatedKey(Object entityName) {
+		if(normalizedKeyMap.isEmpty()){
+			throw new IllegalArgumentException("Empty results. Entity '" + entityName + "' not found. ");
+		}
+
+		String key = getNormalizedKey(entityName);
+		if(!normalizedKeyMap.containsKey(key)){
+			throw new IllegalArgumentException("Entity name '" + entityName + "' not found in results. Available entities: " + originalKeyMap.keySet());
+		}
+		return key;
+	}
+
+	private String getNormalizedKey(Object entityName) {
 		Args.notNull(entityName, "Entity name");
 
 		String key = entityName.toString().trim();
@@ -77,12 +89,12 @@ public final class Results<R extends Result> implements Map<String, R> {
 	 * @return the previous {@code result} associated with {@code entityName}
 	 */
 	public final R put(String entityName, Object result) {
-		normalizedKeyMap.put(getValidatedKey(entityName), (R) result);
+		normalizedKeyMap.put(getNormalizedKey(entityName), (R) result);
 		return originalKeyMap.put(entityName, (R) result);
 	}
 
 	public final R put(String entityName, R result) {
-		normalizedKeyMap.put(getValidatedKey(entityName), result);
+		normalizedKeyMap.put(getNormalizedKey(entityName), result);
 		return originalKeyMap.put(entityName, result);
 	}
 
@@ -111,12 +123,12 @@ public final class Results<R extends Result> implements Map<String, R> {
 
 	@Override
 	public final boolean containsValue(Object entityName) {
-		return normalizedKeyMap.containsValue(getValidatedKey(entityName));
+		return normalizedKeyMap.containsValue(getNormalizedKey(entityName));
 	}
 
 	@Override
 	public final boolean containsKey(Object entityName) {
-		return normalizedKeyMap.containsKey(getValidatedKey(entityName));
+		return normalizedKeyMap.containsKey(getNormalizedKey(entityName));
 	}
 
 	@Override
