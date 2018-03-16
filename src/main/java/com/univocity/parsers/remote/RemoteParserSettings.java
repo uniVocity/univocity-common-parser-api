@@ -53,6 +53,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private int downloadThreads = 8;
 
 	private ExecutorService executorService;
+	private long remoteInterval = 15L;
 
 	/**
 	 * Creates a new configuration object for an implementation of {@link EntityParserInterface}, which will process
@@ -515,5 +516,33 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		out.paginator = null;
 		out.fileNamePattern = null;
 		return out;
+	}
+
+	/**
+	 * Returns the minimum interval of time to wait between remote requests. This is required to prevent submitting
+	 * multiple requests to the same server at the same time, which can easily happen when {@link RemoteFollower}s are
+	 * used.
+	 *
+	 * <em>Defaults to 15 ms</em>
+	 *
+	 * @return the minimum time (in milliseconds) to wait between remote requests.
+	 *         Values {@link <= 0} mean the internal {@link RateLimiter} is disabled.
+	 */
+	public final long getRemoteInterval() {
+		return remoteInterval;
+	}
+
+	/**
+	 * Defines the minimum interval of time to wait between remote requests. This is required to prevent submitting
+	 * multiple requests to the same server at the same time, which can easily happen when {@link RemoteFollower}s are
+	 * used.
+	 *
+	 * <em>Defaults to 15 ms</em>
+	 *
+	 * @param remoteInterval minimum time (in milliseconds) to wait between remote requests.
+	 *                       Any value {@link <= 0} will disable the internal {@link RateLimiter}.
+	 */
+	public final void setRemoteInterval(long remoteInterval) {
+		this.remoteInterval = remoteInterval;
 	}
 }

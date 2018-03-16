@@ -6,6 +6,7 @@
 
 package com.univocity.parsers.remote;
 
+import com.univocity.api.io.*;
 import com.univocity.api.net.*;
 
 /**
@@ -98,4 +99,15 @@ public interface RemoteContext {
 	 */
 	void stop();
 
+	/**
+	 * Returns the {@link RateLimiter} used by the parser to prevent multiple concurrent requests against the same
+	 * server if {@link RemoteParserSettings#getRemoteInterval()} returns a positive number. Otherwise returns {@code null}
+	 *
+	 * You can decrease or increase the wait time with {@link RateLimiter#increaseWaitTime(long)} and
+	 * {@link RateLimiter#decreaseWaitTime(long)}
+	 *
+	 * @return the active {@link RateLimiter} or {@code null} if {@link RemoteParserSettings#getRemoteInterval()}
+	 * is {@code <= 0}
+	 */
+	RateLimiter getRateLimiter();
 }
