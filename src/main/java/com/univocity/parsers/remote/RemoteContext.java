@@ -101,13 +101,13 @@ public interface RemoteContext {
 
 	/**
 	 * Returns the {@link RateLimiter} used by the parser to prevent multiple concurrent requests against the same
-	 * server if {@link RemoteParserSettings#getRemoteInterval()} returns a positive number. Otherwise returns {@code null}
+	 * server, using the interval defined by {@link RemoteParserSettings#getRemoteInterval()}.
 	 *
 	 * You can decrease or increase the wait time with {@link RateLimiter#increaseWaitTime(long)} and
-	 * {@link RateLimiter#decreaseWaitTime(long)}
+	 * {@link RateLimiter#decreaseWaitTime(long)}. Calling {@code rateLimiter.setInterval(0)} disables the rate limiter
+	 * and unblocks all threads.
 	 *
-	 * @return the active {@link RateLimiter} or {@code null} if {@link RemoteParserSettings#getRemoteInterval()}
-	 * is {@code <= 0}
+	 * @return the active {@link RateLimiter}
 	 */
 	RateLimiter getRateLimiter();
 }

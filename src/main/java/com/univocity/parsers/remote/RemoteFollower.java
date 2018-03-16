@@ -52,7 +52,7 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 		this.entitySettings.owner = this;
 		this.urlParameters = new TreeMap<String, ValueGetter<?>>();
 		ParameterizedString paramString = parserSettings.getParameterizedFileName();
-		parentHasDate = paramString.contains("date");
+//		parentHasDate = paramString.contains("date");
 		parserSettings.setFileNamePattern("{parent}/file_{follower}");
 	}
 
