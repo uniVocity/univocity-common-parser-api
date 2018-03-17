@@ -526,7 +526,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <em>Defaults to 15 ms</em>
 	 *
 	 * @return the minimum time (in milliseconds) to wait between remote requests.
-	 *         Values {@link <= 0} mean the internal {@link RateLimiter} is disabled.
+	 *         Values {@code <= 0} mean the internal {@link RateLimiter} is disabled.
 	 */
 	public final long getRemoteInterval() {
 		return remoteInterval;
@@ -540,7 +540,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <em>Defaults to 15 ms</em>
 	 *
 	 * @param remoteInterval minimum time (in milliseconds) to wait between remote requests.
-	 *                       Any value {@link <= 0} will disable the internal {@link RateLimiter}.
+	 *                       Any value {@code <= 0} will disable the internal {@link RateLimiter}.
 	 */
 	public final void setRemoteInterval(long remoteInterval) {
 		this.remoteInterval = remoteInterval;
