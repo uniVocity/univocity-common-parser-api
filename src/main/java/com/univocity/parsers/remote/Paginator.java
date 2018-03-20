@@ -25,10 +25,10 @@ import java.util.*;
  * @see PaginationContext
  * @see NextInputHandler
  */
-public abstract class Paginator<E extends RemoteEntitySettings> {
+public abstract class Paginator<E extends RemoteEntitySettings, P extends PaginationContext> {
 	protected final E entitySettings;
 	private int followCount = -1;
-	private NextInputHandler<PaginationContext> paginationHandler;
+	private NextInputHandler<P> paginationHandler;
 	private boolean urlTestingEnabled = false;
 
 	/**
@@ -107,7 +107,7 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	 *
 	 * @param paginationHandler the {@link NextInputHandler} that will be associated with this {@code Paginator}
 	 */
-	public final void setPaginationHandler(NextInputHandler<PaginationContext> paginationHandler) {
+	public final void setPaginationHandler(NextInputHandler<P> paginationHandler) {
 		this.paginationHandler = paginationHandler;
 	}
 
@@ -119,7 +119,7 @@ public abstract class Paginator<E extends RemoteEntitySettings> {
 	 *
 	 * @return the {@link NextInputHandler} associated with this {@code Paginator}
 	 */
-	public final NextInputHandler<PaginationContext> getPaginationHandler() {
+	public NextInputHandler<P> getPaginationHandler() {
 		return paginationHandler;
 	}
 
