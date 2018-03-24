@@ -13,6 +13,7 @@ import com.univocity.api.statistics.*;
 import com.univocity.parsers.common.*;
 
 import java.io.*;
+import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -45,6 +46,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private FileProvider downloadContentDirectory;
 	private ParameterizedString fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
+	private Boolean downloadEnabled;
 
 	private Nesting nesting = Nesting.LINK;
 	private boolean ignoreLinkFollowingErrors = false;
@@ -54,6 +56,9 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 
 	private ExecutorService executorService;
 	private long remoteInterval = 15L;
+
+	private Date parseDate;
+	private String batchId;
 
 	/**
 	 * Creates a new configuration object for an implementation of {@link EntityParserInterface}, which will process
@@ -102,50 +107,77 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * The following patterns are recognized:
 	 * <ul>
-	 * <li>{@code {page, <padding>}} prints the current page number from the paginator.
-	 * Number can be padded with leading zeroes if the optional padding number is provided.
-	 * Examples:
-	 * <ul>
-	 * <li>{@code /tmp/page{page, 4}}: prints {@code /tmp/page0001.html, /tmp/page0321.html}, etc.</li>
-	 * <li>{@code /tmp/page{page}}: prints {@code /tmp/page1.html, /tmp/page2.html, /tmp/page543.html}, etc.</li>
-	 * <li>{@code /tmp/page{page, 2}}: prints {@code /tmp/page01.html, /tmp/page89.html, /tmp/page289.html}, etc</li>
-	 * </ul>
-	 * </li>
-	 * <li>{@code {date, <mask>}} prints the current date as a timestamp. A date mask can be provided to configure
-	 * how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
-	 * Examples:
-	 * <ul>
-	 * <li>{@code /tmp/file_{date, yyyy-MMM-dd}}: prints {@code /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html}, etc</li>
-	 * <li>{@code /tmp/file_{date}}: prints {@code /tmp/file_23423423423.pdf, /tmp/file_234234324231.html}, etc</li>
-	 * </ul>
-	 * </li>
-	 * <li>{@code {$query}} prints the value associated with the supplied query located in the HTML page's URL. Examples:
-	 * <ul>
-	 * <li>{@code /tmp/search_{$q}} on HTML page with url {@code 'http://google.com/search?q=cup'}: prints {@code /tmp/search_cup.html}</li>
-	 * </ul>
-	 * </li>
-	 * <li>
-	 * {@code {follower, <padding>}} prints the number of followers that have been parsed. Basically the same as {@code page}
-	 * except for link followers.
-	 * Examples:
-	 * <ul>
-	 * <li>{@code /tmp/file_{follower, 3}}: prints {@code /tmp/file_001, /tmp/file_014}, etc.</li>
-	 * </ul>
-	 * </li>
-	 * <li>
-	 * {@code {parent}} prints the name of the "parent" file without the extension. The "parent" file is the one that
-	 * the "parent" entity saved to. In the case of a link follower the "parent" entity would be the entity that parsed
-	 * the row which triggered the link follower to start parsing.
-	 * Examples:
-	 * <ul>
-	 * <li>{@code {parent}/followedPage} with a parent entity saving to the file {@code /tmp/page_1.html} would print
-	 * {@code /tmp/page_1/followedPage.html}</li>
-	 * <li>
-	 * {@code {parent}/file_{follower}} with a parent entity saving to the file {@code /tmp/page_4.html} would print
-	 * {@code /tmp/page_4/file_1.html, /tmp/page_4/file_2.html}, etc.
-	 * </li>
-	 * </ul>
-	 * </li>
+	 *   <li>{@code {page, <padding>}} prints the current page number from the paginator.
+	 *        Number can be padded with leading zeroes if the optional padding number is provided.
+	 *        Examples:
+	 *     <ul>
+	 *       <li>{@code /tmp/page{page, 4}}: prints {@code /tmp/page0001.html, /tmp/page0321.html}, etc.</li>
+	 *       <li>{@code /tmp/page{page}}: prints {@code /tmp/page1.html, /tmp/page2.html, /tmp/page543.html}, etc.</li>
+	 *       <li>{@code /tmp/page{page, 2}}: prints {@code /tmp/page01.html, /tmp/page89.html, /tmp/page289.html}, etc</li>
+	 *     </ul>
+	 *   </li>
+	 *
+	 *   <li>{@code {date, <mask>}} prints the current date as a timestamp. A date mask can be provided to configure
+	 *       how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
+	 *       Examples:
+	 *     <ul>
+	 *       <li>{@code /tmp/file_{date, yyyy-MMM-dd}}: prints {@code /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html}, etc</li>
+	 *       <li>{@code /tmp/file_{date}}: prints {@code /tmp/file_23423423423.pdf, /tmp/file_234234324231.html}, etc</li>
+	 *     </ul>
+	 *   </li>
+	 *
+	 *   <li>{@code {$query}} prints the value associated with the supplied query located in the HTML page's URL. Examples:
+	 *     <ul>
+	 *       <li>{@code /tmp/search_{$q}} on HTML page with url {@code 'http://google.com/search?q=cup'}: prints {@code /tmp/search_cup.html}</li>
+	 *     </ul>
+	 *   </li>
+	 *
+	 *   <li>
+	 *     {@code {follower, <padding>}} prints the number of followers that have been parsed. Basically the same as {@code page}
+	 *     except for link followers.
+	 *     Examples:
+	 *     <ul>
+	 *       <li>{@code /tmp/file_{follower, 3}}: prints {@code /tmp/file_001, /tmp/file_014}, etc.</li>
+	 *     </ul>
+	 *   </li>
+	 *
+	 *   <li>
+	 *     {@code {parent}} prints the name of the "parent" file without the extension. The "parent" file is the one that
+	 *     the "parent" entity saved to. In the case of a link follower the "parent" entity would be the entity that parsed
+	 *     the row which triggered the link follower to start parsing.
+	 *     Examples:
+	 *     <ul>
+	 *       <li>{@code {parent}/followedPage} with a parent entity saving to the file {@code /tmp/page_1.html} would print
+	 *           {@code /tmp/page_1/followedPage.html}
+	 *       </li>
+	 *       <li> {@code {parent}/file_{follower}} with a parent entity saving to the file {@code /tmp/page_4.html} would print
+	 *            {@code /tmp/page_4/file_1.html, /tmp/page_4/file_2.html}, etc.
+	 *       </li>
+	 *     </ul>
+	 *   </li>
+	 *
+	 *   <li>
+	 *     {@code {batch}} prints the the custom batch ID provided by {@link #getBatchId()}
+	 *     Example:
+	 *     <ul>
+	 *       <li>{@code /tmp/{batch}/page_{page}} where the batch ID is set to "abc" would print
+	 *           {@code /tmp/abc/page_1.html}
+	 *       </li>
+	 *     </ul>
+	 *   </li>
+	 *
+	 *   <li>{@code {url, <option>}} prints part of the current URL being visited, the url itself where each part is a
+	 *                               directory, or a flattened representation of the URL. For example, given the relative
+	 *                               url:
+	 *
+	 *                               "/Property/307634/EST6886/Springfield"
+	 *
+	 *     <ul>
+	 *       <li>Using a 0-based index to select a section of the URL path - {@code /tmp/{url, 2}}: prints the third section of the URL {@code /tmp/est6886.html}</li>
+	 *       <li>Flattening the URL - {@code /tmp/{url, flat}}: prints {@code /tmp/property_307634_est6886_springfield.html}</li>
+	 *       <li>Creating sub-directories based on the URL path - {@code /tmp/{url}}: prints {@code /tmp/Property/307634/EST6886/Springfield.html}</li>
+	 *     </ul>
+	 *   </li>
 	 * </ul>
 	 *
 	 * <i>Defaults to {@code file_{page}}</i>
@@ -155,6 +187,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	@UI(order = 2)
 	public final void setFileNamePattern(String pattern) {
 		fileNamePattern = new ParameterizedString(pattern);
+		parseDate = null;
 	}
 
 	/**
@@ -385,6 +418,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * <i>Defaults to {@code true}</i>
 	 *
+	 * Has no effect if {@link RemoteEntityParserInterface#gete}
+	 *
 	 * @return flag to indicate overwriting of downloaded content is enabled.
 	 */
 	public boolean isDownloadOverwritingEnabled() {
@@ -544,5 +579,178 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 */
 	public final void setRemoteInterval(long remoteInterval) {
 		this.remoteInterval = remoteInterval;
+	}
+
+	/**
+	 * Defines a parse date to process historical files. It's expected that the pattern returned by
+	 * {@link RemoteParserSettings#getFileNamePattern()} contains a date parameter,
+	 * for example: @code{"{date, yyyy-MMM-dd}/results_{page}.html")"}. If the parse date is set to 2015-10-10, the
+	 * parser will look for existing files under the directory named "2015-Oct-10" inside
+	 * {@link RemoteParserSettings#getDownloadContentDirectory()}
+	 *
+	 * If the parse date is not {@code null}, downloads will be disabled automatically unless explicitly enabled with
+	 * {@code setDownloadEnabled(true);}
+	 *
+	 * @param parseDate the date to use for loading files downloaded in the past that will be re-parsed.
+	 */
+	public final void setParseDate(Calendar parseDate) {
+		if (parseDate == null) {
+			setParseDate((Date) null);
+		} else {
+			setParseDate(parseDate.getTime());
+		}
+	}
+
+	/**
+	 * Defines a parse Date to process historical files. It's expected that the pattern returned by
+	 * {@link RemoteParserSettings#getFileNamePattern()} contains a date parameter,
+	 * for example: @code{"{date, yyyy-MMM-dd}/results_{page}.html")"}. If the parse Date is set to 2015-10-10, the
+	 * parser will look for existing files under the directory named "2015-Oct-10" inside
+	 * {@link RemoteParserSettings#getDownloadContentDirectory()}
+	 *
+	 * If the parse Date is not {@code null}, downloads will be disabled automatically unless explicitly enabled with
+	 * {@code setDownloadEnabled(true);}
+	 *
+	 * @param parseDate the date to use for loading files downloaded in the past that will be re-parsed.
+	 */
+	public final void setParseDate(Date parseDate) {
+		this.parseDate = parseDate;
+		if (parseDate != null && downloadEnabled == null) {
+			downloadEnabled = false;
+		}
+	}
+
+	/**
+	 * Defines a parse Date to process historical files. It's expected that the pattern returned by
+	 * {@link RemoteParserSettings#getFileNamePattern()} contains a date parameter,
+	 * for example: @code{"{date, yyyy-MMM-dd}/results_{page}.html")"}. If the parse Date is set to "2015-Oct-10", the
+	 * parser will look for existing files under the directory named "2015-Oct-10" inside
+	 * {@link RemoteParserSettings#getDownloadContentDirectory()}.
+	 *
+	 * If the parse Date is not {@code null}, downloads will be disabled automatically unless explicitly enabled with
+	 * {@code setDownloadEnabled(true);}
+	 *
+	 * @param parseDate the formatted representation of the date to use for loading files downloaded in the past that
+	 *                     will be re-parsed. Must match the date pattern used in
+	 *                     {@link RemoteParserSettings#getFileNamePattern()}
+	 */
+	public final void setParseDate(String parseDate) {
+		if (parseDate == null) {
+			setParseDate((Date) null);
+		} else {
+			ParameterizedString pattern = getParameterizedFileName();
+			if (pattern.contains("date")) {
+				String format = pattern.getFormat("date");
+				if (format == null) {
+					try {
+						long millis = Long.valueOf(parseDate);
+						setParseDate(new Date(millis));
+					} catch (Exception e) {
+						throw new IllegalArgumentException("Can't convert parse Date '" + parseDate + "' to a long. Try setting a date mask in your parameterizedFileName {date} parameter. Current pattern: " + pattern, e);
+					}
+
+				}
+				try {
+					setParseDate(new SimpleDateFormat(format).parse(parseDate));
+				} catch (Exception e) {
+					throw new IllegalArgumentException("Can't parse date '" + parseDate + "' using mask " + format + ". Current pattern: " + pattern, e);
+				}
+			} else {
+				throw new IllegalArgumentException("Can't set formatted parse Date '" + parseDate + "' if the parameterizedFileName has no {date} parameter. Current parameterizedFileName: " + pattern);
+			}
+		}
+	}
+
+	/**
+	 * Returns the formatted parse date to associate with any downloaded files for future re-parsing. If the pattern
+	 * returned by {@link RemoteParserSettings#getFileNamePattern()} contains a date parameter such as
+	 * @code{"{date, yyyy-MMM-dd}/results_{page}.html")"}, any downloaded files will be stored under the
+	 * directory named after the date. If the parse date is set manually to "2015-Oct-10", the
+	 * parser will look for existing files under the directory named "2015-Oct-10" inside
+	 * {@link RemoteParserSettings#getDownloadContentDirectory()}. If no format is defined, a {@code String}
+	 * representing the time in milliseconds will be returned.
+	 *
+	 * If no date has been set explicitly, the current date and time of the system will be used.
+	 *
+	 * If given parse date is <strong>not</strong> {@code null}, downloads will be disabled automatically unless
+	 * explicitly enabled with {@code setDownloadEnabled(true);}
+	 *
+	 * @param parseDate the formatted representation of the date of the directory/files to be processed. Must match the
+	 *                  date pattern used in {@link RemoteParserSettings#getFileNamePattern()}
+	 */
+	public final String getParseDate() {
+		Date date = parseDate == null ? new Date() : parseDate;
+
+		ParameterizedString pattern = getParameterizedFileName();
+		if (pattern.contains("date")) {
+			String format = pattern.getFormat("date");
+			if (format == null) {
+				return String.valueOf(date.getTime());
+			}
+			return new SimpleDateFormat(format).format(date);
+		} else {
+			return String.valueOf(date.getTime());
+		}
+	}
+
+	/**
+	 * Returns the custom batch ID to be used in the file name pattern specified by
+	 * {@link RemoteParserSettings#getFileNamePattern()}. Used to process files stored locally.
+	 *
+	 * If a {batch} parameter is not present in the pattern, the given batch ID will be simply ignored.
+	 *
+	 * If the batch ID is not {@code null}, downloads will be disabled automatically unless explicitly enabled with
+	 * {@code setDownloadEnabled(true);}
+	 *
+	 * @return the current batch ID
+	 */
+	public final String getBatchId() {
+		return batchId;
+	}
+
+	/**
+	 * Defines a custom batch ID to be used in the file name pattern specified by
+	 * {@link RemoteParserSettings#getFileNamePattern()}. Used to process files stored locally.
+	 *
+	 * If a {batch} parameter is not present in the pattern, the given batch ID will be simply ignored.
+	 *
+	 * If the batch ID is not {@code null}, downloads will be disabled automatically unless explicitly enabled with
+	 * {@code setDownloadEnabled(true);}
+	 *
+	 * @param batchId the user-specific batch ID
+	 */
+	public final void setBatchId(String batchId) {
+		this.batchId = batchId;
+		if (batchId != null && downloadEnabled == null) {
+			downloadEnabled = false;
+		}
+	}
+
+	/**
+	 * Enables/disables any remote download operation. Enabled by default. It's recommended to disable downloads when
+	 * processing historical files offline to ensure no accidental download will occur and overwrite old files.
+	 *
+	 * If enabled, when processing stored files any missing file that was not downloaded previously will be downloaded.
+	 * Make sure that {@link RemoteParserSettings#isDownloadOverwritingEnabled()} is set to {@code false} to prevent
+	 * downloading and overwriting existing files.
+	 *
+	 * @param downloadEnabled flag indicating whether downloads are enabled.
+	 */
+	public final void setDownloadEnabled(boolean downloadEnabled) {
+		this.downloadEnabled = downloadEnabled;
+	}
+
+	/**
+	 * Flags whether remote downloads are enabled. {@code true} by default. It's recommended to disable downloads when
+	 * processing historical files offline to ensure no accidental download will occur and overwrite old files.
+	 *
+	 * If enabled, when processing stored files any missing file that was not downloaded previously will be downloaded.
+	 * Make sure that {@link RemoteParserSettings#isDownloadOverwritingEnabled()} is set to {@code false} to prevent
+	 * downloading and overwriting existing files.
+	 *
+	 * @return flag indicating whether downloads are enabled.
+	 */
+	public final boolean isDownloadEnabled() {
+		return downloadEnabled == null ? true : downloadEnabled;
 	}
 }
