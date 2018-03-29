@@ -178,6 +178,15 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 		return (RemoteEntityList) super.getParentEntityList();
 	}
 
+	/**
+	 * A {@link RemoteFollower}s associated with this entity.
+	 *
+	 * @return the {@link RemoteFollower} name associated with this entity.
+	 */
+	public T getRemoteFollower(String followerName) {
+		return followers.get(followerName);
+	}
+
 
 	@Override
 	protected EntitySettings<C, S, G> clone() {

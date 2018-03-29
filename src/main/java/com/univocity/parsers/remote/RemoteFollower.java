@@ -80,6 +80,17 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	}
 
 	/**
+	 * Returns an entity of this remote follower.
+	 *
+	 * @param entityName name of the entity whose configuration that will be returned.
+	 *
+	 * @return an existing entity configuration associated with the given entity name
+	 */
+	public final S getEntity(String entityName) {
+		return entityList.getEntity(entityName);
+	}
+
+	/**
 	 * Returns the settings object associated with the remote follower. This configuration object is used to configure the
 	 * remote follower when it parses a linked page.
 	 *
