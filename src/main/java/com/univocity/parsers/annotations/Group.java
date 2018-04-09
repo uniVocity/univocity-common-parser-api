@@ -24,15 +24,6 @@ import java.util.*;
 public @interface Group {
 
 	/**
-	 * The name of the entity in the {@link com.univocity.parsers.common.Results} instance whose rows will be read
-	 * to generate instances of the given {@link #key()} type. If empty, the name of the attribute will be used as the
-	 * entity name.
-	 *
-	 * @return name of the entity whose results should be linked to the parent instance.
-	 */
-	String entity() default "";
-
-	/**
 	 * The concrete type of the keys put into this map. Instances will be created from the records of the linked entity.
 	 *
 	 * @return the type of key to be added to the map.
