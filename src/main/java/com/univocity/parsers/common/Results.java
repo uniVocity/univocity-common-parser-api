@@ -21,9 +21,15 @@ public final class Results<R extends Result> implements Map<String, R> {
 	private final Map<String, R> originalKeyMap = new LinkedHashMap<String, R>();
 
 	/**
-	 * Joins the results of the entity {@code entityToLink} to the results of the entity {@code masterEntity}
+	 * Joins the results of the entity {@code entityToLink} to the results of the entity {@code masterEntity}, producing
+	 * a new result whose records will have all values of the {@code masterEntity} plus all values of the
+	 * {@code entityToLink}.
 	 *
-	 * The optional {@code otherEntitiesToLink} list other entities to join to the {@code masterEntity}
+	 * Field names in common between the master entity and each entity are used to determine which records to join.
+	 *
+	 * If the {@code entityToLink} has multiple records that match with the {@code masterEntity}, the result will be
+	 * the cartesian product, i.e. if  {@code entityToLink} has rows {@code [x,u,v] and [x,y,z} and {@code masterEntity}
+	 * has row {@code [x,a,b]}, the result will have two rows: {@code [x,a,b,u,v] and [x,a,b,y,z]}.
 	 *
 	 * @param masterEntity        the name of the entity to join all other specified entities to.
 	 * @param entityToLink        the name of the entity to join to the {@code masterEntity}
@@ -42,9 +48,11 @@ public final class Results<R extends Result> implements Map<String, R> {
 	}
 
 	/**
-	 * Links the results of the entity {@code entityToLink} to the results of the entity {@code masterEntity}
+	 * Links the results of the entity {@code entityToLink} to the results of the entity {@code masterEntity}, so that
+	 * each record from {@code masterEntity} will have the corresponding records from {@code entityToLink} available
+	 * when {@link ResultRecord#getLinkedEntityData()} is called.
 	 *
-	 * The optional {@code otherEntitiesToLink} list other entities to link to the {@code masterEntity}
+	 * Field names in common between the master entity and each entity are used to determine which records to link.
 	 *
 	 * @param masterEntity        the name of the entity to link all other specified entities to.
 	 * @param entityToLink        the name of the entity to link to the {@code masterEntity}
