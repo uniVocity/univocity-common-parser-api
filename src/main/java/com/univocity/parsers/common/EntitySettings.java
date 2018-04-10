@@ -515,7 +515,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 
 			return out;
 		} catch (CloneNotSupportedException e) {
-			throw new IllegalStateException(e);
+			throw new IllegalStateException("Unable to clone", e);
 		}
 	}
 }

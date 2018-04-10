@@ -42,8 +42,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private String emptyValue;
 	protected Paginator paginator;
 
-	private boolean downloadBeforeParsingEnabled = false;
 	private FileProvider downloadContentDirectory;
+	protected Boolean downloadBeforeParsingEnabled = null;
 	private ParameterizedString fileNamePattern;
 	private boolean downloadOverwritingEnabled = true;
 	private Boolean downloadEnabled;
@@ -477,7 +477,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @return a flag indicating whether any remote content should be downloaded into a local file before being parsed.
 	 */
 	public boolean isDownloadBeforeParsingEnabled() {
-		return downloadBeforeParsingEnabled || downloadContentDirectory != null;
+		return (downloadBeforeParsingEnabled != null && downloadBeforeParsingEnabled)|| downloadContentDirectory != null;
 	}
 
 	/**

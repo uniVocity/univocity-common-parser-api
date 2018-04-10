@@ -342,7 +342,7 @@ public abstract class EntityParserSettings<S extends CommonParserSettings, L ext
 
 			return out;
 		} catch (CloneNotSupportedException e) {
-			throw new IllegalStateException(e);
+			throw new IllegalStateException("Unable to clone", e);
 		}
 	}
 }
