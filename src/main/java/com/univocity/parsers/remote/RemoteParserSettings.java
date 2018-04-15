@@ -74,7 +74,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * If the downloaded content is text, it will be stored using the system default encoding
 	 *
 	 * @param path the path to the target directory. It can contain system variables enclosed within { and }
-	 *             (e.g. {@code {user.home}/Downloads"}). Subdirectories that doesn't exist will be created if required.
+	 *             (e.g. {@code {user.home}/Downloads"}). Subdirectories that don't exist will be created if required.
 	 */
 	public final void setDownloadContentDirectory(String path) {
 		downloadContentDirectory = new FileProvider(path);
@@ -84,7 +84,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Configures the parser to store a local copy of the remote content in the filesystem.
 	 * If the downloaded content is text, it will be stored using the system default encoding
 	 *
-	 * @param directory the target directory. Subdirectories that doesn't exist will be created if required.
+	 * @param directory the target directory. Subdirectories that don't exist will be created if required.
 	 */
 	@UI(order = 1)
 	public final void setDownloadContentDirectory(File directory) {
