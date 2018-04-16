@@ -211,7 +211,7 @@
 		<dependency>
 			<groupId>com.univocity</groupId>
 			<artifactId>univocity-parsers</artifactId>
-			<version>2.6.3-SNAPSHOT</version>
+			<version>2.6.3</version>
 		</dependency>
 	</dependencies>
 
