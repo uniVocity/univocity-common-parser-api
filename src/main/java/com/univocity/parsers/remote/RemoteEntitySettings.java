@@ -179,9 +179,11 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	}
 
 	/**
-	 * A {@link RemoteFollower}s associated with this entity.
+	 * Obtains a {@link RemoteFollower}s associated with this entity.
 	 *
-	 * @return the {@link RemoteFollower} name associated with this entity.
+	 * @param followerName name of the {@link RemoteFollower} to return
+	 *
+	 * @return the {@link RemoteFollower} associated with this entity, or {@code null} if not found.
 	 */
 	public T getRemoteFollower(String followerName) {
 		return followers.get(followerName);

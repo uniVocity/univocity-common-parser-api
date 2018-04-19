@@ -445,7 +445,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * <i>Defaults to {@code true}</i>
 	 *
-	 * Has no effect if {@link RemoteEntityParserInterface#gete}
+	 * Has no effect if {@link RemoteParserSettings#isDownloadEnabled()} evaluates to {@code false}
 	 *
 	 * @return flag to indicate overwriting of downloaded content is enabled.
 	 */
@@ -691,7 +691,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	/**
 	 * Returns the formatted parse date to associate with any downloaded files for future re-parsing. If the pattern
 	 * returned by {@link RemoteParserSettings#getFileNamePattern()} contains a date parameter such as
-	 * @code{"{date, yyyy-MMM-dd}/results_{page}.html")"}, any downloaded files will be stored under the
+	 * <code>"{date, yyyy-MMM-dd}/results_{page}.html")"</code>, any downloaded files will be stored under the
 	 * directory named after the date. If the parse date is set manually to "2015-Oct-10", the
 	 * parser will look for existing files under the directory named "2015-Oct-10" inside
 	 * {@link RemoteParserSettings#getDownloadContentDirectory()}. If no format is defined, a {@code String}
@@ -702,8 +702,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * If given parse date is <strong>not</strong> {@code null}, downloads will be disabled automatically unless
 	 * explicitly enabled with {@code setDownloadEnabled(true);}
 	 *
-	 * @param parseDate the formatted representation of the date of the directory/files to be processed. Must match the
-	 *                  date pattern used in {@link RemoteParserSettings#getFileNamePattern()}
+	 * @return a formatted {@code String} representing the parse date.
 	 */
 	public final String getParseDate() {
 		Date date = parseDate == null ? new Date() : parseDate;
