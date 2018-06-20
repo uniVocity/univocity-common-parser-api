@@ -13,6 +13,7 @@ import com.univocity.api.statistics.*;
 import com.univocity.parsers.common.*;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -44,6 +45,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private String emptyValue;
 	protected Paginator paginator;
 
+	private Charset textEncoding = Charset.defaultCharset();
 	private FileProvider downloadContentDirectory;
 	protected Boolean downloadBeforeParsingEnabled = null;
 	private ParameterizedString fileNamePattern;
@@ -280,6 +282,37 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		return getParameterizedFileName().applyParameterValues();
 	}
 
+	/**
+	 * Returns the character set to use when writing text/html files downloaded by the parser
+	 * Defaults to the system encoding if not provided
+	 *
+	 * @return the current text encoding.
+	 */
+	public final Charset getTextEncoding() {
+		return textEncoding;
+	}
+
+	/**
+	 * Defines the character set to use when writing text/html files downloaded by the parser
+	 * By default the system encoding is used.
+	 *
+	 * @param encoding the encoding to use for writing downloaded files
+	 */
+	public final void setTextEncoding(Charset encoding) {
+		this.textEncoding = encoding == null ? Charset.defaultCharset() : encoding;
+	}
+
+
+	/**
+	 * Defines the character set to use when writing text/html files downloaded by the parser
+	 * By default the system encoding is used.
+	 *
+	 * @param charsetName the name of the charset to use for writing downloaded files
+	 */
+	public final void setTextEncoding(String charsetName) {
+		setTextEncoding(Charset.forName(charsetName));
+	}
+
 	final ParameterizedString getParameterizedFileName() {
 		if (fileNamePattern == null) {
 			fileNamePattern = new ParameterizedString("file_{page}");
@@ -479,7 +512,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * @return a flag indicating whether any remote content should be downloaded into a local file before being parsed.
 	 */
 	public boolean isDownloadBeforeParsingEnabled() {
-		return (downloadBeforeParsingEnabled != null && downloadBeforeParsingEnabled)|| downloadContentDirectory != null;
+		return (downloadBeforeParsingEnabled != null && downloadBeforeParsingEnabled) || downloadContentDirectory != null;
 	}
 
 	/**
@@ -559,8 +592,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 */
 	public final ExecutorService getExecutorService() {
 		if (executorService == null || executorService.isShutdown()) {
-			if(DEFAULT_THREAD_POOL == null || DEFAULT_THREAD_POOL.isShutdown()){
-				synchronized (RemoteParserSettings.class){
+			if (DEFAULT_THREAD_POOL == null || DEFAULT_THREAD_POOL.isShutdown()) {
+				synchronized (RemoteParserSettings.class) {
 					DEFAULT_THREAD_POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 				}
 			}
@@ -595,7 +628,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * <em>Defaults to 15 ms</em>
 	 *
 	 * @return the minimum time (in milliseconds) to wait between remote requests.
-	 *         Values {@code <= 0} mean the internal {@link RateLimiter} is disabled.
+	 * Values {@code <= 0} mean the internal {@link RateLimiter} is disabled.
 	 */
 	public final long getRemoteInterval() {
 		return remoteInterval;
@@ -665,8 +698,8 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * {@code setDownloadEnabled(true);}
 	 *
 	 * @param parseDate the formatted representation of the date to use for loading files downloaded in the past that
-	 *                     will be re-parsed. Must match the date pattern used in
-	 *                     {@link RemoteParserSettings#getFileNamePattern()}
+	 *                  will be re-parsed. Must match the date pattern used in
+	 *                  {@link RemoteParserSettings#getFileNamePattern()}
 	 */
 	public final void setParseDate(String parseDate) {
 		if (parseDate == null) {
