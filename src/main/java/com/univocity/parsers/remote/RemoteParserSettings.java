@@ -39,6 +39,8 @@ import java.util.concurrent.*;
  */
 public abstract class RemoteParserSettings<S extends CommonParserSettings, L extends RemoteEntityList, C extends Context> extends EntityParserSettings<S, L, C> implements CommonFollowerOptions {
 
+	private static ExecutorService DEFAULT_THREAD_POOL;
+
 	private String emptyValue;
 	protected Paginator paginator;
 
@@ -52,7 +54,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	private boolean ignoreLinkFollowingErrors = false;
 
 	private DownloadListener downloadListener;
-	private int downloadThreads = 8;
+	private int downloadThreads = 4;
 
 	private ExecutorService executorService;
 	private long remoteInterval = 15L;
@@ -499,7 +501,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Sets the number of threads that will be used to download remote content (e.g. images) that is associated with
 	 * the parsed input
 	 *
-	 * <i>Defaults to 8</i>
+	 * <i>Defaults to 4</i>
 	 *
 	 * @param downloadThreads the maximum number of threads to be used for downloading content
 	 */
@@ -514,12 +516,12 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Sets the number of threads that will be used to download remote content (e.g. images) that is associated with
 	 * the parsed input
 	 *
-	 * <i>Defaults to 8</i>
+	 * <i>Defaults to 4</i>
 	 *
 	 * @return the maximum number of threads to be used for downloading content
 	 */
 	public final int getDownloadThreads() {
-		return downloadThreads <= 0 ? 8 : downloadThreads;
+		return downloadThreads <= 0 ? 4 : downloadThreads;
 	}
 
 	@Override
@@ -539,7 +541,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Assigns an {@link ExecutorService} to be parser, which will be used to manage the multiple threads that can be
 	 * started. These threads are used to parse/download data from a given input and any remote resources associated with it.
 	 *
-	 * <em>Defaults to:</em> {@code Executors.newCachedThreadPool();}
+	 * <em>Defaults to:</em> {@code Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());}
 	 *
 	 * @param executorService the executor service to be used by the parser for the creation of new threads.
 	 */
@@ -551,13 +553,18 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 * Returns the {@link ExecutorService} to be used by the parser for managing the multiple threads that can be
 	 * started. These threads are used to parse/download data from a given input and any remote resources associated with it.
 	 *
-	 * <em>Defaults to:</em> {@code Executors.newCachedThreadPool();}
+	 * <em>Defaults to:</em> {@code Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());}
 	 *
 	 * @return the executor service to be used by the parser for the creation of new threads.
 	 */
 	public final ExecutorService getExecutorService() {
-		if (executorService == null) {
-			executorService = Executors.newCachedThreadPool();
+		if (executorService == null || executorService.isShutdown()) {
+			if(DEFAULT_THREAD_POOL == null || DEFAULT_THREAD_POOL.isShutdown()){
+				synchronized (RemoteParserSettings.class){
+					DEFAULT_THREAD_POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+				}
+			}
+			return DEFAULT_THREAD_POOL;
 		}
 		return this.executorService;
 	}

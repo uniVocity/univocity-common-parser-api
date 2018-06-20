@@ -8,6 +8,8 @@ package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
 
+import java.util.concurrent.*;
+
 /**
  * A list of remote entities to be parsed by some implementation of {@link EntityParserInterface},
  * and their specific configurations.
@@ -23,6 +25,8 @@ import com.univocity.parsers.common.*;
  * @see EntityParserInterface
  */
 public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends EntityList<S> {
+
+	protected ExecutorService downloadThreadPool;
 
 	/**
 	 * Creates a new, empty {@code RemoteEntityList}, applying the global configuration object, used by the
@@ -50,5 +54,13 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 	protected S configureEntity(String entityName, S parentEntity) {
 		return super.configureEntity(entityName, parentEntity);
 	}
+
+	protected final synchronized ExecutorService getDownloadThreadPool(){
+		if(downloadThreadPool == null || downloadThreadPool.isShutdown()){
+			this.downloadThreadPool = Executors.newFixedThreadPool(getParserSettings().getDownloadThreads());
+		}
+		return downloadThreadPool;
+	}
+
 }
 
