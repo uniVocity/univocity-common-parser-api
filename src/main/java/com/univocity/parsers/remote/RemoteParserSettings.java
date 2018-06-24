@@ -111,80 +111,80 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * The following patterns are recognized:
 	 * <ul>
-	 *   <li>{@code {page, <padding>}} prints the current page number from the paginator.
+	 *   <li><code> {page, <padding>}</code> prints the current page number from the paginator.
 	 *        Number can be padded with leading zeroes if the optional padding number is provided.
 	 *        Examples:
 	 *     <ul>
-	 *       <li>{@code /tmp/page{page, 4}}: prints {@code /tmp/page0001.html, /tmp/page0321.html}, etc.</li>
-	 *       <li>{@code /tmp/page{page}}: prints {@code /tmp/page1.html, /tmp/page2.html, /tmp/page543.html}, etc.</li>
-	 *       <li>{@code /tmp/page{page, 2}}: prints {@code /tmp/page01.html, /tmp/page89.html, /tmp/page289.html}, etc</li>
+	 *       <li><code> /tmp/page{page, 4}</code>: prints <code> /tmp/page0001.html, /tmp/page0321.html</code>, etc.</li>
+	 *       <li><code> /tmp/page{page}</code>: prints <code> /tmp/page1.html, /tmp/page2.html, /tmp/page543.html</code>, etc.</li>
+	 *       <li><code> /tmp/page{page, 2}</code>: prints <code> /tmp/page01.html, /tmp/page89.html, /tmp/page289.html</code>, etc</li>
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li>{@code {date, <mask>}} prints the current date as a timestamp. A date mask can be provided to configure
+	 *   <li><code> {date, <mask>}</code> prints the current date as a timestamp. A date mask can be provided to configure
 	 *       how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
 	 *       Examples:
 	 *     <ul>
-	 *       <li>{@code /tmp/file_{date, yyyy-MMM-dd}}: prints {@code /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html}, etc</li>
-	 *       <li>{@code /tmp/file_{date}}: prints {@code /tmp/file_23423423423.pdf, /tmp/file_234234324231.html}, etc</li>
+	 *       <li><code> /tmp/file_{date, yyyy-MMM-dd}</code>: prints <code> /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html</code>, etc</li>
+	 *       <li><code> /tmp/file_{date}</code>: prints <code> /tmp/file_23423423423.pdf, /tmp/file_234234324231.html</code>, etc</li>
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li>{@code {$query}} prints the value associated with the supplied query located in the HTML page's URL. Examples:
+	 *   <li><code> {$query}</code> prints the value associated with the supplied query located in the HTML page's URL. Examples:
 	 *     <ul>
-	 *       <li>{@code /tmp/search_{$q}} on HTML page with url {@code 'http://google.com/search?q=cup'}: prints {@code /tmp/search_cup.html}</li>
+	 *       <li><code> /tmp/search_{$q}</code> on HTML page with url <code> 'http://google.com/search?q=cup'</code>: prints <code> /tmp/search_cup.html</code></li>
 	 *     </ul>
 	 *   </li>
 	 *
 	 *   <li>
-	 *     {@code {entry, <padding>}} prints the number of followers that have been parsed. Basically the same as {@code page}
+	 *     <code> {entry, <padding>}</code> prints the number of followers that have been parsed. Basically the same as <code> page</code>
 	 *     except for link followers.
 	 *     Examples:
 	 *     <ul>
-	 *       <li>{@code /tmp/file_{entry, 3}}: prints {@code /tmp/file_001, /tmp/file_014}, etc.</li>
+	 *       <li><code> /tmp/file_{entry, 3}</code>: prints <code> /tmp/file_001, /tmp/file_014</code>, etc.</li>
 	 *     </ul>
 	 *   </li>
 	 *
 	 *   <li>
-	 *     {@code {parent}} prints the name of the "parent" file without the extension. The "parent" file is the one that
+	 *     <code> {parent}</code> prints the name of the "parent" file without the extension. The "parent" file is the one that
 	 *     the "parent" entity saved to. In the case of a link follower the "parent" entity would be the entity that parsed
 	 *     the row which triggered the link follower to start parsing.
 	 *     Examples:
 	 *     <ul>
-	 *       <li>{@code {parent}/followedPage} with a parent entity saving to the file {@code /tmp/page_1.html} would print
-	 *           {@code /tmp/page_1/followedPage.html}
+	 *       <li><code> {parent}/followedPage</code> with a parent entity saving to the file <code> /tmp/page_1.html</code> would print
+	 *           <code> /tmp/page_1/followedPage.html</code>
 	 *       </li>
-	 *       <li> {@code {parent}/file_{entry}} with a parent entity saving to the file {@code /tmp/page_4.html} would print
-	 *            {@code /tmp/page_4/file_1.html, /tmp/page_4/file_2.html}, etc.
+	 *       <li> <code> {parent}/file_{entry}</code> with a parent entity saving to the file <code> /tmp/page_4.html</code> would print
+	 *            <code> /tmp/page_4/file_1.html, /tmp/page_4/file_2.html</code>, etc.
 	 *       </li>
 	 *     </ul>
 	 *   </li>
 	 *
 	 *   <li>
-	 *     {@code {batch}} prints the the custom batch ID provided by {@link #getBatchId()}
+	 *     <code> {batch}</code> prints the the custom batch ID provided by {@link #getBatchId()}
 	 *     Example:
 	 *     <ul>
-	 *       <li>{@code /tmp/{batch}/page_{page}} where the batch ID is set to "abc" would print
-	 *           {@code /tmp/abc/page_1.html}
+	 *       <li><code> /tmp/{batch}/page_{page}</code> where the batch ID is set to "abc" would print
+	 *           <code> /tmp/abc/page_1.html</code>
 	 *       </li>
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li>{@code {url, <option>}} prints part of the current URL being visited, the url itself where each part is a
+	 *   <li><code> {url, <option>}</code> prints part of the current URL being visited, the url itself where each part is a
 	 *                               directory, or a flattened representation of the URL. For example, given the relative
 	 *                               url:
 	 *
 	 *                               "/Property/307634/EST6886/Springfield"
 	 *
 	 *     <ul>
-	 *       <li>Using a 0-based index to select a section of the URL path - {@code /tmp/{url, 2}}: prints the third section of the URL {@code /tmp/est6886.html}</li>
-	 *       <li>Flattening the URL - {@code /tmp/{url, flat}}: prints {@code /tmp/property_307634_est6886_springfield.html}</li>
-	 *       <li>Creating sub-directories based on the URL path - {@code /tmp/{url}}: prints {@code /tmp/Property/307634/EST6886/Springfield.html}</li>
+	 *       <li>Using a 0-based index to select a section of the URL path - <code> /tmp/{url, 2}</code>: prints the third section of the URL <code> /tmp/est6886.html</code></li>
+	 *       <li>Flattening the URL - <code> /tmp/{url, flat}</code>: prints <code> /tmp/property_307634_est6886_springfield.html</code></li>
+	 *       <li>Creating sub-directories based on the URL path - <code> /tmp/{url}</code>: prints <code> /tmp/Property/307634/EST6886/Springfield.html</code></li>
 	 *     </ul>
 	 *   </li>
 	 * </ul>
 	 *
-	 * <i>Defaults to {@code file_{page}}</i>
+	 * <i>Defaults to <code> file_{page}</code></i>
 	 *
 	 * @param pattern the pattern used to generate file names for downloaded content.
 	 */
@@ -201,80 +201,80 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * The following patterns are recognized:
 	 * <ul>
-	 *   <li>{@code {page, <padding>}} prints the current page number from the paginator.
+	 *   <li><code> {page, <padding>}</code> prints the current page number from the paginator.
 	 *        Number can be padded with leading zeroes if the optional padding number is provided.
 	 *        Examples:
 	 *     <ul>
-	 *       <li>{@code /tmp/page{page, 4}}: prints {@code /tmp/page0001.html, /tmp/page0321.html}, etc.</li>
-	 *       <li>{@code /tmp/page{page}}: prints {@code /tmp/page1.html, /tmp/page2.html, /tmp/page543.html}, etc.</li>
-	 *       <li>{@code /tmp/page{page, 2}}: prints {@code /tmp/page01.html, /tmp/page89.html, /tmp/page289.html}, etc</li>
+	 *       <li><code> /tmp/page{page, 4}</code>: prints <code> /tmp/page0001.html, /tmp/page0321.html</code>, etc.</li>
+	 *       <li><code> /tmp/page{page}</code>: prints <code> /tmp/page1.html, /tmp/page2.html, /tmp/page543.html</code>, etc.</li>
+	 *       <li><code> /tmp/page{page, 2}</code>: prints <code> /tmp/page01.html, /tmp/page89.html, /tmp/page289.html</code>, etc</li>
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li>{@code {date, <mask>}} prints the current date as a timestamp. A date mask can be provided to configure
+	 *   <li><code> {date, <mask>}</code> prints the current date as a timestamp. A date mask can be provided to configure
 	 *       how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
 	 *       Examples:
 	 *     <ul>
-	 *       <li>{@code /tmp/file_{date, yyyy-MMM-dd}}: prints {@code /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html}, etc</li>
-	 *       <li>{@code /tmp/file_{date}}: prints {@code /tmp/file_23423423423.pdf, /tmp/file_234234324231.html}, etc</li>
+	 *       <li><code> /tmp/file_{date, yyyy-MMM-dd}</code>: prints <code> /tmp/file_2016-Dec-25.pdf, /tmp/file_2020-Feb-28.html</code>, etc</li>
+	 *       <li><code> /tmp/file_{date}</code>: prints <code> /tmp/file_23423423423.pdf, /tmp/file_234234324231.html</code>, etc</li>
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li>{@code {$query}} prints the value associated with the supplied query located in the HTML page's URL. Examples:
+	 *   <li><code> {$query}</code> prints the value associated with the supplied query located in the HTML page's URL. Examples:
 	 *     <ul>
-	 *       <li>{@code /tmp/search_{$q}} on HTML page with url {@code 'http://google.com/search?q=cup'}: prints {@code /tmp/search_cup.html}</li>
+	 *       <li><code> /tmp/search_{$q}</code> on HTML page with url <code> 'http://google.com/search?q=cup'</code>: prints <code> /tmp/search_cup.html</code></li>
 	 *     </ul>
 	 *   </li>
 	 *
 	 *   <li>
-	 *     {@code {entry, <padding>}} prints the number of followers that have been parsed. Basically the same as {@code page}
+	 *     <code> {entry, <padding>}</code> prints the number of followers that have been parsed. Basically the same as <code> page</code>
 	 *     except for link followers.
 	 *     Examples:
 	 *     <ul>
-	 *       <li>{@code /tmp/file_{entry, 3}}: prints {@code /tmp/file_001, /tmp/file_014}, etc.</li>
+	 *       <li><code> /tmp/file_{entry, 3}</code>: prints <code> /tmp/file_001, /tmp/file_014</code>, etc.</li>
 	 *     </ul>
 	 *   </li>
 	 *
 	 *   <li>
-	 *     {@code {parent}} prints the name of the "parent" file without the extension. The "parent" file is the one that
+	 *     <code> {parent}</code> prints the name of the "parent" file without the extension. The "parent" file is the one that
 	 *     the "parent" entity saved to. In the case of a link follower the "parent" entity would be the entity that parsed
 	 *     the row which triggered the link follower to start parsing.
 	 *     Examples:
 	 *     <ul>
-	 *       <li>{@code {parent}/followedPage} with a parent entity saving to the file {@code /tmp/page_1.html} would print
-	 *           {@code /tmp/page_1/followedPage.html}
+	 *       <li><code> {parent}/followedPage</code> with a parent entity saving to the file <code> /tmp/page_1.html</code> would print
+	 *           <code> /tmp/page_1/followedPage.html</code>
 	 *       </li>
-	 *       <li> {@code {parent}/file_{entry}} with a parent entity saving to the file {@code /tmp/page_4.html} would print
-	 *            {@code /tmp/page_4/file_1.html, /tmp/page_4/file_2.html}, etc.
+	 *       <li> <code> {parent}/file_{entry}</code> with a parent entity saving to the file <code> /tmp/page_4.html</code> would print
+	 *            <code> /tmp/page_4/file_1.html, /tmp/page_4/file_2.html</code>, etc.
 	 *       </li>
 	 *     </ul>
 	 *   </li>
 	 *
 	 *   <li>
-	 *     {@code {batch}} prints the the custom batch ID provided by {@link #getBatchId()}
+	 *     <code> {batch}</code> prints the the custom batch ID provided by {@link #getBatchId()}
 	 *     Example:
 	 *     <ul>
-	 *       <li>{@code /tmp/{batch}/page_{page}} where the batch ID is set to "abc" would print
-	 *           {@code /tmp/abc/page_1.html}
+	 *       <li><code> /tmp/{batch}/page_{page}</code> where the batch ID is set to "abc" would print
+	 *           <code> /tmp/abc/page_1.html</code>
 	 *       </li>
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li>{@code {url, <option>}} prints part of the current URL being visited, the url itself where each part is a
+	 *   <li><code> {url, <option>}</code> prints part of the current URL being visited, the url itself where each part is a
 	 *                               directory, or a flattened representation of the URL. For example, given the relative
 	 *                               url:
 	 *
 	 *                               "/Property/307634/EST6886/Springfield"
 	 *
 	 *     <ul>
-	 *       <li>Using a 0-based index to select a section of the URL path - {@code /tmp/{url, 2}}: prints the third section of the URL {@code /tmp/est6886.html}</li>
-	 *       <li>Flattening the URL - {@code /tmp/{url, flat}}: prints {@code /tmp/property_307634_est6886_springfield.html}</li>
-	 *       <li>Creating sub-directories based on the URL path - {@code /tmp/{url}}: prints {@code /tmp/Property/307634/EST6886/Springfield.html}</li>
+	 *       <li>Using a 0-based index to select a section of the URL path - <code> /tmp/{url, 2}</code>: prints the third section of the URL <code> /tmp/est6886.html</code></li>
+	 *       <li>Flattening the URL - <code> /tmp/{url, flat}</code>: prints <code> /tmp/property_307634_est6886_springfield.html</code></li>
+	 *       <li>Creating sub-directories based on the URL path - <code> /tmp/{url}</code>: prints <code> /tmp/Property/307634/EST6886/Springfield.html</code></li>
 	 *     </ul>
 	 *   </li>
 	 * </ul>
 	 *
-	 * <i>Defaults to {@code file_{page}}</i>
+	 * <i>Defaults to <code> file_{page}</code></i>
 	 *
 	 * @return the pattern used to generate file names for downloaded content.
 	 */
