@@ -111,7 +111,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * The following patterns are recognized:
 	 * <ul>
-	 *   <li><code> {page, <padding>}</code> prints the current page number from the paginator.
+	 *   <li><code> {page, &lt;padding&gt;}</code> prints the current page number from the paginator.
 	 *        Number can be padded with leading zeroes if the optional padding number is provided.
 	 *        Examples:
 	 *     <ul>
@@ -121,7 +121,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li><code> {date, <mask>}</code> prints the current date as a timestamp. A date mask can be provided to configure
+	 *   <li><code> {date, &lt;mask&gt;}</code> prints the current date as a timestamp. A date mask can be provided to configure
 	 *       how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
 	 *       Examples:
 	 *     <ul>
@@ -137,7 +137,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *   </li>
 	 *
 	 *   <li>
-	 *     <code> {entry, <padding>}</code> prints the number of followers that have been parsed. Basically the same as <code> page</code>
+	 *     <code> {entry, &lt;padding&gt;}</code> prints the number of followers that have been parsed. Basically the same as <code> page</code>
 	 *     except for link followers.
 	 *     Examples:
 	 *     <ul>
@@ -170,7 +170,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li><code> {url, <option>}</code> prints part of the current URL being visited, the url itself where each part is a
+	 *   <li><code> {url, &lt;option&gt;}</code> prints part of the current URL being visited, the url itself where each part is a
 	 *                               directory, or a flattened representation of the URL. For example, given the relative
 	 *                               url:
 	 *
@@ -201,7 +201,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 * The following patterns are recognized:
 	 * <ul>
-	 *   <li><code> {page, <padding>}</code> prints the current page number from the paginator.
+	 *   <li><code> {page, &lt;padding&gt;}</code> prints the current page number from the paginator.
 	 *        Number can be padded with leading zeroes if the optional padding number is provided.
 	 *        Examples:
 	 *     <ul>
@@ -211,7 +211,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li><code> {date, <mask>}</code> prints the current date as a timestamp. A date mask can be provided to configure
+	 *   <li><code> {date, &lt;mask&gt;}</code> prints the current date as a timestamp. A date mask can be provided to configure
 	 *       how the date should be displayed (refer to {@link java.text.SimpleDateFormat} for valid patterns).
 	 *       Examples:
 	 *     <ul>
@@ -227,7 +227,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *   </li>
 	 *
 	 *   <li>
-	 *     <code> {entry, <padding>}</code> prints the number of followers that have been parsed. Basically the same as <code> page</code>
+	 *     <code> {entry, &lt;padding&gt;}</code> prints the number of followers that have been parsed. Basically the same as <code> page</code>
 	 *     except for link followers.
 	 *     Examples:
 	 *     <ul>
@@ -260,7 +260,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *     </ul>
 	 *   </li>
 	 *
-	 *   <li><code> {url, <option>}</code> prints part of the current URL being visited, the url itself where each part is a
+	 *   <li><code> {url, &lt;option&gt;}</code> prints part of the current URL being visited, the url itself where each part is a
 	 *                               directory, or a flattened representation of the URL. For example, given the relative
 	 *                               url:
 	 *
