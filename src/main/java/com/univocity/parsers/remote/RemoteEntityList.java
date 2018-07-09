@@ -6,6 +6,7 @@
 
 package com.univocity.parsers.remote;
 
+import com.univocity.api.common.*;
 import com.univocity.parsers.common.*;
 
 import java.util.concurrent.*;
@@ -57,7 +58,7 @@ public abstract class RemoteEntityList<S extends RemoteEntitySettings> extends E
 
 	protected final synchronized ExecutorService getDownloadThreadPool(){
 		if(downloadThreadPool == null || downloadThreadPool.isShutdown()){
-			this.downloadThreadPool = Executors.newFixedThreadPool(getParserSettings().getDownloadThreads());
+			this.downloadThreadPool = Executors.newFixedThreadPool(getParserSettings().getDownloadThreads(), new DaemonThreadFactory());
 		}
 		return downloadThreadPool;
 	}

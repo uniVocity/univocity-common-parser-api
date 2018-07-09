@@ -594,7 +594,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 		if (executorService == null || executorService.isShutdown()) {
 			if (DEFAULT_THREAD_POOL == null || DEFAULT_THREAD_POOL.isShutdown()) {
 				synchronized (RemoteParserSettings.class) {
-					DEFAULT_THREAD_POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+					DEFAULT_THREAD_POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new DaemonThreadFactory());
 				}
 			}
 			return DEFAULT_THREAD_POOL;
