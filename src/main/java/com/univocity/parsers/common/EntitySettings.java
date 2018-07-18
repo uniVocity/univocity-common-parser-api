@@ -43,7 +43,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 
 	protected final String name;
 	protected Processor<C> processor;
-	protected final EntitySettings parentEntity;
+	protected EntitySettings parentEntity;
 
 	/**
 	 * Internal constructor to be invoked the subclasses of {@code EntitySettings}
@@ -61,14 +61,24 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	}
 
 	/**
+	 * Returns the parent settings object of the current entity
+	 * @return the parent entity settings
+	 */
+	protected EntitySettings getParentEntitySettings(){
+		return parentEntity;
+	}
+
+	/**
 	 * Used to "inherit" default settings of a parent {@link EntityParserSettings}. Used internally in
 	 * in the constructor of {@link EntityParserSettings} (which is the global setting object itself).
 	 *
 	 * @param parentEntityList the parent {@link EntityList} who "owns" all entities and their {@code EntitySettings}
+	 * @param parentEntity the optional parent {@link EntitySettings} of the entity who originates remote follower settings.
 	 */
-	protected final void setParent(EntityList parentEntityList) {
+	protected final void setParents(EntityList parentEntityList, EntitySettings parentEntity) {
 		this.parentEntityList = parentEntityList;
 		this.parserSettings = (G) parentEntityList.getParserSettings();
+		this.parentEntity = parentEntity;
 	}
 
 	/**

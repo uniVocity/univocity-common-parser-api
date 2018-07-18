@@ -25,7 +25,7 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	protected T entityList;
 	protected R parserSettings;
 	protected S entitySettings;
-	protected final RemoteFollower parentLinkFollower;
+	protected final RemoteFollower<S, T, R> parentLinkFollower;
 	private UrlReaderProvider baseUrl;
 
 	private Nesting nesting = null;
@@ -33,9 +33,10 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	protected NextInputHandler<RemoteContext> nextLinkHandler;
 	boolean stopped;
 
-	boolean parentHasDate;
+	boolean followersNeedParent;
 
 	protected TreeMap<String, ValueGetter<?>> urlParameters;
+	protected final S parentEntitySettings;
 
 	/**
 	 * Creates a new LinkFollower
@@ -45,15 +46,32 @@ public abstract class RemoteFollower<S extends RemoteEntitySettings, T extends R
 	 */
 	protected RemoteFollower(S parentEntitySettings) {
 		ArgumentUtils.notEmpty("Parent of remote follower", parentEntitySettings);
+		this.parentEntitySettings = parentEntitySettings;
 		this.entityList = (T) parentEntitySettings.getParentEntityList().newInstance();
 		this.entitySettings = entityList.addEntitySettings(parentEntitySettings);
 		this.parserSettings = (R) entityList.getParserSettings();
-		this.parentLinkFollower = (RemoteFollower) this.entitySettings.owner;
+		this.parentLinkFollower = this.entitySettings.owner;
 		this.entitySettings.owner = this;
 		this.urlParameters = new TreeMap<String, ValueGetter<?>>();
 		ParameterizedString paramString = parserSettings.getParameterizedFileName();
-//		parentHasDate = paramString.contains("date");
+		followersNeedParent = paramString.contains("date") || paramString.contains("batch");
 		parserSettings.setFileNamePattern("{parent}/file_{entry}");
+	}
+
+	/**
+	 * Returns the parent follower that originated the current one.
+	 * @return the parent follower, if any.
+	 */
+	public RemoteFollower<S, T, R> getParentFollower(){
+		return parentLinkFollower;
+	}
+
+	/**
+	 * Returns the name of the parent entity where this remote follower originates from.
+	 * @return the name of the parent entity.
+	 */
+	public final String getParentEntityName() {
+		return parentEntitySettings == null ? null : parentEntitySettings.getEntityName();
 	}
 
 	/**

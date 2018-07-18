@@ -71,12 +71,12 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 		String normalizedEntityName = entityName.trim().toLowerCase();
 		if (entities.get(normalizedEntityName) == null) {
 			E newEntity = newEntity(entityName, parentEntity);
-			newEntity.setParent(this);
+			newEntity.setParents(this, parentEntity);
 			entities.put(normalizedEntityName, newEntity);
 			originalEntityNames.put(entityName, normalizedEntityName);
 		}
 		E entitySettings = entities.get(normalizedEntityName);
-		entitySettings.setParent(this);
+		entitySettings.setParents(this, parentEntity);
 
 		return entitySettings;
 	}
@@ -172,12 +172,12 @@ public abstract class EntityList<E extends EntitySettings> implements Iterable<E
 		Args.notNull(settings, "Entity settings");
 
 		String entityName = settings.getEntityName();
-		configureEntity(entityName);
+		configureEntity(entityName, settings);
 		String normalizedEntityName = entityName.trim().toLowerCase();
 
 		E config = (E) settings.clone();
 		this.entities.put(normalizedEntityName, config);
-		config.setParent(this);
+		config.setParents(this, settings);
 
 		return config;
 	}

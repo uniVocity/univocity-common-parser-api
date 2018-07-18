@@ -33,7 +33,7 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 
 	private Boolean ignoreLinkFollowingErrors;
 	private Nesting nesting;
-	protected Object owner;
+	protected RemoteFollower owner;
 
 	/**
 	 * Internal constructor to be invoked the subclasses of {@code EntitySettings}

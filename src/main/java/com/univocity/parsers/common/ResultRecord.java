@@ -41,4 +41,14 @@ public interface ResultRecord<C extends Context> extends Record {
 	 * @return the meta data associated with the record.
 	 */
 	ResultRecordMetaData getMetaData();
+
+	/**
+	 * Returns the parent record which contains this current record. Every {@link ResultRecord}
+	 * obtained from method {@link #getLinkedEntityData()} should have a parent record. This
+	 * record will have the initially parsed data from the input, before any {@link Nesting} operation
+	 * is applied.
+	 *
+	 * @return the parent record if it exists.
+	 */
+	ResultRecord<C> getParentRecord();
 }
