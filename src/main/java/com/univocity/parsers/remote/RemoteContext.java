@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 uniVocity Software Pty Ltd. All rights reserved.
+ * Copyright (c) 2013 Univocity Software Pty Ltd. All rights reserved.
  * This file is subject to the terms and conditions defined in file
  * 'LICENSE.txt', which is part of this source code package.
  */
@@ -14,7 +14,7 @@ import com.univocity.api.net.*;
  * and the next HTTP request to be performed by the parser. This is made available to the user through the
  * {@link NextInputHandler} callback.
  *
- * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see RemoteFollower
  * @see Paginator
  * @see NextInputHandler

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 uniVocity Software Pty Ltd. All rights reserved.
+ * Copyright (c) 2013 Univocity Software Pty Ltd. All rights reserved.
  * This file is subject to the terms and conditions defined in file
  * 'LICENSE.txt', which is part of this source code package.
  */
@@ -24,7 +24,7 @@ import java.util.*;
  * @param <C> the pagination context implementation supported by the parser, to support reading through records available
  *            remotely in multiple result pages.
  *
- * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see EntityParserInterface
  * @see PaginationContext
  * @see Record

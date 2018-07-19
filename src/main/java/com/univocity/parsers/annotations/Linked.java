@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 uniVocity Software Pty Ltd. All rights reserved.
+ * Copyright (c) 2013 Univocity Software Pty Ltd. All rights reserved.
  * This file is subject to the terms and conditions defined in file
  * 'LICENSE.txt', which is part of this source code package.
  */
@@ -17,7 +17,7 @@ import java.lang.annotation.*;
  * If linking to a {@link java.util.Map}, you must add the {@link Group} annotation to the attribute to configure how the
  * keys should be populated. The configuration in this {@code Linked} annotation will be used to populate the values of the map.
  *
- * @author uniVocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
+ * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see Group
  * @see com.univocity.parsers.common.Results
  * @see com.univocity.parsers.common.Result

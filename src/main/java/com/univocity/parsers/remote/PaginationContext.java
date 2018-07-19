@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 uniVocity Software Pty Ltd. All rights reserved.
+ * Copyright (c) 2013 Univocity Software Pty Ltd. All rights reserved.
  * This file is subject to the terms and conditions defined in file
  * 'LICENSE.txt', which is part of this source code package.
  */
@@ -16,7 +16,7 @@ import java.util.*;
  * Contains information about the pagination process managed by a {@link Paginator} and made available to the user
  * through the {@link NextInputHandler} callback.
  *
- * @author uniVocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
+ * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see RemoteContext
  * @see Paginator
  * @see NextInputHandler
