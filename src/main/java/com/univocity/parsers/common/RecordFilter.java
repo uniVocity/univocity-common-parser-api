@@ -21,7 +21,7 @@ public interface RecordFilter<R extends Record, C extends Context> {
 	 * @param record the record to accept
 	 * @param context the current state of the parser
 	 * @return {@code true} if the record should be accepted by the parser for
-	 * further processing, or {@false} if the record should be discarded
+	 * further processing, or {@code false} if the record should be discarded
 	 */
 	boolean accept(R record, C context);
 }
