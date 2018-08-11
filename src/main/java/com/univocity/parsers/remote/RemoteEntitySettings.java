@@ -7,6 +7,7 @@
 package com.univocity.parsers.remote;
 
 import com.univocity.parsers.common.*;
+import com.univocity.parsers.common.record.*;
 
 import java.util.*;
 
@@ -34,6 +35,8 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	private Boolean ignoreLinkFollowingErrors;
 	private Nesting nesting;
 	protected RemoteFollower owner;
+	protected List<RecordFilter<? extends Record, C>> recordFilters = new ArrayList<RecordFilter<? extends Record, C>>(1);
+
 
 	/**
 	 * Internal constructor to be invoked the subclasses of {@code EntitySettings}
@@ -197,4 +200,13 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 		requestParameters = new LinkedHashSet<String>();
 		return out;
 	}
+
+	/**
+	 * Adds a filter to the entity to prevent unwanted rows to be processed.
+	 * @param filter the callback {@link RecordFilter} to filter incoming records of this entity.
+	 */
+	public final void addRecordFilter(RecordFilter<? extends Record, C> filter) {
+		recordFilters.add(filter);
+	}
+
 }
