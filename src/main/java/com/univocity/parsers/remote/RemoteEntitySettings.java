@@ -35,7 +35,7 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	private Boolean ignoreLinkFollowingErrors;
 	private Nesting nesting;
 	protected RemoteFollower owner;
-	protected List<RecordFilter<? extends Record, C>> recordFilters = new ArrayList<RecordFilter<? extends Record, C>>(1);
+	protected List<RecordFilter<? extends com.univocity.parsers.common.record.Record, C>> recordFilters = new ArrayList<RecordFilter<? extends com.univocity.parsers.common.record.Record, C>>(1);
 
 
 	/**
@@ -205,7 +205,7 @@ public abstract class RemoteEntitySettings<C extends Context, S extends CommonPa
 	 * Adds a filter to the entity to prevent unwanted rows to be processed.
 	 * @param filter the callback {@link RecordFilter} to filter incoming records of this entity.
 	 */
-	public final void addRecordFilter(RecordFilter<? extends Record, C> filter) {
+	public final void addRecordFilter(RecordFilter<? extends com.univocity.parsers.common.record.Record, C> filter) {
 		recordFilters.add(filter);
 	}
 

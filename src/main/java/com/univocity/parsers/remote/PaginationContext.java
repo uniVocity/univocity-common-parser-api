@@ -58,7 +58,7 @@ public interface PaginationContext extends RemoteContext {
 	 *
 	 * @return the content extracted from the input as a {@link Record}
 	 */
-	Record getRecord();
+	com.univocity.parsers.common.record.Record getRecord();
 
 	/**
 	 * Returns the local file which will contain the data of the next page to be visited,

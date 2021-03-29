@@ -14,7 +14,7 @@ import com.univocity.parsers.common.record.*;
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see ResultRecordMetaData
  */
-public interface ResultRecord<C extends Context> extends Record {
+public interface ResultRecord<C extends Context> extends com.univocity.parsers.common.record.Record {
 
 	/**
 	 * Gets {@link Result}s with data for additional fields linked to the current record.

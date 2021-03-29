@@ -15,7 +15,7 @@ import com.univocity.parsers.common.record.*;
  * @param <R> the type of record to filter.
  * @param <C> the a contextual object with the current parsing state
  */
-public interface RecordFilter<R extends Record, C extends Context> {
+public interface RecordFilter<R extends com.univocity.parsers.common.record.Record, C extends Context> {
 	/**
 	 * Determines whether the given record should be accepted by the parser or discarded.
 	 * @param record the record to accept

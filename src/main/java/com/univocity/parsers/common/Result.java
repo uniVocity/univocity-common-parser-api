@@ -25,7 +25,7 @@ import java.util.*;
  * @see EntitySettings
  * @see Record
  */
-public interface Result<R extends Record, C extends Context> extends Closeable {
+public interface Result<R extends com.univocity.parsers.common.record.Record, C extends Context> extends Closeable {
 
 	/**
 	 * Get the name of the entity that this result belongs to.
