@@ -268,6 +268,7 @@ public abstract class RemoteParserSettings<S extends CommonParserSettings, L ext
 	 *
 	 *     <ul>
 	 *       <li>Using a 0-based index to select a section of the URL path - <code> /tmp/{url, 2}</code>: prints the third section of the URL <code> /tmp/est6886.html</code></li>
+	 *       <li>Using the last section of the URL path - <code> /tmp/{url, last}.html</code>: prints the last section of the URL <code>Springfield.html</code></li>
 	 *       <li>Flattening the URL - <code> /tmp/{url, flat}</code>: prints <code> /tmp/property_307634_est6886_springfield.html</code></li>
 	 *       <li>Creating sub-directories based on the URL path - <code> /tmp/{url}</code>: prints <code> /tmp/Property/307634/EST6886/Springfield.html</code></li>
 	 *     </ul>
