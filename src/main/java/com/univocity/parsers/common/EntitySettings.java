@@ -62,9 +62,10 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 
 	/**
 	 * Returns the parent settings object of the current entity
+	 *
 	 * @return the parent entity settings
 	 */
-	protected EntitySettings getParentEntitySettings(){
+	protected EntitySettings getParentEntitySettings() {
 		return parentEntity;
 	}
 
@@ -73,7 +74,7 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 	 * in the constructor of {@link EntityParserSettings} (which is the global setting object itself).
 	 *
 	 * @param parentEntityList the parent {@link EntityList} who "owns" all entities and their {@code EntitySettings}
-	 * @param parentEntity the optional parent {@link EntitySettings} of the entity who originates remote follower settings.
+	 * @param parentEntity     the optional parent {@link EntitySettings} of the entity who originates remote follower settings.
 	 */
 	protected final void setParents(EntityList parentEntityList, EntitySettings parentEntity) {
 		this.parentEntityList = parentEntityList;
@@ -98,6 +99,24 @@ public abstract class EntitySettings<C extends Context, S extends CommonSettings
 				};
 			}
 		};
+	}
+
+	/**
+	 * Returns the name of the entity that contains this entity (i.e. the parent), or {@code null} if the entity has no parent
+	 *
+	 * @return this parent's entity name, if available
+	 */
+	public String getParentEntityName() {
+		return parentEntity == null ? null : parentEntity.name;
+	}
+
+	/**
+	 * Returns the name of this entity
+	 *
+	 * @return this entity's name
+	 */
+	public String getName() {
+		return name;
 	}
 
 	/**
